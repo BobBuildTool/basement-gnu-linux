@@ -19,7 +19,7 @@ project. To do so add a `layers` entry to `config.yaml`:
 
     bobMinimumVersion: "0.20"
     layers:
-	- basement-gnu-linux
+        - basement-gnu-linux
         - basement
 
 and then add the repositories as submodules to your project:
