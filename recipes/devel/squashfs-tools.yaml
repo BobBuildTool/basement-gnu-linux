@@ -4,7 +4,7 @@ metaEnvironment:
     PKG_VERSION: "4.4"
 
 depends:
-    - utils::xz-utils
+    - utils::xz-utils-dev
     - libs::zlib-dev
 
 checkoutSCM:
@@ -15,8 +15,8 @@ checkoutSCM:
 
 buildVars: [CC, CPPFLAGS, CFLAGS, LDFLAGS]
 buildScript: |
-    CFLAGS+=" -I${BOB_DEP_PATHS[utils::xz-utils]}/usr/include -I${BOB_DEP_PATHS[libs::zlib-dev]}/usr/include"
-    LDFLAGS+=" -L${BOB_DEP_PATHS[utils::xz-utils]}/usr/lib -L${BOB_DEP_PATHS[libs::zlib-dev]}/usr/lib"
+    CFLAGS+=" -I${BOB_DEP_PATHS[utils::xz-utils-dev]}/usr/include -I${BOB_DEP_PATHS[libs::zlib-dev]}/usr/include"
+    LDFLAGS+=" -L${BOB_DEP_PATHS[utils::xz-utils-dev]}/usr/lib -L${BOB_DEP_PATHS[libs::zlib-dev]}/usr/lib"
 
     rsync -aH --delete $1/ .
     make -C squashfs-tools CC=${CC}
