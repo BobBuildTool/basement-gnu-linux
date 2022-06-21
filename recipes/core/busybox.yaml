@@ -1,5 +1,9 @@
 inherit: [make]
 
+depends:
+    - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
+      name: core::busybox-custom-config
+
 metaEnvironment:
     PKG_VERSION: "1.35.0"
 
@@ -10,14 +14,20 @@ checkoutSCM:
     stripComponents: 1
 
 buildTools: [host-toolchain, target-toolchain]
-buildVars: [ARCH, CROSS_COMPILE, CFLAGS, LDFLAGS]
+buildVars: [ARCH, BUSYBOX_CUSTOM_CONFIG, CFLAGS, CROSS_COMPILE, LDFLAGS]
 buildScript: |
     # prevent timestamps in configuration
     export KCONFIG_NOTIMESTAMP=1
 
     mkdir -p build install
     cd build
-    make -C $1 O=$PWD defconfig
+
+    if [[ ${BUSYBOX_CUSTOM_CONFIG:+true} ]] ; then
+        cp -u "${BOB_DEP_PATHS[core::busybox-custom-config]}/${BUSYBOX_CUSTOM_CONFIG}" .config
+        make -C $1 O=$PWD oldconfig
+    else
+        make -C $1 O=$PWD defconfig
+    fi
     makeParallel
     make CONFIG_PREFIX=${BOB_CWD}/install install
 
