@@ -10,7 +10,7 @@ checkoutSCM:
   stripComponents: 1
 
 buildTools: [bison, flex, target-toolchain]
-buildVars: [CC, LD, CFLAGS, LDFLAGS]
+buildVars: [AR, CC, LD, CFLAGS, LDFLAGS]
 buildScript: |
   mkdir -p build install
   rsync -a "$1/" build/
