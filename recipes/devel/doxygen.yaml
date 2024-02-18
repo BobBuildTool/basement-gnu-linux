@@ -1,12 +1,12 @@
 inherit: [cmake]
 
 metaEnvironment:
-    PKG_VERSION: "1.9.1"
+    PKG_VERSION: "1.10.0"
 
 checkoutSCM:
     scm: url
-    url: ${SOURCEFORGE_MIRROR}/doxygen/doxygen-${PKG_VERSION}.src.tar.gz
-    digestSHA256: 67aeae1be4e1565519898f46f1f7092f1973cce8a767e93101ee0111717091d1
+    url: ${GITHUB_MIRROR}/doxygen/doxygen/releases/download/Release_$(subst,".","_",${PKG_VERSION})/doxygen-${PKG_VERSION}.src.tar.gz
+    digestSHA256: dd7c556b4d96ca5e682534bc1f1a78a5cfabce0c425b14c1b8549802686a4442
     stripComponents: 1
 
 buildTools: [flex, bison, dot]
