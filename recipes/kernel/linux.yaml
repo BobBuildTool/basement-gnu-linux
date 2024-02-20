@@ -70,7 +70,7 @@ multiPackage:
         inherit: [pkg-config]
         depends:
             - tools:
-                target-toolchain: host-toolchain
+                target-toolchain: host-compat-toolchain
               depends:
                 - libs::elfutils-libelf-dev
                 - libs::openssl-dev

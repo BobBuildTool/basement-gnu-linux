@@ -8,7 +8,7 @@ depends:
     - name: libs::glib-tools
       use: [tools]
       tools:
-          target-toolchain: host-toolchain
+          target-toolchain: host-compat-toolchain
     - libs::fontconfig-dev
     - libs::harfbuzz-dev
     - libs::cairo-dev
