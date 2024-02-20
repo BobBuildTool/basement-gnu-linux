@@ -11,17 +11,13 @@ depends:
       name: kernel::linux-custom-config
 
 metaEnvironment:
-    PKG_VERSION: "5.10.172"
+    PKG_VERSION: "6.6.17"
 
 checkoutSCM:
     scm: url
-    url: ${KERNEL_MIRROR}/linux/kernel/v5.x/linux-${PKG_VERSION}.tar.xz
-    digestSHA1: "305a035f88a48d865aa2126fbf5d8f0fd3ed063a"
+    url: ${KERNEL_MIRROR}/linux/kernel/v6.x/linux-${PKG_VERSION}.tar.xz
+    digestSHA256: "ee7650996ba75aa29fe66f309b413097f249a03e7001f2a41128c7c95205226a"
     stripComponents: 1
-
-checkoutDeterministic: True
-checkoutScript: |
-    patchApplySeries $<<linux/*.patch>>
 
 buildTools: [bison, flex, host-toolchain]
 buildVars: [ARCH, LINUX_CONFIG, LINUX_CUSTOM_CONFIG]
