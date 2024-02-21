@@ -7,11 +7,11 @@ depends:
     - name: devel::gettext
       use: [tools]
       tools:
-          target-toolchain: host-toolchain
+          target-toolchain: host-compat-toolchain
     - name: devel::gperf
       use: [tools]
       tools:
-          target-toolchain: host-toolchain
+          target-toolchain: host-compat-toolchain
 
     - libs::freetype-dev
     - libs::expat-dev

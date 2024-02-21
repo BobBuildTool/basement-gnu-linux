@@ -8,7 +8,7 @@ depends:
     - name: libs::glib-tools
       use: [tools]
       tools:
-        target-toolchain: host-toolchain
+        target-toolchain: host-compat-toolchain
 
     - libs::glib-dev
     - use: []

@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "0.179"
+    PKG_VERSION: "0.190"
 
 depends:
     - libs::zlib-dev
@@ -12,14 +12,15 @@ depends:
 checkoutSCM:
     scm: url
     url: ${SOURCEWARE_MIRROR}/elfutils/${PKG_VERSION}/elfutils-${PKG_VERSION}.tar.bz2
-    digestSHA256: 25a545566cbacaa37ae6222e58f1c48ea4570f53ba991886e2f5ce96e22a23a2
+    digestSHA256: 8e00a3a9b5f04bc1dc273ae86281d2d26ed412020b391ffcc23198f10231d692
     stripComponents: 1
 
 buildScript: |
     mkdir -p all
     pushd all
     autotoolsBuild "$1" \
-        --disable-debuginfod
+        --disable-debuginfod \
+        --disable-libdebuginfod
     popd
 
     # libelf
