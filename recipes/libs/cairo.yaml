@@ -1,9 +1,10 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.16.0"
+    PKG_VERSION: "1.18.0"
 
 depends:
+    - libs::glib-dev
     - libs::libpng-dev
     - libs::pixman-dev
     - libs::zlib-dev
@@ -11,6 +12,7 @@ depends:
     - libs::fontconfig-dev
     - use: []
       depends:
+          - libs::glib-tgt
           - libs::libpng-tgt
           - libs::pixman-tgt
           - libs::zlib-tgt
@@ -20,20 +22,19 @@ depends:
 checkoutSCM:
     scm: url
     url:  https://www.cairographics.org/releases/cairo-${PKG_VERSION}.tar.xz
-    digestSHA256: 5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331
+    digestSHA256: 243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64
     stripComponents: 1
 
 buildTools: [host-toolchain]
 buildScript: |
-    export png_REQUIRES="libpng"
-    autotoolsBuild $1 \
-        --disable-full-testing
+    mesonBuild $1 \
+        -Dtests=disabled
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: mesonPackageDev
         provideDeps: ["*-dev"]
 
     tgt:
-        packageScript: autotoolsPackageTgt
+        packageScript: mesonPackageTgt
         provideDeps: ["*-tgt"]
