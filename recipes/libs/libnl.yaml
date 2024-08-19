@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+   PKG_DESCRIPTION: "Convenience library for netlink sockets"
+   PKG_LICENSE: "LGPL-2.1-only"
+   PKG_VERSION: "3.10.0"
+
+checkoutSCM:
+   scm: url
+   url: https://github.com/thom311/libnl/releases/download/libnl$(subst,.,_,${PKG_VERSION})/libnl-${PKG_VERSION}.tar.gz
+   digestSHA256: 49b3e2235fdb58f5910bbb3ed0de8143b71ffc220571540502eb6c2471f204f5
+   stripComponents: 1
+
+buildTools: [bison, flex]
+buildScript: |
+   autotoolsBuild $1
+
+multiPackage:
+   dev:
+      packageScript: |
+         autotoolsPackageDev
+   tgt:
+      packageScript: |
+         autotoolsPackageTgt
