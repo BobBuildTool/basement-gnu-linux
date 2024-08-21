@@ -1,0 +1,28 @@
+inherit: [install]
+
+metaEnvironment:
+    PKG_VERSION: "2024.02.5"
+    PKG_LICENSE: "GPL-2.0"
+
+checkoutSCM:
+    scm: url
+    url: https://buildroot.org/downloads/buildroot-${PKG_VERSION}.tar.gz
+    digestSHA1: "19cd1d9410f42c1dbaeeebb2fdf3265c698330e2"
+    extract: False
+checkoutDeterministic: True
+checkoutVars: [PKG_VERSION]
+checkoutScript: |
+    tar --strip-components=3 -xf buildroot-${PKG_VERSION}.tar.gz \
+      buildroot-${PKG_VERSION}/package/makedevs/makedevs.c
+
+buildTools: [target-toolchain]
+buildVars: [CC]
+buildScript: |
+    mkdir -p install/usr/bin
+    $CC $1/makedevs.c -o install/usr/bin/makedevs
+
+packageScript: |
+    installPackageBin $1/install/
+
+provideTools:
+    makedevs: "usr/bin"
