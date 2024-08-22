@@ -1,0 +1,19 @@
+inherit: [cmake]
+
+metaEnvironment:
+   PKG_VERSION: "5.8.0"
+
+checkoutSCM:
+   scm: git
+   url: ${GITHUB_MIRROR}/htacg/tidy-html5.git
+   tag: "$PKG_VERSION"
+   commit: 1ca37471b48a3498f985509828cb3cf85ea129f8
+
+buildScript: |
+   cmakeBuild $1
+
+packageScript: |
+   cmakePackageTgt
+
+provideTools:
+   tidy: "usr/bin"
