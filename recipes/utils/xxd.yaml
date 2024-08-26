@@ -1,0 +1,29 @@
+inherit: [make, install]
+
+metaEnvironment:
+    PKG_VERSION: "9.1.0686"
+    PKG_LICENSE: "Charityware"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/vim/vim/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA1: "2613a32f69c31d746d961a35323e655408c1dd62"
+    extract: False
+
+buildTools: [target-toolchain]
+buildVars: [PKG_VERSION, CC]
+buildSetup: |
+    tar --strip-components=3 -xf $1/v${PKG_VERSION}.tar.gz \
+      vim-${PKG_VERSION}/src/xxd
+buildScript: |
+    makeParallel \
+      CC=$CC
+
+    mkdir -p install/usr/bin
+    cp xxd install/usr/bin
+
+packageScript: |
+    installPackageBin $1/install/
+
+provideTools:
+    xxd: "usr/bin"
