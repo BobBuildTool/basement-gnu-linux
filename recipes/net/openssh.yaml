@@ -21,6 +21,7 @@ checkoutSCM:
 buildTools: [target-toolchain]
 buildScript: |
     autotoolsBuild $1 \
+        --sysconfdir=/etc/ssh \
         --disable-strip \
         --with-ssl-dir="${BOB_DEP_PATHS[libs::openssl-dev]}/usr" \
         --without-openssl-header-check
