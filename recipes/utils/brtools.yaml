@@ -1,0 +1,41 @@
+inherit: [cpackage, install]
+
+metaEnvironment:
+    PKG_VERSION: "2024.08"
+    PKG_LICENSE: "GPL-2.0"
+
+checkoutSCM:
+    scm: url
+    url: https://buildroot.org/downloads/buildroot-${PKG_VERSION}.tar.gz
+    digestSHA1: ecb7e941a4e2ba28a151522c476ed8925f0e8c7b
+    extract: False
+checkoutDeterministic: True
+checkoutVars: [PKG_VERSION]
+checkoutScript: |
+    tar --wildcards --strip-components=3 -xf buildroot-${PKG_VERSION}.tar.gz \
+        buildroot-${PKG_VERSION}/package/mkpasswd/{mkpasswd.c,utils.*,config.h} \
+        buildroot-${PKG_VERSION}/package/makedevs/makedevs.c \
+        buildroot-${PKG_VERSION}/support/scripts/mkusers
+
+buildVars: [CC, CFLAGS, LDFLAGS]
+buildScript: |
+    mkdir -p install/usr/bin
+    # mkpasswd
+    $CC $CFLAGS $(cpackageLibraryTypeCheck "-static" "-shared") $LDFLAGS \
+        -I$1 $1/mkpasswd.c $1/utils.c -lcrypt \
+        -o install/usr/bin/mkpasswd
+    # makedevs
+    $CC $CFLAGS $LDFLAGS \
+        $1/makedevs.c \
+        -o install/usr/bin/makedevs
+    # mkusers
+    install -m 0755 $1/mkusers install/usr/bin/mkusers
+    # this uses BR specific logic for selecting the pw hash method; replace
+    # this with a fixed variant (sha-512)
+    sed -i '/^PASSWD_METHOD/,+3cPASSWD_METHOD=sha-512' install/usr/bin/mkusers
+
+packageScript: |
+    installPackageBin "$1/install/"
+
+provideTools:
+    brtools: "usr/bin"
