@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "22"
+    PKG_VERSION: "33"
 
 privateEnvironment:
     AUTOTOOLS_AUTO_STATIC: "no"
@@ -9,21 +9,33 @@ privateEnvironment:
 checkoutSCM:
     scm: url
     url: ${KERNEL_MIRROR}/linux/utils/kernel/kmod/kmod-${PKG_VERSION}.tar.gz
-    digestSHA1: "e07a6245a040e8c18bff39b302d6d09bcbdf57b6"
+    digestSHA1: "1514ec6d35a35ba625e2e817e8646c23ee0437e7"
     stripComponents: 1
 
 buildScript: |
-    autotoolsBuild $1
+    autotoolsBuild $1 \
+        --disable-manpages
 
-# We have to create the symlinks ourself. Not sure why "make install" doesn't
-# do it
-packageScript: |
-    autotoolsPackageTgt
-    mkdir -p usr/sbin
+    # We have to create the symlinks ourself. Not sure why "make
+    # install" doesn't do it
+    mkdir -p install/usr/sbin
     for i in depmod insmod lsmod modinfo modprobe rmmod ; do
-        ln -s ../bin/kmod usr/sbin/$i
+        ln -s ../bin/kmod install/usr/sbin/$i
     done
-    ln -s kmod usr/lsmod
+    ln -s kmod install/usr/lsmod
 
-provideTools:
-    kmod: usr/sbin
+multiPackage:
+    "":
+        depends:
+            - name: kernel::kmod-lib-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+        provideTools:
+            kmod: usr/sbin
+
+    lib-dev:
+        packageScript: autotoolsPackageDev
+
+    lib-tgt:
+        packageScript: autotoolsPackageLib
