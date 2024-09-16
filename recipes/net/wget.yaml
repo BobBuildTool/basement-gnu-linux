@@ -1,12 +1,12 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.17"
+    PKG_VERSION: "1.24.5"
 
 checkoutSCM:
     scm: url
     url: ${GNU_MIRROR}/wget/wget-${PKG_VERSION}.tar.gz
-    digestSHA1: "ebb8df8ee6a0c2d11be9e250cae55d8502bc1ee6"
+    digestSHA256: "fa2dc35bab5184ecbc46a9ef83def2aaaa3f4c9f3c97d4bd19dcb07d4da637de"
     stripComponents: 1
 
 buildScript: |
