@@ -1,0 +1,21 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.5"
+    PKG_LICENSE: "LGPL-2.1+"
+
+checkoutSCM:
+    scm: url
+    url: https://netfilter.org/projects/libmnl/files/libmnl-${PKG_VERSION}.tar.bz2
+    digestSHA1: 63c6456b77f7978a7b37e62c1b38346b2ef2d91c
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt
