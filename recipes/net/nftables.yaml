@@ -1,0 +1,33 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.0"
+    PKG_LICENSE: "GPL-2.0"
+
+depends:
+    - libs::readline-dev
+    - libs::libnftnl-dev
+
+    - use: []
+      depends:
+          - libs::readline-tgt
+          - libs::libnftnl-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.netfilter.org/projects/nftables/files/nftables-${PKG_VERSION}.tar.xz
+    digestSHA1: a9237fe37b390f4d2af1b3f0b213bbc6efd9e643
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-debug \
+        --disable-man-doc \
+        --disable-pdf-doc \
+        --disable-python \
+        --without-json \
+        --with-mini-gmp \
+        --with-cli=readline
+
+packageScript: autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]
