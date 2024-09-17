@@ -1,0 +1,79 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "3.2.14"
+    PKG_LICENSE: "GPL-2.0+, LGPL-2.1+"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/eudev-project/eudev/releases/download/v${PKG_VERSION}/eudev-${PKG_VERSION}.tar.gz
+    digestSHA1: 242801bd31ff45a3fdc4a3b9d078ffa69ccae3c9
+    stripComponents: 1
+
+multiPackage:
+    "":
+        depends:
+            # depend on our self for the host build; we want to create the
+            # actual hw db
+            - name: core::eudev-tools
+              tools:
+                  target-toolchain: host-compat-toolchain
+              use: [tools]
+
+            - kernel::kmod-lib-dev
+
+            - use: []
+              depends:
+                - kernel::kmod-lib-tgt
+
+        buildTools: [udevadm]
+        buildScript: |
+            autotoolsBuild $1 \
+                --sbindir=/usr/sbin \
+                --libexecdir=/lib \
+                --disable-manpages \
+                --disable-selinux \
+                --disable-rule-generator \
+                --disable-blkid \
+                --enable-kmod \
+                --enable-hwdb
+
+            # update hw db for target build
+            udevadm hwdb --update --root $PWD/install
+
+            # and remove the source files, as they are not needed anymore
+            rm -rf $PWD/install/etc/udev/hwdb.d
+
+        multiPackage:
+            "":
+                depends:
+                    - name: core::eudev-tgt
+                      use: []
+                packageScript: autotoolsPackageBin
+                provideDeps: [ "*-tgt" ]
+
+            dev:
+                packageScript: autotoolsPackageDev
+                provideDeps: [ "*-dev" ]
+
+            tgt:
+                packageScript: autotoolsPackageLib
+                provideDeps: [ "*-tgt" ]
+
+
+    tools:
+        buildScript: |
+            # only enable hwdb management
+            autotoolsBuild $1 \
+                --sbindir=/usr/sbin \
+                --libexecdir=/lib \
+                --disable-manpages \
+                --disable-selinux \
+                --disable-blkid \
+                --disable-rule-generator \
+                --disable-kmod \
+                --enable-hwdb
+
+        packageScript: autotoolsPackageBin
+        provideTools:
+            udevadm: "usr/bin"
