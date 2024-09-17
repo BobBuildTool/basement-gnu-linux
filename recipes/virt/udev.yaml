@@ -1,0 +1,17 @@
+multiPackage:
+    "":
+        depends:
+            - name: ${CONFIG_SELECT_UDEV:-core::eudev}
+              use: []
+
+    dev:
+        depends:
+            - name: ${CONFIG_SELECT_UDEV:-core::eudev}-dev
+              use: []
+
+    tgt:
+        depends:
+            - name: ${CONFIG_SELECT_UDEV:-core::eudev}-tgt
+              use: []
+
+provideDeps: [ "*" ]
