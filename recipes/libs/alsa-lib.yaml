@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.12"
+    PKG_LICENSE: "LGPL-2.1+"
+
+checkoutSCM:
+    scm: url
+    url: https://www.alsa-project.org/files/pub/lib/alsa-lib-${PKG_VERSION}.tar.bz2
+    digestSHA1: b911006236d4f7f1e02f6d9d64c8ab218df34855
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --with-alsa-devdir=/dev/snd \
+        --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" \
+        --with-ctl-plugins=all
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt
