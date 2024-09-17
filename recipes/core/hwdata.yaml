@@ -1,0 +1,22 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "0.387"
+    PKG_LICENSE: "GPL-2.0+, BSD-3-Clause, XFree86 1.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/vcrhonek/hwdata/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA1: 5e368120c7c8095df1dfda9e72d1aad1364ca8e2
+    stripComponents: 1
+
+buildScript: |
+    cp -r $1 build
+    cd build
+    ./configure \
+        --prefix=$BOB_CWD/install/usr \
+        --datarootdir=$BOB_CWD/install/usr/share
+
+    makeParallel install
+
+packageScript: installCopy "$1/install/"
