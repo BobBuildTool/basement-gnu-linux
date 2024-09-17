@@ -1,0 +1,53 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "0.5.6"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - name: libs::glib-tools
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
+    - libs::glib-dev
+    - devel::lua-dev
+    - multimedia::pipewire-dev
+
+    - use: []
+      depends:
+          - libs::glib-tgt
+          - multimedia::pipewire-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/${PKG_VERSION}/wireplumber-${PKG_VERSION}.tar.bz2
+    digestSHA1: 97bfc92bc27678d7cbcaf983ba9a38986e06eed5
+    stripComponents: 1
+
+buildTools: [glib]
+buildScript: |
+    mesonBuild $1 \
+        -Ddoc=disabled \
+        -Dintrospection=disabled \
+        -Dsystemd=disabled \
+        -Dsystem-lua=true \
+        -Dsystem-lua-version=
+
+multiPackage:
+    "":
+        depends:
+            - use: []
+              depends:
+                - multimedia::wireplumber-tgt
+                - multimedia::pipewire
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt", "multimedia::pipewire" ]
+
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: mesonPackageLib
+        provideDeps: [ "*-tgt" ]
