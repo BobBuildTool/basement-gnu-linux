@@ -1,0 +1,30 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.7"
+    PKG_LICENSE: "GPL-2.0+"
+
+depends:
+    - libs::libmnl-dev
+
+    - use: []
+      depends:
+          - libs::libmnl-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://netfilter.org/projects/libnftnl/files/libnftnl-${PKG_VERSION}.tar.xz
+    digestSHA1: 06532b49e06d12a8fc2a33326dc35a638b3ae3c6
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: autotoolsPackageTgt
+        provideDeps: [ "*-tgt" ]
