@@ -1,0 +1,34 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "2.90"
+    PKG_LICENSE: "GPL-2.0 or GPL-3.0"
+
+checkoutSCM:
+    scm: url
+    url: https://thekelleys.org.uk/dnsmasq/dnsmasq-${PKG_VERSION}.tar.xz
+    digestSHA1: 864374a3e573d4997753b34290d50072463570c9
+    stripComponents: 1
+
+buildVars: [CC, CFLAGS, LDFLAGS]
+buildScript: |
+    makeParallel -C $1 BUILDDIR=$BOB_CWD/build \
+        CC="$CC" \
+        CFLAGS="$CFLAGS" \
+        LDFLAGS="$LDFLAGS" \
+        PREFIX=$BOB_CWD/install/usr \
+        COPTS=-DNO_TFTP \
+        all
+
+    makeParallel -C $1 BUILDDIR=$BOB_CWD/build \
+        CC="$CC" \
+        CFLAGS="$CFLAGS" \
+        LDFLAGS="$LDFLAGS" \
+        PREFIX=$BOB_CWD/install/usr \
+        COPTS=-DNO_TFTP \
+        install
+
+    # required at runtime:
+    mkdir -p install/var/lib/misc
+
+packageScript: installPackageTgt "$1/install/"
