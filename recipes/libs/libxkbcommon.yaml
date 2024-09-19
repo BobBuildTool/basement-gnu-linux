@@ -1,0 +1,35 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.7.0"
+    PKG_LICENSE: "MIT/X11"
+
+depends:
+    - libs::libxml2-dev
+
+    - use: []
+      depends:
+          - libs::libxml2-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xkbcommon.org/download/libxkbcommon-${PKG_VERSION}.tar.xz
+    digestSHA1: 6c9b00437feb6389470bb6dbce66f6f7d16f09bc
+    stripComponents: 1
+
+buildTools: [bison]
+buildScript: |
+    mesonBuild $1 \
+        -Denable-x11=false \
+        -Denable-tools=false \
+        -Denable-wayland=true
+
+    # this will not work without this dir; even when X11 is disabled
+    mkdir -p install/usr/share/X11/xkb
+
+multiPackage:
+    dev:
+        packageScript: mesonPackageDev
+
+    tgt:
+        packageScript: mesonPackageTgt
