@@ -1,0 +1,28 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.7"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://bitmath.se/org/code/mtdev/mtdev-${PKG_VERSION}.tar.bz2
+    digestSHA1: ecfe6c2c4be21eed24f6932f071ee0691ead18a9
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    bin:
+        depends:
+            - name: libs::mtdev-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
