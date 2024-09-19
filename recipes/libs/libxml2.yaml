@@ -1,0 +1,33 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.13.3"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://download.gnome.org/sources/libxml2/2.13/libxml2-${PKG_VERSION}.tar.xz
+    digestSHA1: 170889cc11c53a96b18e6957f07ec6f823cad2c6
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --with-gnu-ld \
+        --without-debug \
+        --without-python
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    bin:
+        depends:
+            - name: libs::libxml2-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+        provideTools:
+            libxml2-tools: "usr/bin"
