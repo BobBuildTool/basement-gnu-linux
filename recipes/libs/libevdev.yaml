@@ -1,0 +1,31 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.13.2"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://www.freedesktop.org/software/libevdev/libevdev-${PKG_VERSION}.tar.xz
+    digestSHA1: e916eb4730bf3c508240341d9b3082bc6dfd4b6b
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Ddocumentation=disabled \
+        -Dtests=disabled \
+        -Dcoverity=false
+
+multiPackage:
+    dev:
+        packageScript: mesonPackageDev
+
+    tgt:
+        packageScript: mesonPackageLib
+
+    bin:
+        depends:
+            - name: libs::libevdev-tgt
+              use: []
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt" ]
