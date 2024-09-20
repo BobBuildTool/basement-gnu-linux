@@ -1,0 +1,18 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.4.4"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/thkukuk/rpcsvc-proto/releases/download/v${PKG_VERSION}/rpcsvc-proto-${PKG_VERSION}.tar.xz
+    digestSHA1: 5d89eee175e956e4d85e6cb32382382cbad74ece
+    stripComponents: 1
+
+buildTools: [host-toolchain, target-toolchain]
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: autotoolsPackageTgt
+provideTools:
+    rpcgen: "usr/bin"
