@@ -1,0 +1,22 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.3.5"
+    PKG_LICENSE: "BSD-3-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/libtirpc/libtirpc-${PKG_VERSION}.tar.bz2
+    digestSHA1: f5b209b2a7f3ffcdcff5b5b54fefc6a90ddec0d3
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-gssapi
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt
