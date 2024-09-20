@@ -1,0 +1,21 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "9f"
+    PKG_LICENSE: "IJG"
+
+checkoutSCM:
+    scm: url
+    url: http://www.ijg.org/files/jpegsrc.v${PKG_VERSION}.tar.gz
+    digestSHA1: bb1d5ad2b388e0db7dca62868ad01c5cbf774868
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt

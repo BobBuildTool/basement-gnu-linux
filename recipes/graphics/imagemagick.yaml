@@ -1,0 +1,31 @@
+inherit: [autotools]
+
+depends:
+    - libs::libpng-dev
+    - virt::libjpeg-dev
+
+    - use: []
+      depends:
+          - libs::libpng-tgt
+          - virt::libjpeg-tgt
+
+metaEnvironment:
+    PKG_VERSION: "7.1.1-38"
+    PKG_LICENSE: "Apache-2.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/ImageMagick/ImageMagick/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 041bd8e67e984e61fca8443078b37a7851371de7
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideDeps: ["*-tgt"]
+
+provideTools:
+    imagemagick: "usr/bin"

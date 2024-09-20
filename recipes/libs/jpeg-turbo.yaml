@@ -1,0 +1,24 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "3.0.3"
+    PKG_LICENSE: "IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 397a31222105129c9e798efce2459c445048546e
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1 \
+        -DWITH_JPEG8=ON \
+        -DWITH_SIMD=ON \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+
+    tgt:
+        packageScript: cmakePackageTgt
