@@ -1,0 +1,61 @@
+inherit: [make, install]
+
+metaEnvironment:
+    PKG_VERSION: "2024b"
+    PKG_LICENSE: "Public domain"
+
+checkoutSCM:
+    - scm: url
+      url: https://www.iana.org/time-zones/repository/releases/tzcode${PKG_VERSION}.tar.gz
+      digestSHA1: 95cfb1106f60e925f0255d340350ba4be51b9b29
+      dir: src
+    - scm: url
+      url: https://www.iana.org/time-zones/repository/releases/tzdata${PKG_VERSION}.tar.gz
+      digestSHA1: 52adf39a4b3c29502866167e78b89b20fd08dc3e
+      dir: data
+
+multiPackage:
+    "data":
+        depends:
+            - tools:
+                target-toolchain: host-compat-toolchain
+              depends:
+                - name: core::tz-zic
+                  use: [tools]
+        buildTools: [zic]
+        buildScript: |
+            for z in africa antarctica asia australasia europe northamerica \
+                     southamerica etcetera backward factory; do
+                zic -b fat -d build/posix $1/data/$z
+                zic -b fat -d build/right -L $1/data/leapseconds $1/data/$z
+            done;
+
+            mkdir -p install/usr/share/zoneinfo
+            cp -a build/* $1/data/*.tab $1/data/leap-seconds.list \
+                install/usr/share/zoneinfo
+            pushd install/usr/share/zoneinfo
+            for z in posix/*; do
+                ln -sfn "${z}" "${z##*/}"
+            done
+            popd
+
+        packageScript: |
+            installPackageBin $1/install/
+
+    "zic":
+        buildTools: [target-toolchain]
+        buildVars: [CC, AR]
+        buildScript: |
+            mkdir -p build
+            cp -r $1/data/* build/
+            cp -r $1/src/* build/
+            makeParallel CC=$CC -C build \
+                zic
+            mkdir -p install/usr/sbin
+            cp build/zic install/usr/sbin/zic
+
+        packageScript: |
+            installPackageBin $1/install/
+
+        provideTools:
+            zic: "usr/sbin"
