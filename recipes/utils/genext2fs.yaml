@@ -1,0 +1,22 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_VERSION: "1.5.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/bestouff/genext2fs/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA1: 4b06176c1c71b2818dc2f9d772346c5902238c33
+    stripComponents: 1
+
+checkoutScript: |
+    autoconfReconfigure
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideTools:
+    genext2fs: "usr/bin"
