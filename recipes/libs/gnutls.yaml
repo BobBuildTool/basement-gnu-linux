@@ -1,0 +1,45 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "3.8.7.1"
+    PKG_LICENSE: "LGPL-2.1+ (core library)"
+
+depends:
+    - libs::nettle-dev
+    - libs::libtasn1-dev
+    - libs::libunistring-dev
+
+    - use: []
+      depends:
+          - libs::nettle-tgt
+          - libs::libtasn1-tgt
+          - libs::libunistring-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-${PKG_VERSION}.tar.xz
+    digestSHA1: d66729d963c7a5fb170e4b3afeb63702a9ccd265
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-doc \
+        --disable-tests \
+        --disable-libdane \
+        --without-p11-kit
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: autotoolsPackageLib
+        provideDeps: [ "*-tgt" ]
+
+    bin:
+        depends:
+            - name: libs::gnutls-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
