@@ -1,0 +1,21 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2"
+    PKG_LICENSE: "LGPL-3.0+ or GPL-2.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/libunistring/libunistring-${PKG_VERSION}.tar.xz
+    digestSHA1: 914912b4ab91ab57e0ede4b34f3d92296e4dd6ec
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt
