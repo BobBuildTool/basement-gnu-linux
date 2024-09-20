@@ -1,0 +1,40 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "3.10"
+    PKG_LICENSE: "Dual GPL-2.0+/LGPL-3.0+"
+
+depends:
+    - libs::openssl-dev
+    - libs::gmp-dev
+
+    - use: []
+      depends:
+          - libs::openssl-tgt
+          - libs::gmp-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/nettle/nettle-${PKG_VERSION}.tar.gz
+    digestSHA1: 8bd7614c5f5a156e2a5caa703402f3b4e87dabd5
+    stripComponents: 1
+
+buildTools: [host-toolchain]
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: autotoolsPackageLib
+        provideDeps: [ "*-tgt" ]
+
+    bin:
+        depends:
+            - name: libs::nettle-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
