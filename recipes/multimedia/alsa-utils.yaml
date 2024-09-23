@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.12"
+    PKG_LICENSE: "GPL-2.0"
+
+depends:
+    - libs::ncurses-dev
+    - libs::alsa-lib-dev
+
+    - use: []
+      depends:
+          - libs::ncurses-tgt
+          - libs::alsa-lib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.alsa-project.org/files/pub/utils/alsa-utils-${PKG_VERSION}.tar.bz2
+    digestSHA1: e44aa993e2e63c9b5c6bfd2a34b8c6b3846c822a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-xmlto \
+        --disable-rst2man \
+        --disable-nls \
+        --disable-bat
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideDeps: [ "*-tgt" ]
