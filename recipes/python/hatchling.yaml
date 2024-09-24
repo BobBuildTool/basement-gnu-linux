@@ -1,0 +1,23 @@
+inherit: [python3-build]
+
+metaEnvironment:
+   PKG_VERSION: "1.25.0"
+
+checkoutSCM:
+   scm: url
+   url: ${GITHUB_MIRROR}/pypa/hatch/archive/refs/tags/hatchling-v${PKG_VERSION}.tar.gz
+   digestSHA256: 0d8d66b687b8e765d19d2d0560f182457aa78cdbc45fef9430655ccaf1cd34b1
+   stripComponents: 1
+
+depends:
+   - python::pathspec
+   - python::pluggy
+   - python::trove-classifiers
+
+buildScript: |
+   python3Build $1/backend/
+
+packageScript: |
+   python3PackageTgt
+
+provideDeps: ['python::*']
