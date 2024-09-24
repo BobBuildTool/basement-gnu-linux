@@ -1,0 +1,19 @@
+inherit: [python3-build]
+
+metaEnvironment:
+   PKG_VERSION: "0.4.6"
+
+depends:
+   - python::hatchling
+
+checkoutSCM:
+   scm: url
+   url: https://files.pythonhosted.org/packages/source/c/colorama/colorama-0.4.6.tar.gz
+   digestSHA256: 08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44
+   stripComponents: 1
+
+buildScript: |
+   python3Build $1
+
+packageScript: |
+   python3PackageTgt
