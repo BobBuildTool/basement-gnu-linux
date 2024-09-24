@@ -1,0 +1,23 @@
+inherit: [make, install]
+
+metaEnvironment:
+   PKG_VERSION: "R06_28_23"
+
+checkoutSCM:
+   scm: git
+   url: https://github.com/acpica/acpica.git
+   tag: "${PKG_VERSION}"
+   commit: f16a0b4d0f0edd7b78a332fcf507be2187fac21e
+
+buildTools: [bison, flex, target-toolchain]
+buildVars: [CC, STRIP]
+buildScript: |
+   rsync -a --delete $1/ .
+   makeParallel
+   makeSequential install DESTDIR=$(pwd)/install INSTALLFLAGS="-m 555"
+
+packageScript: |
+   installPackageTgt $1/install/
+
+provideTools:
+   acpica: "usr/bin"
