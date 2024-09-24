@@ -1,0 +1,16 @@
+inherit: [python3-build]
+
+metaEnvironment:
+   PKG_VERSION: "8.1.0"
+
+checkoutSCM:
+   scm: url
+   url: ${GITHUB_MIRROR}/pypa/setuptools-scm/archive/refs/tags/v${PKG_VERSION}.tar.gz
+   digestSHA256: 4407d237183e668574bc893fdf739f8f4cde5f61950b99ead4f370f13224ea2b
+   stripComponents: 1
+
+buildScript: |
+   python3Build $1
+
+packageScript: |
+   python3PackageTgt
