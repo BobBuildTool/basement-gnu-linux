@@ -1,0 +1,16 @@
+inherit: [python3-build]
+
+metaEnvironment:
+   PKG_VERSION: "0.12.1"
+
+checkoutSCM:
+   scm: url
+   url: ${GITHUB_MIRROR}/cpburnz/python-pathspec/archive/refs/tags/v${PKG_VERSION}.tar.gz
+   digestSHA256: dd47a400b58c965c93e1ee6723b8ac562ade44ebfcc12421075ebc8dbe7030a7
+   stripComponents: 1
+
+buildScript: |
+   python3Build $1
+
+packageScript: |
+   python3PackageTgt
