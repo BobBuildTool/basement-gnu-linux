@@ -1,0 +1,28 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.5.5"
+    PKG_LICENSE: "LGPL-2.1"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/seccomp/libseccomp/releases/download/v${PKG_VERSION}/libseccomp-${PKG_VERSION}.tar.gz
+    digestSHA1: c0349aca443ec0807528d088a3f2e2e0d5d1b17b
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    bin:
+        depends:
+            - name: libs::libseccomp-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]

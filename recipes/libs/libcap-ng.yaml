@@ -1,0 +1,30 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.8.5"
+    PKG_LICENSE: "LGPL-2.1+"
+
+checkoutSCM:
+    scm: url
+    url: https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-${PKG_VERSION}.tar.gz
+    digestSHA1: 9d1870bd30d7a83f9e92f033809f13e3765eb4c9
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    bin:
+        metaEnvironment:
+            PKG_LICENSE: "GPL-2.0+"
+        depends:
+            - name: libs::libcap-ng-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]

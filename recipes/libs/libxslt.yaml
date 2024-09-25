@@ -1,0 +1,42 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.42"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - libs::libxml2-dev
+
+    - use: []
+      depends:
+          - libs::libxml2-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://download.gnome.org/sources/libxslt/1.1/libxslt-${PKG_VERSION}.tar.xz
+    digestSHA1: a2ee92076aa1f9d0b97218ba3a1222e23112e34a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --without-plugins \
+        --without-debug \
+        --without-python
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: autotoolsPackageLib
+        provideDeps: [ "*-tgt" ]
+
+    bin:
+        depends:
+            - name: libs::libxslt-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+        provideTools:
+            libxslt-tools: "usr/bin"
