@@ -1,0 +1,161 @@
+# Convenience methods for creating a Linux root fs system image.
+#
+# Here we define helper methods for executing certain tasks which are commonly
+# needed to be done on a Linux rootfs. This includes setting the timezone or
+# the root password.
+#
+# Within the rootfs namespace multiple target image formats are defined.
+# Besides creating the actual image, they make sure permissions/device nodes
+# are set and pre-defined users are added.
+#
+# In its simplest form the usage looks something like this:
+#
+#  inherit: [rootfs::ext4]
+#
+#  ...
+#
+#  buildScript: |
+#    rootfsCopy "$PWD/install" "${@:2}"
+#
+#    rootfsPrepare "$PWD/install" "$PWD" "${@:2}"
+#
+#    rootfsExt4CreateImage "$PWD/install" "demo"
+#
+# Please note, that you will need a base root file directory structure which
+# contains e.g. an /etc/passwd file or the timezone files. This is not provided
+# by these classes and has to come from somewhere else.
+
+depends:
+    - tools:
+        target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - kernel::kmod
+          - utils::brtools
+
+buildToolsWeak: [kmod, brtools]
+buildVars: [CONFIG_HOSTNAME, CONFIG_TZ, CONFIG_ROOT_PW, CONFIG_ROOT_PW_SALT]
+buildSetup: |
+    export DEVICE_TABLE_FILE="image.device-table"
+    export USER_TABLE_FILE="image.user-table"
+
+    # Copies multiple source directories into one target directory, excluding
+    # meta directories/files.
+    #
+    # $1: target directory
+    # $2+: source directories
+    rootfsCopy()
+    {
+        for i in "${@:2}" ; do
+            rsync -aHK --exclude ".empty" --exclude ".debug" --exclude ".bob" \
+                $i/ $1/
+        done
+    }
+
+    # Set the hostname on the target.
+    #
+    # $1: rootfs source directory
+    # $2: hostname
+    rootfsSetHostname()
+    {
+        mkdir -p $1/etc
+        echo "$2" > $1/etc/hostname
+        sed -i -e "/^127.0.1.1/d" -e "a127.0.1.1\t$2" $1/etc/hosts
+    }
+
+    # Set the timezone on the target.
+    #
+    # $1: rootfs source directory
+    # $2: timezone
+    rootfsSetTimezone()
+    {
+        mkdir -p $1/etc
+        ln -sf /usr/share/zoneinfo/$2 "$1/etc/localtime"
+        echo "$2" > "$1/etc/timezone"
+    }
+
+    # Set the root password on the target. An optional password salt can be
+    # specified.
+    #
+    # $1: rootfs source directory
+    # $2: password
+    # $3: password salt (optional)
+    rootfsSetRootPw()
+    {
+        PW=$(mkpasswd ${3:+-S$3} -msha-512 "$2")
+        sed -i s/^root:[^:]*:/root:${PW//\//\\\/}:/ \
+            "$1/etc/shadow"
+    }
+
+    # Create the final user-table file. It searches all provided source paths
+    # for *.user-tables files within the .bob directories.
+    #
+    # $1: source path to search for *.user-table files
+    # $2: output file
+    rootfsMergeUserTables()
+    {
+        # Search for all user-table files and cat them into one file
+        TABLES=`find "${@:2}" -regex ".bob/.*.user-table"`
+        if [ "$TABLES" != "" ]; then
+          cat $TABLES > "$1"
+        fi
+    }
+
+    # Create the final device-table file. It searches all provided source paths
+    # for *.device-tables files within the .bob directories.
+    #
+    # $1: source path to search for *.device-table files
+    # $2: output file
+    rootfsMergeDeviceTables()
+    {
+        # Search for all device-table files and cat them into one file
+        TABLES=`find "${@:2}" -regex ".bob/.*.device-table"`
+        if [ "$TABLES" != "" ]; then
+          cat $TABLES > "$1"
+        fi
+    }
+
+    # Execute commonly required task on the root fs directory. This is in
+    # preparation of the actual image creation step.
+    #
+    # $1: rootfs source directory
+    # $2+: source directories to search for bob files
+    rootfsPrepare()
+    {
+        # set hostname; defaults to "demo"
+        rootfsSetHostname "$1" "${CONFIG_HOSTNAME:-demo}"
+
+        # set timezone; defaults to "Europe/Berlin"
+        rootfsSetTimezone "$1" "${CONFIG_TZ:-Europe/Berlin}"
+
+        # set root pw; defaults to "root"
+        rootfsSetRootPw "$1" "${CONFIG_ROOT_PW:-root}" "${CONFIG_ROOT_PW_SALT:-}"
+
+        # Search for all user-table files and cat them into one file
+        rootfsMergeUserTables $USER_TABLE_FILE "${@:2}"
+
+        # Search for all device-table files and cat them into one file
+        rootfsMergeDeviceTables $DEVICE_TABLE_FILE "${@:2}"
+
+        # call depmod on the final tree
+        if [ -e $1/lib/modules/* ]; then
+            # we don't know the kernel name, so just assume there is only one
+            # kernel directory in /lib/modules
+            depmod -a -b $1 `basename $1/lib/modules/*`
+        fi
+
+        # Create a base script which we can execute in a fake root environment.
+        # This can be used by the actual scripts creating the target files.
+        read -r -d '\0' CREATE_SH_FILE << EOF
+    #!/bin/sh
+    set -e
+    chown -h -R 0:0 $1
+    if [ -e $USER_TABLE_FILE ]; then
+        mkusers $USER_TABLE_FILE $1
+    fi
+    if [ -e $DEVICE_TABLE_FILE ]; then
+        makedevs -d $DEVICE_TABLE_FILE $1
+    fi
+    \0
+    EOF
+    }

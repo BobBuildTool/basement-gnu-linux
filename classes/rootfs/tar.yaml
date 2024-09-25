@@ -1,0 +1,17 @@
+inherit: [rootfs]
+
+buildSetup: |
+    # Creates a xz compressed tar image from the root fs source directory.
+    #
+    # $1: rootfs source directory
+    # $2: output name
+    rootfsTarCreateImage()
+    {
+        cat >create_tar_img.sh <<EOF
+    $CREATE_SH_FILE
+
+    tar -C $1 -cJf $BOB_CWD/$2.tar.xz .
+    EOF
+
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_tar_img.sh
+    }

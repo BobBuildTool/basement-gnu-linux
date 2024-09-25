@@ -1,0 +1,28 @@
+inherit: [rootfs]
+
+depends:
+    - tools:
+        target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - utils::cpio
+
+buildToolsWeak: [cpio]
+buildSetup: |
+    # Creates a gzip compressed cpio image from the root fs source directory.
+    #
+    # $1: rootfs source directory
+    # $2: output name
+    rootfsCpioCreateImage()
+    {
+        cat >create_cpio_img.sh <<EOF
+    $CREATE_SH_FILE
+
+    cd $1
+    find . -print | sort | \
+         cpio --create --reproducible --format=newc | \
+         gzip > $BOB_CWD/$2.cpio.gz
+    EOF
+
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_cpio_img.sh
+    }
