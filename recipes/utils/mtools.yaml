@@ -1,0 +1,19 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.0.44"
+    PKG_LICENSE: "GPL-3.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/mtools/mtools-${PKG_VERSION}.tar.bz2
+    digestSHA1: 93dde7a8ae934b54beaa8ecc7ca134d5cfd1e3f8
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+provideTools:
+    mtools: "usr/bin"
