@@ -1,0 +1,29 @@
+inherit: [rootfs]
+
+depends:
+    - tools:
+        target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - utils::e2fsprogs
+
+buildToolsWeak: [e2fsprogs]
+buildSetup: |
+    # Creates a ext4 image from the root fs source directory. The target image
+    # size can be optionally specified. If not, it is automatically calculated.
+    #
+    # $1: rootfs source directory
+    # $2: output name
+    # $3: output size (optional)
+    rootfsExt4CreateImage()
+    {
+        cat >create_ext4_img.sh <<EOF
+    $CREATE_SH_FILE
+
+    # calc size and add 18% head room for inodes, ...
+    SIZE=${3:-\$(printf %0.f \$(echo "\$(du -xsb -- install | cut -f 1)*1.18" | bc) | numfmt --to-unit=1024)}
+    mkfs.ext4 -d $1 $BOB_CWD/$2.img \${SIZE}
+    EOF
+
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_ext4_img.sh
+    }
