@@ -1,0 +1,40 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.8.10"
+    PKG_LICENSE: "GPL-2.0"
+
+depends:
+    - libs::libmnl-dev
+    - libs::libnftnl-dev
+
+    - use: []
+      depends:
+        - libs::libmnl-tgt
+        - libs::libnftnl-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.netfilter.org/projects/iptables/files/iptables-${PKG_VERSION}.tar.xz
+    digestSHA1: ddbebf81eacbf900dc6dd4ed409353930397e0c2
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-libipq
+
+multiPackage:
+    "":
+        depends:
+            - name: net::iptables-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+        packageScript: autotoolsPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: autotoolsPackageLib
+        provideDeps: [ "*-tgt" ]
