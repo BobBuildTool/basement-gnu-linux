@@ -1,0 +1,23 @@
+inherit: [autoconf, autotools]
+
+metaEnvironment:
+  PKG_VERSION: "6.10"
+
+checkoutSCM:
+  scm: url
+  url: https://ftp.ntu.edu.tw/pub/software/network/ethtool/ethtool-${PKG_VERSION}.tar.xz
+  digestSHA256: cc613fe8a2bcddee17a1e6e0d763c0f3ea33c7e930658d2d7f601aa65e426a1f
+  stripComponents: 1
+
+depends:
+  - libs::libmnl-dev
+  - use: []
+    depends:
+      - libs::libmnl-tgt
+
+buildScript: |
+  autotoolsBuild $1
+
+provideDeps: ["*-tgt"]
+packageScript: |
+  autotoolsPackageTgt

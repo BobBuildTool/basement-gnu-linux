@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+   PKG_VERSION: "1.17"
+   PKG_DESCRIPTION: "This library provides an iconv() implementation"
+   PKG_LICENSE: "LGPL-2.0-only"
+
+checkoutSCM:
+   scm: url
+   url: ${GNU_MIRROR}/libiconv/libiconv-${PKG_VERSION}.tar.gz
+   stripComponents: 1
+   digestSHA256: "8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313"
+
+privateEnvironment:
+   APPLY_LIBTOOL_PATCH: "no"
+
+buildScript: |
+   autotoolsBuild $1
+
+multiPackage:
+   dev:
+      packageScript: autotoolsPackageDev
+   tgt:
+      packageScript: autotoolsPackageTgt

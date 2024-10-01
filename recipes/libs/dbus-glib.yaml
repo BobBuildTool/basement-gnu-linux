@@ -1,0 +1,54 @@
+inherit: [autotools]
+
+metaEnvironment:
+   PKG_DESCRIPTION: "D-Bus client library (binding) for C using GLib"
+   PKG_LICENSE: "AFL-2.1 OR GPL-2.0-or-later"
+   PKG_VERSION: "0.112"
+
+depends:
+   - core::dbus-dev
+   - libs::expat-dev
+   - libs::glib-dev
+   - use: []
+     depends:
+      - core::dbus-tgt
+      - libs::expat-tgt
+      - libs::glib-tgt
+
+checkoutSCM:
+   scm: url
+   url: https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${PKG_VERSION}.tar.gz
+   digestSHA1: 9eb81f50e36e349f57297d1a2a61b48707a551cc
+   stripComponents: 1
+
+multiPackage:
+   "":
+      depends:
+         - name: libs::dbus-glib-tools
+           use: [tools]
+           tools:
+              target-toolchain: host-compat-toolchain
+
+      buildTools: [dbus-glib-tools, glib, python3]
+      buildScript: |
+         autotoolsBuild $1 \
+            --with-dbus-binding-tool=${BOB_TOOL_PATHS[dbus-glib-tools]}/dbus-binding-tool \
+            --disable-gtk-doc \
+            GLIB_GENMARSHAL=glib-genmarshal
+
+      multiPackage:
+         dev:
+            provideDeps: ['*-dev']
+            packageScript: autotoolsPackageDev
+         tgt:
+            provideDeps: ['*-tgt']
+            packageScript: autotoolsPackageTgt
+   tools:
+      buildTools: [glib, python3]
+      buildScript: |
+         export ac_cv_have_abstract_sockets=true
+         autotoolsBuild $1 --disable-gtk-doc GLIB_GENMARSHAL=glib-genmarshal
+      packageScript: autotoolsPackageBin
+      provideTools:
+         dbus-glib-tools: "usr/bin"
+
