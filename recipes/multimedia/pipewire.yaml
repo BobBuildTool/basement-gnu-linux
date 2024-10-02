@@ -1,0 +1,96 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.3"
+    PKG_LICENSE: "MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)"
+
+depends:
+    - libs::ncurses-dev
+    - libs::readline-dev
+    - virt::udev-dev
+    - libs::alsa-lib-dev
+
+    - use: []
+      depends:
+          - libs::ncurses-tgt
+          - libs::readline-tgt
+          - virt::udev-tgt
+          - libs::alsa-lib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/${PKG_VERSION}/pipewire-${PKG_VERSION}.tar.bz2
+    digestSHA1: 452121b3f14b88cdd2a330227445359a0bf270ff
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Ddocs=disabled \
+        -Dman=disabled \
+        -Dtests=disabled \
+        -Dspa-plugins=enabled \
+        -Daudiomixer=enabled \
+        -Daudioconvert=enabled \
+        -Dbluez5-codec-lc3=disabled \
+        -Dbluez5-codec-lc3plus=disabled \
+        -Dcontrol=enabled \
+        -Daudiotestsrc=enabled \
+        -Dsupport=enabled \
+        -Devl=disabled \
+        -Dtest=disabled \
+        -Dvideoconvert=disabled \
+        -Dvideotestsrc=disabled \
+        -Dvolume=enabled \
+        -Dvulkan=disabled \
+        -Dsession-managers=[] \
+        -Dlegacy-rtkit=false \
+        -Davb=disabled \
+        -Dlibcanberra=disabled \
+        -Dlibmysofa=disabled \
+        -Dlibffado=disabled \
+        -Dflatpak=disabled \
+        -Ddbus=disabled \
+        -Dexamples=disabled \
+        -Dgstreamer=disabled \
+        -Dsystemd=disabled \
+        -Davahi=disabled \
+        -Dpipewire-jack=disabled -Djack=disabled \
+        -Dbluez5-backend-native-mm=disabled -Dbluez5=disabled -Dbluez5-codec-opus=disabled \
+        -Dffmpeg=disabled -Dpw-cat-ffmpeg=disabled \
+        -Dpipewire-v4l2=disabled -Dv4l2=disabled \
+        -Dlibcamera=disabled \
+        -Dlv2=disabled \
+        -Dx11=disabled \
+        -Dgsettings=disabled \
+        -Dlibusb=disabled \
+        -Dpw-cat=disabled -Dsndfile=disabled \
+        -Dopus=disabled \
+        -Dlibpulse=disabled \
+        -Dsdl2=disabled \
+        -Dcompress-offload=disabled \
+        -Decho-cancel-webrtc=disabled \
+        -Draop=disabled \
+        -Dreadline=disabled \
+        -Dudev=enabled \
+        -Dpipewire-alsa=enabled -Dalsa=enabled
+
+    mkdir -p install/.bob
+    cat >install/.bob/pipewire.user-table <<EOF
+    pipewire -1 pipewire -1 * - - audio,video PipeWire System Daemon
+    EOF
+
+multiPackage:
+    "":
+        depends:
+            - name: multimedia::pipewire-tgt
+              use: []
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: mesonPackageLib
+        provideDeps: [ "*-tgt" ]

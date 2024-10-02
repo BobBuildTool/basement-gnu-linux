@@ -1,0 +1,67 @@
+inherit: [cpackage, make, pkg-config, install]
+
+metaEnvironment:
+    PKG_VERSION: "5.4.7"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - libs::ncurses-dev
+    - libs::readline-dev
+
+    - use: []
+      depends:
+          - libs::ncurses-tgt
+          - libs::readline-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.lua.org/ftp/lua-${PKG_VERSION}.tar.gz
+    digestSHA1: 29b54f97dab8631f52ee21a44871622eaefbe235
+    stripComponents: 1
+
+buildTools: [target-toolchain]
+buildVars: [CC, CFLAGS, LDFLAGS, RANLIB, AR, PKG_VERSION]
+buildScript: |
+    mkdir -p build install
+    cp -r $1/doc $1/src $1/Makefile build
+    LUA_CFLAGS="-fPIC -DLUA_USE_POSIX -DLUA_COMPAT_5_3 -DLUA_USE_DLOPEN -DLUA_USE_READLINE"
+    LUA_LIBS=`pkg-config --libs-only-l ncurses readline history`
+    makeParallel -C build \
+        CC="$CC" \
+        CFLAGS="$CFLAGS $LUA_CFLAGS" \
+        MYLDFLAGS="$LDFLAGS" \
+        MYLIBS="$LUA_LIBS" \
+        RANLIB="$RANLIB" AR="$AR rcu" \
+        PKG_VERSION="${PKG_VERSION}" \
+        BUILDMODE=dynamic \
+        all
+
+    makeParallel -C build \
+        INSTALL_TOP=$BOB_CWD/install/usr \
+        install
+
+    # add a pkg-config file, so other users are able to find lua
+    mkdir -p install/usr/lib/pkgconfig
+    cat >install/usr/lib/pkgconfig/lua.pc <<EOF
+    prefix=/usr
+    exec_prefix=\${prefix}
+    libdir=\${exec_prefix}/lib
+    includedir=\${prefix}/include
+
+    Name: Lua
+    Description: An Extensible Extension Language
+    Version: ${PKG_VERSION}
+    Requires:
+    Libs: -L\${libdir} -llua -lm $LUA_LIBS
+    Cflags: -I\${includedir}
+    EOF
+
+multiPackage:
+    dev:
+        packageScript: installPackageDev "$1/install/"
+        provideDeps: [ "*-dev" ]
+
+    # lua doesn't provide shared libs
+    bin:
+        packageScript: installPackageBin "$1/install/"
+        provideDeps: [ "*-tgt" ]
