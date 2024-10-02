@@ -1,0 +1,25 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "2.10"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/net-tools/net-tools-${PKG_VERSION}.tar.xz
+    digestSHA1: 4080baab0486dc882c3b293d5559c27251ae4268
+    stripComponents: 1
+
+buildVars: [CC, AR]
+buildScript: |
+    mkdir -p build install
+    # this doesn't support out of tree builds; symlink the sources
+    cp -as $1/* build/
+    pushd build
+    # accept default config
+    yes "" | $1/configure.sh $1/config.in || true
+    makeParallel CC="$CC" AR="$AR"
+    makeParallel BASEDIR=$BOB_CWD/install install
+    popd
+
+packageScript: installPackageTgt "$1/install/"

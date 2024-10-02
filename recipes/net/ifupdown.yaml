@@ -1,0 +1,37 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "0.8.43"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: https://snapshot.debian.org/archive/debian/20240826T023510Z/pool/main/i/ifupdown/ifupdown_${PKG_VERSION}.tar.xz
+    digestSHA1: "6df0fc3b6ed0d16ce55b4d01d0cbb6993294afde"
+    stripComponents: 1
+
+buildVars: [CC]
+buildScript: |
+    mkdir -p build
+    cp -a $1/* build/
+
+    # fake this
+    mkdir -p bin
+    cat >bin/dpkg-architecture <<EOF
+    echo linux
+    EOF
+    chmod u+x bin/dpkg-architecture
+
+    export PATH=$PATH:$PWD/bin
+    makeParallel -C build \
+        CC="$CC" \
+        PKGLIBDIR=/usr/lib/ifupdown \
+        ifup ifdown ifquery
+    makeSequential -C build \
+        BASEDIR=$PWD/install \
+        install
+
+    mkdir -p install/etc/network/if-{pre-up.d,up.d,post-down.d,down.d}
+
+packageScript: |
+    installPackageBin "$1/install/"

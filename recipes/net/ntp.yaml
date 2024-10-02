@@ -1,0 +1,45 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.2.8p18"
+    PKG_LICENSE: "NTP"
+
+depends:
+    - libs::openssl-dev
+    - libs::libcap-dev
+
+    - use: []
+      depends:
+          - libs::openssl-tgt
+          - libs::libcap-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-${PKG_VERSION}.tar.gz
+    digestSHA1: 9b5247a8576c6082900682c6de98c8d3c17fc15f
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --with-shared \
+        --program-transform-name=s,,, \
+        --disable-tickadj \
+        --disable-debugging \
+        --with-yielding-select=yes \
+        --disable-local-libevent \
+        --without-lineeditlibs \
+        --without-ntpsnmpd \
+        --disable-ATOM \
+        --disable-SHM \
+        --with-sntp \
+        --with-crypto \
+        --enable-openssl-random \
+        --enable-linuxcaps
+
+    mkdir -p install/.bob
+    cat >install/.bob/ntpd.user-table <<EOF
+    ntp -1 ntp -1 * - - - ntpd user
+    EOF
+
+packageScript: autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]

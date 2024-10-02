@@ -1,0 +1,24 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_VERSION: "1.7.1"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${KERNEL_MIRROR}/linux/utils/net/bridge-utils/bridge-utils-${PKG_VERSION}.tar.xz
+    digestSHA1: 07266dff2bf31a24fc912314b6764251ce645a39
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    autoconfReconfigure
+
+buildVars: [AR]
+buildScript: |
+    # this doesn't support out of tree builds; symlink the sources
+    mkdir -p build
+    cp -as $1/* build/
+    autotoolsBuild -o AR=$AR $1
+
+packageScript: autotoolsPackageTgt
