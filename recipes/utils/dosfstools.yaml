@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.2"
+    PKG_LICENSE: "GPL-3.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/dosfstools/dosfstools/releases/download/v${PKG_VERSION}/dosfstools-${PKG_VERSION}.tar.gz
+    digestSHA1: 14efc68c64987a9067b6a919ad2870007247686b
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-compat-symlinks
+
+packageScript: |
+    autotoolsPackageTgt
+provideTools:
+    dosfstools: "usr/sbin"
