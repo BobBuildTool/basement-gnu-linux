@@ -1,28 +1,37 @@
-inherit: [autotools, patch]
+inherit: [autotools]
 
 metaEnvironment:
-  PKG_VERSION: 5.0.0
+    PKG_VERSION: 5.0.0
 
 checkoutSCM:
-  scm: url
-  url: https://ftp.gnu.org/gnu/screen/screen-${PKG_VERSION}.tar.gz
-  digestSHA256: f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971
-  stripComponents: 1
+    scm: url
+    url: ${GNU_MIRROR}/screen/screen-${PKG_VERSION}.tar.gz
+    digestSHA256: f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971
+    stripComponents: 1
 
 depends:
-  - libs::libxcrypt-dev
-  - libs::ncurses-dev
-  - use: []
-    depends:
-      - libs::libxcrypt-tgt
-      - libs::ncurses-tgt
+    - libs::libxcrypt-dev
+    - libs::ncurses-dev
+    - use: []
+      depends:
+        - libs::libxcrypt-tgt
+        - libs::ncurses-tgt
 
 buildScript: |
-  CFLAGS="${CFLAGS} -I$1"
-  autotoolsBuild $1 --prefix=/usr \
-          --sysconfdir=/etc \
-          --disable-pam
+    CFLAGS="${CFLAGS} -I$1"
+    autotoolsBuild $1 \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --disable-pam
+
+    mkdir -p install/.bob
+
+    # add screen as shell
+    cat >install/.bob/screen.shell-table <<EOF
+    /bin/screen
+    /usr/bin/screen
+    EOF
 
 provideDeps: ["*-tgt"]
 packageScript: |
-  autotoolsPackageTgt
+    autotoolsPackageTgt
