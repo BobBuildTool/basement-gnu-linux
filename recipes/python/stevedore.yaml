@@ -1,0 +1,19 @@
+inherit: [python3-build]
+
+metaEnvironment:
+   PKG_VERSION: "5.3.0"
+
+depends:
+   - python::pbr
+
+checkoutSCM:
+   scm: url
+   url: https://files.pythonhosted.org/packages/source/s/stevedore/stevedore-${PKG_VERSION}.tar.gz
+   digestSHA256: 9a64265f4060312828151c204efbe9b7a9852a0d9228756344dbc7e4023e375a
+   stripComponents: 1
+
+buildScript: |
+   python3Build $1
+
+packageScript: |
+   python3PackageTgt

@@ -1,0 +1,16 @@
+inherit: [python3-pkg]
+
+metaEnvironment:
+   PKG_VERSION: "0.20.1"
+
+checkoutSCM:
+   scm: url
+   url: https://files.pythonhosted.org/packages/source/d/docutils/docutils-${PKG_VERSION}.tar.gz
+   digestSHA256: "f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b"
+
+buildVars: [PKG_VERSION]
+buildScript: |
+   python3BuildSetuptools $1/docutils-${PKG_VERSION}/
+
+packageScript: |
+   python3PackageTgt

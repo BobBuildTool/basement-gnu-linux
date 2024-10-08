@@ -1,0 +1,16 @@
+inherit: [python3-pkg]
+
+metaEnvironment:
+   PKG_VERSION: "2.1.5"
+
+checkoutSCM:
+   scm: url
+   url: ${GITHUB_MIRROR}/pallets/markupsafe/archive/refs/tags/${PKG_VERSION}.tar.gz
+   digestSHA256: 307f63295d17f178b7d3af5968fb828e34086d5d66fec505b630a1e5f5b3328b
+   stripComponents: 1
+
+buildScript: |
+   python3BuildSetuptools $1
+
+packageScript: |
+   python3PackageTgt
