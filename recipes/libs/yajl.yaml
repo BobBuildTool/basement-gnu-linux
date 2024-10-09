@@ -1,0 +1,29 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "2.1.0"
+    PKG_LICENSE: "ISC"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/lloyd/yajl/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 29ce2b9695ae93e1b0b349a22cea8067f25a9025
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    "":
+        depends:
+            - name: libs::yajl-tgt
+              use: []
+        packageScript: cmakePackageBin
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+
+        packageScript: cmakePackageDev
+
+    tgt:
+        packageScript: cmakePackageLib
