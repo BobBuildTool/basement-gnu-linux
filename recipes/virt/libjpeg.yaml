@@ -1,13 +1,12 @@
-depends:
-    - ${CONFIG_SELECT_LIBJPEG:-libs::jpeg-turbo}-dev
-
-    - use: []
-      depends:
-          - ${CONFIG_SELECT_LIBJPEG:-libs::jpeg-turbo}-tgt
-
 multiPackage:
     dev:
-        provideDeps: [ "*-dev" ]
+        depends:
+            - name: ${CONFIG_SELECT_LIBJPEG:-libs::jpeg-turbo}-dev
+              use: []
 
     tgt:
-        provideDeps: [ "*-tgt" ]
+        depends:
+            - name: ${CONFIG_SELECT_LIBJPEG:-libs::jpeg-turbo}-tgt
+              use: []
+
+provideDeps: [ "*" ]

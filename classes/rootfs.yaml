@@ -115,6 +115,20 @@ buildSetup: |
         fi
     }
 
+    # Create the final shell-table file. It searches all provided source paths
+    # for *.shell-tables files within the .bob directories.
+    #
+    # $1: source path to search for *.shell-table files
+    # $2: output file
+    rootfsMergeShellTables()
+    {
+        # Search for all shell-table files and cat them into one file
+        TABLES=`find "${@:2}" -regex ".bob/.*.shell-table"`
+        if [ "$TABLES" != "" ]; then
+          cat $TABLES > "$1"
+        fi
+    }
+
     # Execute commonly required task on the root fs directory. This is in
     # preparation of the actual image creation step.
     #
@@ -136,6 +150,9 @@ buildSetup: |
 
         # Search for all device-table files and cat them into one file
         rootfsMergeDeviceTables $DEVICE_TABLE_FILE "${@:2}"
+
+        # Search for all shell-table files and cat them into one file
+        rootfsMergeShellTables $1/etc/shells "${@:2}"
 
         # call depmod on the final tree
         if [ -e $1/lib/modules/* ]; then
