@@ -1,0 +1,44 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "3.13.0"
+    PKG_LICENSE: "GPL-2.0+"
+
+depends:
+    - libs::zlib-dev
+    - virt::udev-dev
+    - kernel::kmod-lib-dev
+
+    - use: []
+      depends:
+          - libs::zlib-tgt
+          - virt::udev-tgt
+          - kernel::kmod-lib-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${KERNEL_MIRROR}/software/utils/pciutils/pciutils-${PKG_VERSION}.tar.xz
+    digestSHA1: 83ea1394a2095442731f639b16f38292be67201f
+    stripComponents: 1
+
+buildVars: [CC, AR, RANLIB, CFLAGS, LDFLAGS]
+buildScript: |
+    mkdir -p build install
+    cp -as $1/* build/
+    makeParallel -C build \
+        AR="$AR" \
+        RANLIB="$RANLIB" \
+        STRIP= \
+        CC="$CC" \
+        CFLAGS="$CFLAGS" \
+        LDFLAGS="$LDFLAGS" \
+        DNS=no \
+        ZLIB=yes \
+        HWDB=yes \
+        LIBKMOD=yes \
+        PREFIX=/usr \
+        DESTDIR=$BOB_CWD/install \
+        install
+
+packageScript: installPackageBin "$1/install/"
+provideDeps: [ "*-tgt" ]
