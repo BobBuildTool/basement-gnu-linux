@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "8.2"
+    PKG_LICENSE: "GPL-3.0+"
+
+depends:
+    - libs::ncurses-dev
+
+    - use: []
+      depends:
+        - libs::ncurses-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/nano/nano-${PKG_VERSION}.tar.xz
+    digestSHA256: "d5ad07dd862facae03051c54c6535e54c7ed7407318783fcad1ad2d7076fffeb"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]
