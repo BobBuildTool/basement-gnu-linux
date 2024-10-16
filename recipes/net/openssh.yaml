@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "9.8p1"
+    PKG_VERSION: "9.9p1"
 
 depends:
     - libs::openssl-dev
@@ -15,7 +15,7 @@ depends:
 checkoutSCM:
     scm: url
     url: http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${PKG_VERSION}.tar.gz
-    digestSHA1: "a0bb501b11349f5c5c33a269351be091dc2c2727"
+    digestSHA1: 5ded7eb0add0b02b5d1a1c4bf5cb2c89d2117b53
     stripComponents: 1
 
 buildTools: [target-toolchain]
@@ -25,6 +25,13 @@ buildScript: |
         --disable-strip \
         --with-ssl-dir="${BOB_DEP_PATHS[libs::openssl-dev]}/usr" \
         --without-openssl-header-check
+
+    mkdir -p install/.bob
+
+    # add some daemon users
+    cat >install/.bob/sshd.user-table <<EOF
+    sshd -1 sshd -1 * - - - sshd user
+    EOF
 
 packageScript: |
     autotoolsPackageTgt
