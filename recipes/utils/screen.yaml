@@ -24,6 +24,14 @@ buildScript: |
         --sysconfdir=/etc \
         --disable-pam
 
+    mkdir -p install/.bob
+
+    # add screen as shell
+    cat >install/.bob/screen.shell-table <<EOF
+    /bin/screen
+    /usr/bin/screen
+    EOF
+
 provideDeps: ["*-tgt"]
 packageScript: |
     autotoolsPackageTgt
