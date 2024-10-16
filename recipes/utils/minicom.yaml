@@ -1,0 +1,29 @@
+inherit: [autotools, autoconf, patch]
+
+metaEnvironment:
+    PKG_VERSION: "2.9"
+    PKG_LICENSE: "GPL-2.0+"
+
+depends:
+    - libs::ncurses-dev
+
+    - use: []
+      depends:
+        - libs::ncurses-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://salsa.debian.org/minicom-team/minicom/-/archive/${PKG_VERSION}/minicom-${PKG_VERSION}.tar.bz2
+    digestSHA1: c25af7dda22a83671c75a145de288e3e0bb5c1b4
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@minicom/*.patch@>
+
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-lock-dir=/var/lock
+
+packageScript: autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]

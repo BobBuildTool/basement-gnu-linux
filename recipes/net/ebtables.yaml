@@ -1,0 +1,18 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.0.11"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: https://netfilter.org/pub/ebtables/ebtables-${PKG_VERSION}.tar.gz
+    digestSHA1: 791b3b535181aa66f302356c2984cf244f76a247
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+    ln -sf /usr/sbin/ebtables-legacy install/usr/sbin/ebtables
+
+packageScript: autotoolsPackageTgt
