@@ -26,6 +26,13 @@ buildScript: |
         --with-ssl-dir="${BOB_DEP_PATHS[libs::openssl-dev]}/usr" \
         --without-openssl-header-check
 
+    mkdir -p install/.bob
+
+    # add some daemon users
+    cat >install/.bob/sshd.user-table <<EOF
+    sshd -1 sshd -1 * - - - sshd user
+    EOF
+
 packageScript: |
     autotoolsPackageTgt
 
