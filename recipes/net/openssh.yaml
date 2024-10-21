@@ -4,11 +4,13 @@ metaEnvironment:
     PKG_VERSION: "9.9p1"
 
 depends:
+    - libs::libxcrypt-dev
     - libs::openssl-dev
     - libs::zlib-dev
 
     - use: []
       depends:
+        - libs::libxcrypt-tgt
         - libs::openssl-tgt
         - libs::zlib-tgt
 
