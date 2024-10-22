@@ -20,7 +20,7 @@ buildScript: |
     export KCONFIG_NOTIMESTAMP=1
 
     mkdir -p build install
-    cd build
+    pushd build
 
     if [[ ${BUSYBOX_CUSTOM_CONFIG:+true} ]] ; then
         cp -u "${BOB_DEP_PATHS[core::busybox-custom-config]}/${BUSYBOX_CUSTOM_CONFIG}" .config
@@ -30,18 +30,19 @@ buildScript: |
     fi
     makeParallel
     make CONFIG_PREFIX=${BOB_CWD}/install install
+    popd #build
 
     mkdir -p install/.bob
 
     # busybox must be setuid if configured
     grep -qE '^CONFIG_FEATURE_SUID=y$' build/.config && \
-        printf '/usr/bin/busybox f 4755 0  0 - - - - -\n' > install/.bob/busybox.device-table
+       (printf '/usr/bin/busybox f 4755 0  0 - - - - -\n' > install/.bob/busybox.device-table) ||:
 
     # add configured shells
     (
         printf '/bin/sh\n/usr/bin/sh\n'
-        grep -qE '^CONFIG_SHELL_ASH=y$' build/.config && printf '/bin/ash\n/usr/bin/ash\n'
-        grep -qE '^CONFIG_SHELL_HUSH=y$' build/.config && printf '/bin/hush\n/usr/bin/hush\n'
+        grep -qE '^CONFIG_SHELL_ASH=y$' build/.config && printf '/bin/ash\n/usr/bin/ash\n' ||:
+        grep -qE '^CONFIG_SHELL_HUSH=y$' build/.config && printf '/bin/hush\n/usr/bin/hush\n' ||:
     ) > install/.bob/busybox.shell-table
 
 packageScript: |
