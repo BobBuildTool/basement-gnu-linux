@@ -67,6 +67,7 @@ depends:
     - libs::libpng-tgt
     - libs::libseccomp-tgt
     - libs::libssh-tgt
+    - libs::libssh2-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
     - libs::libtomcrypt-tgt
