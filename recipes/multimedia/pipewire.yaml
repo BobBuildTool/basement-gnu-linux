@@ -7,14 +7,14 @@ metaEnvironment:
 depends:
     - libs::ncurses-dev
     - libs::readline-dev
-    - virt::udev-dev
+    - virtual::core::udev-dev
     - libs::alsa-lib-dev
 
     - use: []
       depends:
           - libs::ncurses-tgt
           - libs::readline-tgt
-          - virt::udev-tgt
+          - virtual::core::udev-tgt
           - libs::alsa-lib-tgt
 
 checkoutSCM:

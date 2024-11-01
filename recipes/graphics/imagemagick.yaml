@@ -2,12 +2,12 @@ inherit: [autotools]
 
 depends:
     - libs::libpng-dev
-    - virt::libjpeg-dev
+    - virtual::libs::libjpeg-dev
 
     - use: []
       depends:
           - libs::libpng-tgt
-          - virt::libjpeg-tgt
+          - virtual::libs::libjpeg-tgt
 
 metaEnvironment:
     PKG_VERSION: "7.1.1-38"

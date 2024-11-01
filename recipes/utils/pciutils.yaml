@@ -6,13 +6,13 @@ metaEnvironment:
 
 depends:
     - libs::zlib-dev
-    - virt::udev-dev
+    - virtual::core::udev-dev
     - kernel::kmod-lib-dev
 
     - use: []
       depends:
           - libs::zlib-tgt
-          - virt::udev-tgt
+          - virtual::core::udev-tgt
           - kernel::kmod-lib-tgt
 
 checkoutSCM:
