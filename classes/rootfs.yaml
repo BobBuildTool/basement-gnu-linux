@@ -164,7 +164,7 @@ buildSetup: |
         # Create a base script which we can execute in a fake root environment.
         # This can be used by the actual scripts creating the target files.
         read -r -d '\0' CREATE_SH_FILE << EOF
-    #!/bin/sh
+    #!/bin/bash
     set -e
     chown -h -R 0:0 $1
     if [ -e $USER_TABLE_FILE ]; then
