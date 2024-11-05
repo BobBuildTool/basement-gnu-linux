@@ -1,0 +1,35 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.10.8"
+    PKG_LICENSE: "LGPL-2.1-or-later"
+
+checkoutSCM:
+    scm: url
+    url: https://download.gnome.org/sources/json-glib/1.10/json-glib-${PKG_VERSION}.tar.xz
+    digestSHA256: 55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd
+    stripComponents: 1
+
+depends:
+    - libs::glib-dev
+    - use: []
+      depends:
+          - libs::glib-tgt
+
+buildTools: [glib, cmake]
+buildScript: |
+    mesonBuild $1 \
+        -Dintrospection=disabled \
+        -Dtests=false \
+        -Dconformance=false \
+        -Dinstalled_tests=false \
+        -Ddocumentation=disabled \
+        -Dgtk_doc=disabled
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: mesonPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: mesonPackageTgt
