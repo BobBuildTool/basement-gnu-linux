@@ -11,15 +11,19 @@ depends:
           target-toolchain: host-compat-toolchain
     - libs::cairo-dev
     - libs::fontconfig-dev
+    - libs::freetype-dev
     - libs::fribidi-dev
     - libs::glib-dev
+    - libs::gnome::json-glib-dev
     - libs::harfbuzz-dev
 
     - use: []
       depends:
           - libs::cairo-tgt
           - libs::fontconfig-tgt
+          - libs::freetype-tgt
           - libs::fribidi-tgt
+          - libs::gnome::json-glib-tgt
           - libs::glib-tgt
           - libs::harfbuzz-tgt
 
