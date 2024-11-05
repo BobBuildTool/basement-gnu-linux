@@ -1,12 +1,11 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "2.10.4"
+    PKG_VERSION: "2.14.2"
     PKG_LICENSE: "FTL OR GPL-2.0-or-later"
 
 depends:
     - libs::libpng-dev
-
     - use: []
       depends:
           - libs::libpng-tgt
@@ -14,18 +13,18 @@ depends:
 checkoutSCM:
     scm: url
     url:  ${SOURCEFORGE_MIRROR}/freetype/freetype-${PKG_VERSION}.tar.xz
-    digestSHA256: 86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784
+    digestSHA256: 4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1
     stripComponents: 1
 
 buildTools: [host-toolchain]
 buildScript: |
-    autotoolsBuild $1
+    mesonBuild $1
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: mesonPackageDev
         provideDeps: ["*-dev"]
 
     tgt:
-        packageScript: autotoolsPackageTgt
+        packageScript: mesonPackageTgt
         provideDeps: ["*-tgt"]
