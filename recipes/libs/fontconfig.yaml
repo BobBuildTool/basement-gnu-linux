@@ -1,7 +1,7 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "2.13.92"
+    PKG_VERSION: "2.17.1"
     PKG_LICENSE: "HPND AND Unicode-DFS-2016"
 
 depends:
@@ -24,19 +24,19 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-${PKG_VERSION}.tar.xz
-    digestSHA256: 506e61283878c1726550bc94f2af26168f1e9f2106eac77eaaf0b2cdfad66e4e
+    url: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${PKG_VERSION}/fontconfig-${PKG_VERSION}.tar.bz2
+    digestSHA256: bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e
     stripComponents: 1
 
 buildTools: [gettext, gperf]
 buildScript: |
-    autotoolsBuild "$1"
+    mesonBuild "$1"
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: mesonPackageDev
         provideDeps: ["*-dev"]
 
     tgt:
-        packageScript: autotoolsPackageTgt
+        packageScript: mesonPackageTgt
         provideDeps: ["*-tgt"]
