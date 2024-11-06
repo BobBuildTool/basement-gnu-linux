@@ -1,12 +1,18 @@
 inherit: [autotools]
 
 depends:
+    - libs::freetype-dev
+    - libs::libiconv-dev
     - libs::libpng-dev
+    - libs::libxml2-dev
     - virtual::libs::libjpeg-dev
 
     - use: []
       depends:
+          - libs::freetype-tgt
+          - libs::libiconv-tgt
           - libs::libpng-tgt
+          - libs::libxml2-tgt
           - virtual::libs::libjpeg-tgt
 
 metaEnvironment:
