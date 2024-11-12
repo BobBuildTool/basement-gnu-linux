@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.24.5"
+    PKG_VERSION: "1.25.0"
 
 depends:
     - libs::openssl-dev
@@ -13,7 +13,7 @@ depends:
 checkoutSCM:
     scm: url
     url: ${GNU_MIRROR}/wget/wget-${PKG_VERSION}.tar.gz
-    digestSHA256: "fa2dc35bab5184ecbc46a9ef83def2aaaa3f4c9f3c97d4bd19dcb07d4da637de"
+    digestSHA256: "766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784"
     stripComponents: 1
 
 buildScript: |
