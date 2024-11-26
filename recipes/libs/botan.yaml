@@ -1,0 +1,52 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "3.6.1"
+    PKG_LICENSE: "BSD-2-Clause"
+
+depends:
+    - libs::zlib-dev
+
+    - use: []
+      depends:
+        - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://botan.randombit.net/releases/Botan-${PKG_VERSION}.tar.xz
+    digestSHA1: e920c3531fa2daf7348e1a668bfdc0f446e10c8b
+    stripComponents: 1
+
+buildToolsWeak: [python3]
+buildVars: [AR, CXX, CXXFLAGS, CPPFLAGS, ARCH]
+buildScript: |
+    mkdir -p build install
+    pushd build
+    $1/configure.py \
+        --cpu=$ARCH \
+        --os=linux \
+        --cxxflags="$CXXFLAGS $CPPFLAGS" \
+        --ldflags="$LDFLAGS" \
+        --prefix=/usr \
+        --disable-cc-tests \
+        --without-documentation \
+        --with-zlib
+
+    makeParallel DESTDIR="$BOB_CWD/install" install
+    popd
+
+multiPackage:
+    "":
+        depends:
+            - name: libs::botan-tgt
+              use: []
+        packageScript: installPackageBin "$1/install/"
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+        packageScript: installPackageDev "$1/install/"
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: installPackageLib "$1/install/"
+        provideDeps: [ "*-tgt" ]
