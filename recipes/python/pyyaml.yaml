@@ -1,0 +1,9 @@
+inherit: [ python3-cext-pkg ]
+
+buildNetAccess: True
+buildScript: |
+    python3InstallPip \
+        pyyaml==6.0.2
+
+packageScript: |
+    python3PackageTgt
