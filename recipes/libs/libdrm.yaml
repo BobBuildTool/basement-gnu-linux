@@ -1,0 +1,46 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "2.4.123"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - virtual::core::udev-dev
+
+    - use: []
+      depends:
+          - virtual::core::udev-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://dri.freedesktop.org/libdrm/libdrm-${PKG_VERSION}.tar.xz
+    digestSHA1: d61f31495f931d53971fa61686239483c25c2a86
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dcairo-tests=disabled \
+        -Dman-pages=disabled \
+        -Dintel=disabled \
+        -Dradeon=disabled \
+        -Damdgpu=disabled \
+        -Dnouveau=disabled \
+        -Dvmwgfx=disabled \
+        -Domap=disabled \
+        -Detnaviv=disabled \
+        -Dexynos=disabled \
+        -Dfreedreno=disabled \
+        -Dtegra=disabled \
+        -Dvc4=disabled \
+        -Dvalgrind=disabled \
+        -Dtests=false \
+        -Dudev=true
+
+multiPackage:
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: mesonPackageTgt
+        provideDeps: [ "*-tgt" ]
