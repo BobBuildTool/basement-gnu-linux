@@ -1,0 +1,28 @@
+inherit: [install]
+
+metaEnvironment:
+    PKG_VERSION: "2.37"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/dejavu/${PKG_VERSION}/dejavu-fonts-ttf-${PKG_VERSION}.tar.bz2
+    digestSHA1: 7fa15e7b9676fc3915338c41e76ad454c344fff5
+    stripComponents: 1
+
+buildScript: |
+    FONTS=("DejaVuSansMono*.ttf" "DejaVuSans.ttf" "DejaVuSans-*.ttf" "DejaVuSerif.ttf" \
+           "DejaVuSerif-*.ttf" "DejaVuSansCondensed*.ttf" "DejaVuSerifCondensed*.ttf")
+    FONTCFG=("20-unhint-small-dejavu-*.conf" "57-dejavu-*.conf")
+
+    mkdir -p install/usr/share/{fonts/dejavu,fontconfig/conf.avail}
+    for i in "${FONTS[@]}"; do
+        install -m 0644 $1/ttf/$i \
+            install/usr/share/fonts/dejavu/
+    done
+
+    for i in "${FONTCFG[@]}"; do
+        install -m 0644 $1/fontconfig/$i \
+            install/usr/share/fontconfig/conf.avail/
+    done
+
+packageScript: installPackageTgt "$1/install/"
