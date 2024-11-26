@@ -1,0 +1,33 @@
+inherit: [meson]
+
+depends:
+    - libs::libpng-dev
+    - virtual::libs::libegl-dev
+    - virtual::libs::libgles-dev
+    - virtual::libs::libdrm-dev
+
+    - use: []
+      depends:
+          - libs::libpng-tgt
+          - virtual::libs::libegl-tgt
+          - virtual::libs::libgles-tgt
+          - virtual::libs::libdrm-tgt
+
+metaEnvironment:
+    PKG_VERSION: "d93842dbed02fe3afe404d3a69e0a6f74b98be5b"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/mesa/kmscube/-/archive/${PKG_VERSION}/kmscube-${PKG_VERSION}.tar.bz2
+    digestSHA1: cab11caf008c5852542f91e5e9d845c9a3ba7e90
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dgstreamer=disabled
+
+packageScript: |
+    mesonPackageTgt
+
+provideDeps: ["*-tgt"]
