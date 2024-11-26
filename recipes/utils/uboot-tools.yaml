@@ -26,6 +26,7 @@ buildTools: [target-toolchain, host-toolchain, bison, flex]
 buildVars: [CROSS_COMPILE, CC]
 buildScript: |
     makeParallel -C $1 O=$PWD \
+        CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc \
         CROSS_COMPILE="$CROSS_COMPILE" \
         CC="$CC" \
         HOSTCC=gcc \
