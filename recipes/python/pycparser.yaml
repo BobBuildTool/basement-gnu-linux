@@ -1,0 +1,9 @@
+inherit: [ python3-pkg ]
+
+buildNetAccess: True
+buildScript: |
+    python3InstallPip \
+        pycparser==2.22
+
+packageScript: |
+    python3PackageTgt
