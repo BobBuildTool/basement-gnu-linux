@@ -1,0 +1,20 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_VERSION: "1.35"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/libevdev/evtest/-/archive/evtest-${PKG_VERSION}.tar.gz
+    digestSHA1: 8dd9df265524469f7740713b5f433e7ef85c444f
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    autoconfReconfigure
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: autotoolsPackageTgt
