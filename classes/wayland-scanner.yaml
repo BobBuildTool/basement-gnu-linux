@@ -1,0 +1,15 @@
+depends:
+    - tools:
+        # We can't use the compat toolchain, because this means "cross"
+        # compiling which the wayland meson build system wrongly interprets.
+        # See src/meson.build when it is checking for the scanner for the
+        # details.
+        target-toolchain: host-native-toolchain
+      depends:
+        - name: graphics::wayland::wayland-scanner
+          use: [tools]
+
+buildToolsWeak: [wayland-scanner]
+buildSetup: |
+    # add wayland-scanner to the pkg-config lib path, so it could be found by others
+    export PKG_CONFIG_LIBDIR+=":${BOB_TOOL_PATHS[wayland-scanner]}/../lib/pkgconfig"

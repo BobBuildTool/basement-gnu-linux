@@ -1,0 +1,19 @@
+multiPackage:
+    "":
+        depends:
+            - name: ${CONFIG_SELECT_LIBEGL:-libs::mesa3d}
+              use: []
+
+    dev:
+        depends:
+            - name: ${CONFIG_SELECT_LIBEGL:-libs::mesa3d}-dev
+              use: []
+
+    tgt:
+        depends:
+            - name: ${CONFIG_SELECT_LIBEGL:-libs::mesa3d}-tgt
+              use: []
+
+provideDeps: [ "*" ]
+provideVars:
+    CONFIG_SELECT_LIBEGL_PGK: "${CONFIG_SELECT_LIBEGL:-libs::mesa3d}"

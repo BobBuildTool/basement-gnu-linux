@@ -1,0 +1,14 @@
+multiPackage:
+    dev:
+        depends:
+            - name: ${CONFIG_SELECT_LIBDRM:-libs::libdrm}-dev
+              use: []
+
+    tgt:
+        depends:
+            - name: ${CONFIG_SELECT_LIBDRM:-libs::libdrm}-tgt
+              use: []
+
+provideDeps: [ "*" ]
+provideVars:
+    CONFIG_SELECT_LIBDRM_PKG: "${CONFIG_SELECT_LIBDRM:-libs::libdrm}"

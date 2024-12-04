@@ -1,0 +1,70 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.23.0"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - libs::libxml2-dev
+    - libs::libffi-dev
+    - libs::expat-dev
+
+    - use: []
+      depends:
+          - libs::libxml2-tgt
+          - libs::libffi-tgt
+          - libs::expat-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/wayland/wayland/-/archive/${PKG_VERSION}/wayland-${PKG_VERSION}.tar.bz2
+    digestSHA1: 118c3a94f1f4a20e488a1451cdc1dd3f8ec8696e
+    stripComponents: 1
+
+multiPackage:
+    "":
+        inherit: [wayland-scanner]
+        buildScript: |
+            mesonBuild $1 \
+                -Dtests=false \
+                -Ddocumentation=false \
+                -Ddtd_validation=true \
+                -Dlibraries=true \
+                -Dscanner=true
+
+        multiPackage:
+            "":
+                depends:
+                    - name: graphics::wayland::wayland-tgt
+                      use: []
+                packageScript: mesonPackageBin
+                provideDeps: [ "*-tgt" ]
+
+            dev:
+                packageScript: |
+                    mesonPackageDev
+                    # Delete wayland-scanner.pc because this is provided by the
+                    # tool package
+                    rm -f usr/lib/pkgconfig/wayland-scanner.pc
+                provideDeps: [ "*-dev" ]
+
+            tgt:
+                packageScript: mesonPackageLib
+                provideDeps: [ "*-tgt" ]
+
+    "scanner":
+        buildScript: |
+            mesonBuild $1 \
+                -Dtests=false \
+                -Ddocumentation=false \
+                -Dlibraries=false \
+                -Ddtd_validation=false \
+                -Dscanner=true
+
+        packageScript: |
+            mkdir -p usr/{bin,lib}
+            cp -a $1/install/usr/bin/wayland-scanner usr/bin
+            cp -a $1/install/usr/lib/pkgconfig usr/lib
+
+        provideTools:
+            wayland-scanner: "usr/bin"
