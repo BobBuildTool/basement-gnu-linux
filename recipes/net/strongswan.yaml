@@ -1,0 +1,36 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "5.9.14"
+    PKG_LICENSE: "GPL-2.0+"
+
+depends:
+    - libs::gmp-dev
+    - libs::openssl-dev
+    - libs::botan-dev
+    - net::iptables-dev
+
+    - use: []
+      depends:
+        - libs::gmp-tgt
+        - libs::openssl-tgt
+        - libs::botan-tgt
+        - net::iptables-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://download.strongswan.org/strongswan-${PKG_VERSION}.tar.gz
+    digestSHA1: 4f8a41b219caebb1bd7337da4a99116280172596
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-gmp=yes \
+        --enable-openssl=yes \
+        --enable-botan=yes \
+        --enable-forecast=yes
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideDeps: [ "*-tgt" ]

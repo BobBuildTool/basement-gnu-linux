@@ -1,0 +1,16 @@
+inherit: [install]
+
+metaEnvironment:
+    PKG_VERSION: "2.9"
+    PKG_LICENSE: "GPL-3.0+"
+
+checkoutSCM:
+    scm: url
+    url: https://snapshot.debian.org/archive/debian/20241001T023324Z/pool/main/i/ifenslave/ifenslave_${PKG_VERSION}.tar.xz
+    digestSHA1: a17e88fa298ef337e872c8aa5d7a390921239d1a
+    stripComponents: 1
+
+buildScript: |
+    install -D -m 0755 $1/ifenslave install/usr/sbin/ifenslave
+
+packageScript: installPackageBin "$1/install/"
