@@ -1,4 +1,4 @@
-inherit: [cpackage, make, install]
+inherit: [cpackage, make, install, patch]
 
 metaEnvironment:
     PKG_VERSION: "3.6.1"
@@ -17,14 +17,28 @@ checkoutSCM:
     digestSHA1: e920c3531fa2daf7348e1a668bfdc0f446e10c8b
     stripComponents: 1
 
+checkoutScript: |
+    patchApplySeries $<@botan/*@>
+
 buildToolsWeak: [python3]
 buildVars: [AR, CXX, CXXFLAGS, CPPFLAGS, ARCH]
 buildScript: |
     mkdir -p build install
     pushd build
+
+    declare -a EXTRA_ARGS=( )
+
+    case "$AUTOCONF_HOST" in
+      *-l4re) target_os=l4re
+              EXTRA_ARGS+=( --without-stack-protector )
+              ;;
+      *) target_os=linux;;
+    esac
+
     $1/configure.py \
         --cpu=$ARCH \
-        --os=linux \
+        --os=$target_os \
+        "${EXTRA_ARGS[@]}" \
         --cxxflags="$CXXFLAGS $CPPFLAGS" \
         --ldflags="$LDFLAGS" \
         --prefix=/usr \
