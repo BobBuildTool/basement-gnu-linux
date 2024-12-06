@@ -17,15 +17,20 @@ to one of the examples to see how this repository is used:
 First you need to add the `basement` and `basement-gnu-linux` layers to your
 project. To do so add a `layers` entry to `config.yaml`:
 
-    bobMinimumVersion: "0.20"
+    bobMinimumVersion: "0.25"
     layers:
-        - basement-gnu-linux
-        - basement
+        - name: basement-gnu-linux
+          scm: git
+          url: https://github.com/BobBuildTool/basement-gnu-linux.git
+          commit: <git commit id> # optional but highly recommended
+        - name: basement
+          scm: git
+          url: https://github.com/BobBuildTool/basement.git
+          commit: <git commit id> # optional but highly recommended
 
-and then add the repositories as submodules to your project:
+and then fetch the layers:
 
-    $ git submodule add https://github.com/BobBuildTool/basement-gnu-linux.git layers/basement-gnu-linux
-    $ git submodule add https://github.com/BobBuildTool/basement.git layers/basement
+    $ bob layers update
 
 To use the standard facilities of the basement project you need to inherit the
 `basement::rootrecipe` class in your root recipe:
