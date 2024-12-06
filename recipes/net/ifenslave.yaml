@@ -6,7 +6,8 @@ metaEnvironment:
 
 checkoutSCM:
     scm: url
-    url: https://snapshot.debian.org/archive/debian/20241001T023324Z/pool/main/i/ifenslave/ifenslave_${PKG_VERSION}.tar.xz
+    url: "https://snapshot.debian.org/archive/debian/20241001T023324Z/\
+          pool/main/i/ifenslave/ifenslave_${PKG_VERSION}.tar.xz"
     digestSHA1: a17e88fa298ef337e872c8aa5d7a390921239d1a
     stripComponents: 1
 

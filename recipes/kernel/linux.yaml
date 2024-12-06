@@ -52,7 +52,9 @@ buildScript: |
         cp -u "${BOB_DEP_PATHS[kernel::linux-custom-config]}/$LINUX_CUSTOM_CONFIG" .config
         make -C "$1" O=$PWD olddefconfig
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
-        if [[ ( ! -e ".config" ) || ( "$1/${LINUX_ARCH_PATH}/configs/${LINUX_CONFIG}_defconfig" -nt ".config" ) ]] ; then
+        if [[ ( ! -e ".config" ) ||
+            ( "$1/${LINUX_ARCH_PATH}/configs/${LINUX_CONFIG}_defconfig" -nt ".config" ) ]] ;
+        then
             make -C "$1" O=$PWD "${LINUX_CONFIG}_defconfig"
         fi
     else

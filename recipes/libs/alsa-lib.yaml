@@ -13,7 +13,9 @@ checkoutSCM:
 buildScript: |
     autotoolsBuild $1 \
         --with-alsa-devdir=/dev/snd \
-        --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" \
+        --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi \
+            file null empty share meter hooks lfloat ladspa dmix dshare dsnoop \
+            asym iec958 softvol extplug ioplug mmap_emul" \
         --with-ctl-plugins=all
 
 multiPackage:
