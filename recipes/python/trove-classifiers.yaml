@@ -1,19 +1,19 @@
 inherit: [python3-build]
 
 metaEnvironment:
-   PKG_VERSION: "2024.9.12"
+    PKG_VERSION: "2024.9.12"
 
 checkoutSCM:
-   scm: url
-   url: ${GITHUB_MIRROR}/pypa/trove-classifiers/archive/refs/tags/${PKG_VERSION}.tar.gz
-   digestSHA256: b90838e77db494590552eb09d3c68dd15acfe37b5f61f66e732fe10616f9e296
-   stripComponents: 1
+    scm: url
+    url: ${GITHUB_MIRROR}/pypa/trove-classifiers/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: b90838e77db494590552eb09d3c68dd15acfe37b5f61f66e732fe10616f9e296
+    stripComponents: 1
 
 depends:
-   - python::calver
+    - python::calver
 
 buildScript: |
-   python3Build $1
+    python3Build $1
 
 packageScript: |
-   python3PackageTgt
+    python3PackageTgt

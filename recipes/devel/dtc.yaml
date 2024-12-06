@@ -4,29 +4,29 @@ metaEnvironment:
     PKG_VERSION: "1.6.1"
 
 checkoutSCM:
-  scm: url
-  url: ${KERNEL_MIRROR}/software/utils/dtc/dtc-${PKG_VERSION}.tar.xz
-  digestSHA256: 65cec529893659a49a89740bb362f507a3b94fc8cd791e76a8d6a2b6f3203473
-  stripComponents: 1
+    scm: url
+    url: ${KERNEL_MIRROR}/software/utils/dtc/dtc-${PKG_VERSION}.tar.xz
+    digestSHA256: 65cec529893659a49a89740bb362f507a3b94fc8cd791e76a8d6a2b6f3203473
+    stripComponents: 1
 
 buildTools: [bison, flex, target-toolchain]
 buildVars: [AR, CC, LD, CFLAGS, LDFLAGS]
 buildScript: |
-  mkdir -p build install
-  rsync -a "$1/" build/
-  make -C build install DESTDIR="$PWD/install" PREFIX=/usr
+    mkdir -p build install
+    rsync -a "$1/" build/
+    make -C build install DESTDIR="$PWD/install" PREFIX=/usr
 
 multiPackage:
-  "":
-    packageScript: |
-      installPackageBin "$1/install/"
-    provideTools:
-      dtc: usr/bin
+    "":
+        packageScript: |
+            installPackageBin "$1/install/"
+        provideTools:
+            dtc: usr/bin
 
-  dev:
-    packageScript: |
-      installPackageDev "$1/install/"
+    dev:
+        packageScript: |
+            installPackageDev "$1/install/"
 
-  tgt:
-    packageScript: |
-      installPackageLib "$1/install/"
+    tgt:
+        packageScript: |
+            installPackageLib "$1/install/"

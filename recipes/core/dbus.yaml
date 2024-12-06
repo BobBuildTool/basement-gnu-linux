@@ -1,17 +1,17 @@
 inherit: [autotools, autoconf]
 
 metaEnvironment:
-   PKG_DESCRIPTION: "D-Bus is a simple system for interprocess communication and coordination."
-   PKG_LICENSE: "AFL-2.1"
-   PKG_VERSION: "1.15.8"
+    PKG_DESCRIPTION: "D-Bus is a simple system for interprocess communication and coordination."
+    PKG_LICENSE: "AFL-2.1"
+    PKG_VERSION: "1.15.8"
 
 depends:
-   - libs::expat-dev
-   - libs::glib-dev
-   - use: []
-     depends:
-      - libs::expat-tgt
-      - libs::glib-tgt
+    - libs::expat-dev
+    - libs::glib-dev
+    - use: []
+      depends:
+          - libs::expat-tgt
+          - libs::glib-tgt
 
 checkoutSCM:
     scm: url
@@ -21,7 +21,7 @@ checkoutSCM:
 
 checkoutDeterministic: True
 checkoutScript: |
-   autoconfReconfigure
+    autoconfReconfigure
 
 buildVars: [CONFIG_DEBUG_DBUS]
 buildScript: |
@@ -51,11 +51,10 @@ buildScript: |
    popd
 
 multiPackage:
-   dev:
-      provideDeps: ['*-dev']
-      packageScript: autotoolsPackageDev $1 "/usr/lib/dbus-1.0/***"
-   tgt:
-      provideDeps: ['*-tgt']
-      packageScript: |
-         autotoolsPackageTgt
-
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev $1 "/usr/lib/dbus-1.0/***"
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            autotoolsPackageTgt

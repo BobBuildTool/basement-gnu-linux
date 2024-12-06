@@ -1,16 +1,16 @@
 inherit: [python3-build]
 
 metaEnvironment:
-   PKG_VERSION: "2022.06.26"
+    PKG_VERSION: "2022.06.26"
 
 checkoutSCM:
-   scm: url
-   url: ${GITHUB_MIRROR}/di/calver/archive/refs/tags/${PKG_VERSION}.tar.gz
-   digestSHA256: 0d3adaea2006c326ccd3959aae34836f497145c0f36b68f00f88d8b7ed02539b
-   stripComponents: 1
+    scm: url
+    url: ${GITHUB_MIRROR}/di/calver/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 0d3adaea2006c326ccd3959aae34836f497145c0f36b68f00f88d8b7ed02539b
+    stripComponents: 1
 
 buildScript: |
-   python3Build $1
+    python3Build $1
 
 packageScript: |
-   python3PackageTgt
+    python3PackageTgt

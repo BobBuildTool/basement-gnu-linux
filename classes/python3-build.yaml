@@ -1,8 +1,8 @@
 inherit: [python3-pkg]
 
 depends:
-   - python::build
-   - python::installer
+    - python::build
+    - python::installer
 
 buildSetup: |
     python3Build () {

@@ -1,24 +1,24 @@
 inherit: [make, install]
 
 metaEnvironment:
-   PKG_VERSION: "R09_27_24"
-   PKG_LICENSE: "GPLv2 OR BSD OR Intel"
+    PKG_VERSION: "R09_27_24"
+    PKG_LICENSE: "GPLv2 OR BSD OR Intel"
 
 checkoutSCM:
-   scm: url
-   url: ${GITHUB_MIRROR}/acpica/acpica/archive/refs/tags/${PKG_VERSION}.tar.gz
-   digestSHA256: cc167c0825c3807f9812f892e77ec918b7f62c3faeaf9a2e3664de7639b00b6b
-   stripComponents: 1
+    scm: url
+    url: ${GITHUB_MIRROR}/acpica/acpica/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: cc167c0825c3807f9812f892e77ec918b7f62c3faeaf9a2e3664de7639b00b6b
+    stripComponents: 1
 
 buildTools: [bison, flex, target-toolchain]
 buildVars: [CC, STRIP]
 buildScript: |
-   rsync -a --delete $1/ .
-   makeParallel
-   makeSequential install DESTDIR=$(pwd)/install INSTALLFLAGS="-m 555"
+    rsync -a --delete $1/ .
+    makeParallel
+    makeSequential install DESTDIR=$(pwd)/install INSTALLFLAGS="-m 555"
 
 packageScript: |
-   installPackageTgt $1/install/
+    installPackageTgt $1/install/
 
 provideTools:
-   acpica: "usr/bin"
+    acpica: "usr/bin"

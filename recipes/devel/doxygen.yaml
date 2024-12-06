@@ -5,7 +5,8 @@ metaEnvironment:
 
 checkoutSCM:
     scm: url
-    url: ${GITHUB_MIRROR}/doxygen/doxygen/releases/download/Release_$(subst,".","_",${PKG_VERSION})/doxygen-${PKG_VERSION}.src.tar.gz
+    url: "${GITHUB_MIRROR}/doxygen/doxygen/releases/download/\
+          Release_$(subst,'.','_',${PKG_VERSION})/doxygen-${PKG_VERSION}.src.tar.gz"
     digestSHA256: dd7c556b4d96ca5e682534bc1f1a78a5cfabce0c425b14c1b8549802686a4442
     stripComponents: 1
 

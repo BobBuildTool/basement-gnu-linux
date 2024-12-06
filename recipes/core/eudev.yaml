@@ -24,7 +24,7 @@ multiPackage:
 
             - use: []
               depends:
-                - kernel::kmod-lib-tgt
+                  - kernel::kmod-lib-tgt
 
         buildTools: [udevadm]
         buildScript: |
@@ -59,7 +59,6 @@ multiPackage:
             tgt:
                 packageScript: autotoolsPackageLib
                 provideDeps: [ "*-tgt" ]
-
 
     tools:
         buildScript: |

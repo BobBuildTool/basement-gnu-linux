@@ -52,7 +52,9 @@ buildScript: |
         cp -u "${BOB_DEP_PATHS[kernel::linux-custom-config]}/$LINUX_CUSTOM_CONFIG" .config
         make -C "$1" O=$PWD olddefconfig
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
-        if [[ ( ! -e ".config" ) || ( "$1/${LINUX_ARCH_PATH}/configs/${LINUX_CONFIG}_defconfig" -nt ".config" ) ]] ; then
+        if [[ ( ! -e ".config" ) ||
+            ( "$1/${LINUX_ARCH_PATH}/configs/${LINUX_CONFIG}_defconfig" -nt ".config" ) ]] ;
+        then
             make -C "$1" O=$PWD "${LINUX_CONFIG}_defconfig"
         fi
     else
@@ -66,12 +68,12 @@ multiPackage:
         inherit: [pkg-config]
         depends:
             - tools:
-                target-toolchain: host-compat-toolchain
+                  target-toolchain: host-compat-toolchain
               depends:
-                - libs::elfutils-libelf-dev
-                - libs::openssl-dev
-                - name: kernel::kmod
-                  use: [tools]
+                  - libs::elfutils-libelf-dev
+                  - libs::openssl-dev
+                  - name: kernel::kmod
+                    use: [tools]
 
         buildTools: [target-toolchain]
         buildVars: [CROSS_COMPILE]

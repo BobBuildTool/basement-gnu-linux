@@ -12,10 +12,10 @@ depends:
 
     - use: []
       depends:
-        - libs::gmp-tgt
-        - libs::openssl-tgt
-        - libs::botan-tgt
-        - net::iptables-tgt
+          - libs::gmp-tgt
+          - libs::openssl-tgt
+          - libs::botan-tgt
+          - net::iptables-tgt
 
 checkoutSCM:
     scm: url

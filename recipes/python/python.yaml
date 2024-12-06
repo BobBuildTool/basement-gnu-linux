@@ -24,24 +24,24 @@ buildScript: |
 multiPackage:
     "":
         depends:
-           - libs::expat-dev
-           - libs::gdbm-dev
-           - libs::libffi-dev
-           - libs::ncurses-dev
-           - libs::openssl-dev
-           - libs::zlib-dev
+            - libs::expat-dev
+            - libs::gdbm-dev
+            - libs::libffi-dev
+            - libs::ncurses-dev
+            - libs::openssl-dev
+            - libs::zlib-dev
 
-           - use: []
-             depends:
-              - libs::expat-tgt
-              - libs::gdbm-tgt
-              - libs::libffi-tgt
-              - libs::ncurses-tgt
-              - libs::openssl-tgt
-              - libs::zlib-tgt
+            - use: []
+              depends:
+                  - libs::expat-tgt
+                  - libs::gdbm-tgt
+                  - libs::libffi-tgt
+                  - libs::ncurses-tgt
+                  - libs::openssl-tgt
+                  - libs::zlib-tgt
 
-           - name: python::python-host-static
-             use: [tools]
+            - name: python::python-host-static
+              use: [tools]
 
         buildTools: [python]
         buildScript: |

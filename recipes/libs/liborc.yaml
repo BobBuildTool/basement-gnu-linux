@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-   PKG_VERSION: "0.4.32"
+    PKG_VERSION: "0.4.32"
 
 checkoutSCM:
     scm: url
@@ -10,10 +10,10 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-   mesonBuild $1
+    mesonBuild $1
 
 multiPackage:
-   dev:
-      packageScript: mesonPackageDev
-   tgt:
-      packageScript: mesonPackageTgt
+    dev:
+        packageScript: mesonPackageDev
+    tgt:
+        packageScript: mesonPackageTgt

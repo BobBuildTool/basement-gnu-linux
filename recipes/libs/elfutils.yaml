@@ -7,7 +7,7 @@ depends:
     - libs::zlib-dev
     - use: []
       depends:
-        - libs::zlib-tgt
+          - libs::zlib-tgt
 
 checkoutSCM:
     scm: url
@@ -51,9 +51,9 @@ multiPackage:
         depends:
             - use: []
               depends:
-                - libs::elfutils-libasm-tgt
-                - libs::elfutils-libdw-tgt
-                - libs::elfutils-libelf-tgt
+                  - libs::elfutils-libasm-tgt
+                  - libs::elfutils-libdw-tgt
+                  - libs::elfutils-libelf-tgt
         packageScript: autotoolsPackageTgt "$1/elfutils"
         provideDeps: ["*-tgt"]
 
@@ -71,8 +71,8 @@ multiPackage:
         depends:
             - use: []
               depends:
-                - libs::elfutils-libelf-dev
-                - libs::elfutils-libelf-tgt
+                  - libs::elfutils-libelf-dev
+                  - libs::elfutils-libelf-tgt
 
         multiPackage:
             dev:
@@ -87,8 +87,8 @@ multiPackage:
         depends:
             - use: []
               depends:
-                - libs::elfutils-libelf-dev
-                - libs::elfutils-libelf-tgt
+                  - libs::elfutils-libelf-dev
+                  - libs::elfutils-libelf-tgt
 
         multiPackage:
             dev:

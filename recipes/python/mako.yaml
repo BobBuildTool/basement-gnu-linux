@@ -1,21 +1,21 @@
 inherit: [python3-pkg]
 
 metaEnvironment:
-   PKG_VERSION: "1.3.5"
+    PKG_VERSION: "1.3.5"
 
 checkoutSCM:
-   scm: url
-   url: ${GITHUB_MIRROR}/sqlalchemy/mako/archive/refs/tags/rel_$(subst,.,_,${PKG_VERSION}).tar.gz
-   digestSHA256: abaf7d76e50d92ce6218a8437ea6ef93905598050099eb125c37dc55a5fffe32
-   stripComponents: 1
+    scm: url
+    url: ${GITHUB_MIRROR}/sqlalchemy/mako/archive/refs/tags/rel_$(subst,.,_,${PKG_VERSION}).tar.gz
+    digestSHA256: abaf7d76e50d92ce6218a8437ea6ef93905598050099eb125c37dc55a5fffe32
+    stripComponents: 1
 
 depends:
-   - python::markupsafe
+    - python::markupsafe
 
 buildScript: |
-   python3BuildSetuptools $1
+    python3BuildSetuptools $1
 
 packageScript: |
-   rsync -a --delete $1/install/ .
+    rsync -a --delete $1/install/ .
 
 provideDeps: ["python::markupsafe"]

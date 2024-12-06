@@ -1,24 +1,23 @@
 inherit: [meson]
 
 metaEnvironment:
-   PKG_VERSION: "1.18.2"
+    PKG_VERSION: "1.18.2"
 
 depends:
     # Requires glib-mkenums
     - name: libs::glib-tools
       use: [tools]
       tools:
-        target-toolchain: host-compat-toolchain
+          target-toolchain: host-compat-toolchain
 
     - libs::liborc-dev
     - multimedia::gstreamer-dev
     - use: []
       depends:
-        - libs::liborc-tgt
-        - multimedia::gstreamer-tgt
+          - libs::liborc-tgt
+          - multimedia::gstreamer-tgt
 
 checkoutSCM:
-   -
     scm: url
     url: https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${PKG_VERSION}.tar.xz
     digestSHA1: 1067885cb91070cd1f04b6381b38a26760dd84f9
@@ -32,11 +31,11 @@ buildScript: |
         -Dexamples=disabled
 
 multiPackage:
-   dev:
-      packageScript: |
-         mesonPackageDev
-      provideDeps: [ '*-dev' ]
-   tgt:
-      packageScript: |
-         mesonPackageTgt
-      provideDeps: [ '*-tgt' ]
+    dev:
+        packageScript: |
+           mesonPackageDev
+        provideDeps: [ '*-dev' ]
+    tgt:
+        packageScript: |
+           mesonPackageTgt
+        provideDeps: [ '*-tgt' ]

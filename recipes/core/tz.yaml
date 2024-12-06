@@ -18,10 +18,10 @@ multiPackage:
     "data":
         depends:
             - tools:
-                target-toolchain: host-compat-toolchain
+                  target-toolchain: host-compat-toolchain
               depends:
-                - name: core::tz-zic
-                  use: [tools]
+                  - name: core::tz-zic
+                    use: [tools]
         buildTools: [zic]
         buildScript: |
             for z in africa antarctica asia australasia europe northamerica \

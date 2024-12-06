@@ -9,8 +9,8 @@ depends:
 
     - use: []
       depends:
-        - libs::gmp-tgt
-        - libs::isl-tgt
+          - libs::gmp-tgt
+          - libs::isl-tgt
 
 checkoutSCM:
     scm: url

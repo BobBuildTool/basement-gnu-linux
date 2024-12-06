@@ -1,19 +1,19 @@
 inherit: [python3-build]
 
 metaEnvironment:
-   PKG_VERSION: "1.5.0"
+    PKG_VERSION: "1.5.0"
 
 checkoutSCM:
-   scm: url
-   url: https://files.pythonhosted.org/packages/source/p/pluggy/pluggy-${PKG_VERSION}.tar.gz
-   digestSHA256: 2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1
-   stripComponents: 1
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/p/pluggy/pluggy-${PKG_VERSION}.tar.gz
+    digestSHA256: 2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1
+    stripComponents: 1
 
 depends:
-   - python::setuptools-scm
+    - python::setuptools-scm
 
 buildScript: |
-   python3Build $1
+    python3Build $1
 
 packageScript: |
-   python3PackageTgt
+    python3PackageTgt
