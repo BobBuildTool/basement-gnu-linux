@@ -66,12 +66,12 @@ multiPackage:
         inherit: [pkg-config]
         depends:
             - tools:
-                target-toolchain: host-compat-toolchain
+                  target-toolchain: host-compat-toolchain
               depends:
-                - libs::elfutils-libelf-dev
-                - libs::openssl-dev
-                - name: kernel::kmod
-                  use: [tools]
+                  - libs::elfutils-libelf-dev
+                  - libs::openssl-dev
+                  - name: kernel::kmod
+                    use: [tools]
 
         buildTools: [target-toolchain]
         buildVars: [CROSS_COMPILE]

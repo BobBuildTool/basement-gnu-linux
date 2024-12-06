@@ -7,7 +7,7 @@ depends:
     - libs::libpcap-dev
     - use: []
       depends:
-        - libs::libpcap-tgt
+          - libs::libpcap-tgt
 
 checkoutSCM:
     scm: url

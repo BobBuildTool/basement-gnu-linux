@@ -9,7 +9,7 @@ depends:
 
     - use: []
       depends:
-        - libs::zlib-tgt
+          - libs::zlib-tgt
 
 checkoutSCM:
     scm: url

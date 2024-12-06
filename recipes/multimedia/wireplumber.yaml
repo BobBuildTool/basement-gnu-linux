@@ -39,8 +39,8 @@ multiPackage:
         depends:
             - use: []
               depends:
-                - multimedia::wireplumber-tgt
-                - multimedia::pipewire
+                  - multimedia::wireplumber-tgt
+                  - multimedia::pipewire
         packageScript: mesonPackageBin
         provideDeps: [ "*-tgt", "multimedia::pipewire" ]
 

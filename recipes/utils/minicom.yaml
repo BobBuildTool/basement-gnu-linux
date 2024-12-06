@@ -9,7 +9,7 @@ depends:
 
     - use: []
       depends:
-        - libs::ncurses-tgt
+          - libs::ncurses-tgt
 
 checkoutSCM:
     scm: url

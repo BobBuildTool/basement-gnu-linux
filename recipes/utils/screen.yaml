@@ -14,8 +14,8 @@ depends:
     - libs::ncurses-dev
     - use: []
       depends:
-        - libs::libxcrypt-tgt
-        - libs::ncurses-tgt
+          - libs::libxcrypt-tgt
+          - libs::ncurses-tgt
 
 buildScript: |
     CFLAGS="${CFLAGS} -I$1"

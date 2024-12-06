@@ -10,8 +10,8 @@ depends:
 
     - use: []
       depends:
-        - libs::libmnl-tgt
-        - libs::libnftnl-tgt
+          - libs::libmnl-tgt
+          - libs::libnftnl-tgt
 
 checkoutSCM:
     scm: url

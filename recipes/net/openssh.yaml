@@ -10,9 +10,9 @@ depends:
 
     - use: []
       depends:
-        - libs::libxcrypt-tgt
-        - libs::openssl-tgt
-        - libs::zlib-tgt
+          - libs::libxcrypt-tgt
+          - libs::openssl-tgt
+          - libs::zlib-tgt
 
 checkoutSCM:
     scm: url
@@ -39,4 +39,3 @@ packageScript: |
     autotoolsPackageTgt
 
 provideDeps: [ "*-tgt" ]
-

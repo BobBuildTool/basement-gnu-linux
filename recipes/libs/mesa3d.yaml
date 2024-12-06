@@ -11,11 +11,11 @@ depends:
     - graphics::wayland::wayland-dev
 
     - tools:
-        target-toolchain: host-compat-toolchain
+          target-toolchain: host-compat-toolchain
       depends:
-        - python::mako
-        - python::pyyaml
-        - python::pycparser
+          - python::mako
+          - python::pyyaml
+          - python::pycparser
 
     - use: []
       depends:

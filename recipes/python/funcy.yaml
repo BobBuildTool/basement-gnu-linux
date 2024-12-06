@@ -1,16 +1,16 @@
 inherit: [python3-pkg]
 
 metaEnvironment:
-   PKG_VERSION: "2.0"
+    PKG_VERSION: "2.0"
 
 checkoutSCM:
-   scm: url
-   url: https://files.pythonhosted.org/packages/source/f/funcy/funcy-${PKG_VERSION}.tar.gz
-   digestSHA256: 3963315d59d41c6f30c04bc910e10ab50a3ac4a225868bfa96feed133df075cb
-   stripComponents: 1
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/f/funcy/funcy-${PKG_VERSION}.tar.gz
+    digestSHA256: 3963315d59d41c6f30c04bc910e10ab50a3ac4a225868bfa96feed133df075cb
+    stripComponents: 1
 
 buildScript: |
-   python3BuildSetuptools $1
+    python3BuildSetuptools $1
 
 packageScript: |
-   python3PackageTgt
+    python3PackageTgt

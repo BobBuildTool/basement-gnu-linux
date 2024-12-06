@@ -1,16 +1,16 @@
 inherit: [python3-build]
 
 metaEnvironment:
-   PKG_VERSION: "6.1.0"
+    PKG_VERSION: "6.1.0"
 
 checkoutSCM:
-   scm: url
-   url: https://files.pythonhosted.org/packages/source/p/pbr/pbr-${PKG_VERSION}.tar.gz
-   digestSHA256: 788183e382e3d1d7707db08978239965e8b9e4e5ed42669bf4758186734d5f24
-   stripComponents: 1
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/p/pbr/pbr-${PKG_VERSION}.tar.gz
+    digestSHA256: 788183e382e3d1d7707db08978239965e8b9e4e5ed42669bf4758186734d5f24
+    stripComponents: 1
 
 buildScript: |
-   python3Build $1
+    python3Build $1
 
 packageScript: |
-   python3PackageTgt
+    python3PackageTgt

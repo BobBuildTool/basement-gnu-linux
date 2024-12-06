@@ -27,7 +27,7 @@
 
 depends:
     - tools:
-        target-toolchain: host-compat-toolchain
+          target-toolchain: host-compat-toolchain
       use: [tools]
       depends:
           - kernel::kmod

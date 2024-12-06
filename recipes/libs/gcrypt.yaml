@@ -9,11 +9,11 @@ depends:
     - name: libs::libgpg-error-tool
       use: [tools]
       tools:
-        target-toolchain: host-compat-toolchain
+          target-toolchain: host-compat-toolchain
     - libs::libgpg-error-dev
     - use: []
       depends:
-        - libs::libgpg-error-tgt
+          - libs::libgpg-error-tgt
 
 checkoutSCM:
     scm: url

@@ -1,19 +1,19 @@
 inherit: [meson, patch]
 
 metaEnvironment:
-   PKG_VERSION: "1.18.2"
+    PKG_VERSION: "1.18.2"
 
 depends:
     # Requires glib-mkenums
     - name: libs::glib-tools
       use: [tools]
       tools:
-        target-toolchain: host-compat-toolchain
+          target-toolchain: host-compat-toolchain
 
     - libs::glib-dev
     - use: []
       depends:
-        - libs::glib-tgt
+          - libs::glib-tgt
 
 checkoutSCM:
     scm: url
@@ -27,14 +27,14 @@ checkoutScript: |
 
 buildTools: [flex, bison, glib]
 buildScript: |
-   mesonBuild $1
+    mesonBuild $1
 
 multiPackage:
-   dev:
-      packageScript: |
-         mesonPackageDev
-      provideDeps: [ '*-dev' ]
-   tgt:
-      packageScript: |
-         mesonPackageTgt
-      provideDeps: [ '*-tgt' ]
+    dev:
+        packageScript: |
+            mesonPackageDev
+        provideDeps: [ '*-dev' ]
+    tgt:
+        packageScript: |
+            mesonPackageTgt
+        provideDeps: [ '*-tgt' ]
