@@ -1,4 +1,4 @@
-inherit: [autotools, perl5]
+inherit: [autotools, patch, perl5]
 
 metaEnvironment:
     PKG_VERSION: "0.51.0"
@@ -16,6 +16,10 @@ checkoutSCM:
     digestSHA1: "a0c3bcb99d1bcfc5db70f8d848232a47c47da090"
     stripComponents: 1
 
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries -p 0 $<@intltool/*.patch@>
+
 buildScript: |
     autotoolsBuild $1
 
@@ -23,3 +27,5 @@ packageScript: |
     autotoolsPackageTgt
 
 provideDeps: ['*-tgt']
+provideTools:
+    intltool: "usr/bin"

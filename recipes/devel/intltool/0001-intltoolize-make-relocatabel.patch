@@ -1,0 +1,21 @@
+--- intltoolize.in.orig	2025-10-01 06:09:50.940635121 +0000
++++ intltoolize.in	2025-10-01 06:10:24.540727031 +0000
+@@ -36,15 +36,9 @@ PACKAGE=@PACKAGE@
+ VERSION=@VERSION@
+ 
+ # Directory names.
+-prefix=@prefix@
+-
+-case "`uname`" in
+-MINGW32*)
+-  # Assume intltoolize is in $prefix/bin. Strip off the script name and the "bin"
+-  prefix=`dirname $0`
+-  prefix=`dirname $prefix`
+-  ;;
+-esac
++# Assume intltoolize is in $prefix/bin. Strip off the script name and the "bin"
++prefix=`dirname $0`
++prefix=`dirname $prefix`
+ 
+ datarootdir=@datarootdir@
+ datadir=@datadir@
