@@ -99,6 +99,7 @@ depends:
     - net::bridge-utils
     - net::chrony
     - net::dnsmasq
+    - net::dropbear
     - net::ebtables
     - net::ethtool
     - net::ifenslave
