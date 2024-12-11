@@ -9,6 +9,7 @@ depends:
           - devel::gengetopt
           - devel::groff
           - devel::intltool
+          - devel::itstool
           - devel::lua-bin
           - devel::makedepend
           - devel::nasm

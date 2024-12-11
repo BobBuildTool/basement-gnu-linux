@@ -1,0 +1,28 @@
+inherit: [autotools, autoconf, python3]
+
+metaEnvironment:
+    PKG_VERSION: "2.0.7+lxml_migration"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+depends:
+    - python::lxml
+
+checkoutSCM:
+    scm: git
+    # url: ${GITHUB_MIRROR}/itstool/itstool.git
+    url: https://github.com/nwellnhof/itstool.git
+    # The latest itstool release uses libxml2, but the python bindings of
+    # libxml2 are deprecated. Use a version from the lxml transformation pull
+    # request until it's merged and a new release is published.
+    # See https://github.com/itstool/itstool/pull/57/
+    commit: 0f6751a586422719442eb7e9ddfe635ec7ca06fb
+
+buildScript: |
+    export PYTHON=python3
+    autotoolsBuild -s $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideTools:
+    itstool: "usr/bin"
