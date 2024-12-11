@@ -6,6 +6,7 @@ depends:
           # devel stuff (usually) not deployed to targets -> host compat toolchain
           - devel::byacc
           - devel::dtc
+          - devel::gengetopt
           - devel::intltool
           - devel::lua-bin
           - devel::makedepend
