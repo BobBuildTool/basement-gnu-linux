@@ -7,6 +7,7 @@ depends:
           - devel::byacc
           - devel::dtc
           - devel::gengetopt
+          - devel::groff
           - devel::intltool
           - devel::lua-bin
           - devel::makedepend

@@ -1,0 +1,22 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.24.0"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/groff/groff-${PKG_VERSION}.tar.gz
+    digestSHA256: "e79bbcd8ff3ed0200e7ac55d3962a15e118c1229990213025f2fc8b264727570"
+    stripComponents: 1
+
+buildVars: [AR]
+buildTools: [perl, m4]
+buildScript: |
+    autotoolsBuild -o AR=${AR} $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideTools:
+    groff: usr/bin
