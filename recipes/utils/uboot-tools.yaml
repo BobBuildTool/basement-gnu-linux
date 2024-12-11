@@ -4,37 +4,46 @@ metaEnvironment:
     PKG_VERSION: "2024.07"
     PKG_LICENSE: "GPL-2.0+"
 
+depends:
+    - libs::openssl-dev
+
+    - use: []
+      depends:
+          - libs::openssl-tgt
+
 checkoutSCM:
     scm: url
     url: https://ftp.denx.de/pub/u-boot/u-boot-${PKG_VERSION}.tar.bz2
     digestSHA256: f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f
     stripComponents: 1
 
-checkoutDeterministic: True
-checkoutScript: |
-    # fake a config; tools don't need one
-    mkdir -p \
-        include/config \
-        include/generated \
-        include/asm
-    touch \
-        include/config/auto.conf \
-        include/generated/autoconf.h \
-        include/asm/linkage.h
-
 buildTools: [target-toolchain, host-toolchain, bison, flex]
 buildVars: [CROSS_COMPILE, CC]
 buildScript: |
+    # call the default config which should be suitable for the tools we want to
+    # build
     makeParallel -C $1 O=$PWD \
-        CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc \
         CROSS_COMPILE="$CROSS_COMPILE" \
+        HOSTCFLAGS="$CFLAGS $CPPFLAGS" \
+        CC="$CC" \
+        HOSTCC=gcc \
+        CROSS_BUILD_TOOLS=y \
+        defconfig
+
+    # remove this tool option, cause it has to much deps on other libs
+    sed -i "s/^CONFIG_TOOLS_MKEFICAPSULE=y/# CONFIG_TOOLS_MKEFICAPSULE is not set/" .config
+
+    makeParallel -C $1 O=$PWD \
+        CROSS_COMPILE="$CROSS_COMPILE" \
+        HOSTCFLAGS="$CFLAGS $CPPFLAGS" \
         CC="$CC" \
         HOSTCC=gcc \
         CROSS_BUILD_TOOLS=y \
         tools-only
-    mkdir -p install/usr/bin
-    cp -a $PWD/tools/{mkimage,fdtgrep,proftool,mkenvimage,dumpimage} \
-        install/usr/bin
+
+    install -D -m 0755 \
+        tools/{bmp_logo,fdtgrep,proftool,mkimage,mkenvimage,dumpimage,fit_info,fit_check_sign} \
+        -t install/usr/bin
 
 packageScript: |
     installPackageBin "$1/install/"
