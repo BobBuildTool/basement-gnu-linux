@@ -1,0 +1,23 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "HPND, HPND-sell-variant, MIT, MIT-open-group, X11"
+    PKG_VERSION: "1.6.0"
+    PKG_DESCRIPTION: "X transport library"
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/xtrans-${PKG_VERSION}.tar.xz
+    digestSHA256: "faafea166bf2451a173d9d593352940ec6404145c5d1da5c213423ce4d359e92"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: |
+            autotoolsPackageDev $1 "/usr/share/***"
+    tgt:
+        packageScript: |
+            autotoolsPackageTgt $1 "/usr/share/***"
