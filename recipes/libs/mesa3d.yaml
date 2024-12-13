@@ -4,6 +4,14 @@ metaEnvironment:
     PKG_VERSION: "24.2.8"
     PKG_LICENSE: "MIT, SGI, Khronos"
 
+Config:
+    MESA3D_GALLIUM_DRIVERS:
+        help: "List of gallium drivers to build"
+        type: str
+        # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
+        # this is the maximum we support right now:
+        default: "crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl"
+
 depends:
     - libs::zlib-dev
     - virtual::libs::libdrm-dev
@@ -30,18 +38,14 @@ checkoutSCM:
     stripComponents: 1
 
 buildTools: [bison, flex, m4]
-buildVars: [CONFIG_MESA3D_GALLIUM_DRIVERS]
+buildVars: [MESA3D_GALLIUM_DRIVERS]
 buildScript: |
-    # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
-    # this is the maximum we support right now:
-    CONFIG_MESA3D_GALLIUM_DRIVERS=${CONFIG_MESA3D_GALLIUM_DRIVERS:-crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl}
-
     mesonBuild $1 \
         -Dglx=disabled \
         -Dgallium-xa=disabled \
         -Dglvnd=disabled \
         -Dgallium-opencl=disabled \
-        -Dgallium-drivers="$CONFIG_MESA3D_GALLIUM_DRIVERS" \
+        -Dgallium-drivers="$MESA3D_GALLIUM_DRIVERS" \
         -Dvulkan-drivers="" \
         -Dplatforms=wayland \
         -Dgbm=enabled \
