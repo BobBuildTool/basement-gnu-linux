@@ -1,0 +1,41 @@
+diff -ur a/resize/resize2fs.h b/resize/resize2fs.h
+--- a/resize/resize2fs.h	2024-12-18 17:06:42.768502913 +0100
++++ b/resize/resize2fs.h	2024-12-18 17:41:59.259698891 +0100
+@@ -171,12 +171,19 @@
+ extern errcode_t online_resize_fs(ext2_filsys fs, const char *mtpt,
+ 				  blk64_t *new_size, int flags);
+ 
++#define RESOURCE_TRACK
++
+ /* resource_track.c */
++#ifdef RESOURCE_TRACK
+ extern void init_resource_track(struct resource_track *track, const char *desc,
+ 				io_channel channel);
+ extern void print_resource_track(ext2_resize_t rfs,
+ 				 struct resource_track *track,
+ 				 io_channel channel);
++#else
++#define init_resource_track(track, desc, channel) do { } while (0)
++#define print_resource_track(rfs, track, channel) do { } while (0)
++#endif
+ 
+ /* sim_progress.c */
+ extern errcode_t ext2fs_progress_init(ext2_sim_progmeter *ret_prog,
+Only in b/resize: resize2fs.h-foo
+diff -ur a/resize/resource_track.c b/resize/resource_track.c
+--- a/resize/resource_track.c	2024-12-18 17:06:42.768502913 +0100
++++ b/resize/resource_track.c	2024-12-18 17:40:47.175868997 +0100
+@@ -18,6 +18,8 @@
+ #endif
+ #include <sys/resource.h>
+ 
++#ifdef RESOURCE_TRACK
++
+ void init_resource_track(struct resource_track *track, const char *desc,
+ 			 io_channel channel)
+ {
+@@ -133,3 +135,4 @@
+ 	fflush(stdout);
+ }
+ 
++#endif /* RESOURCE_TRACK */

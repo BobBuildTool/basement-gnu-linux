@@ -1,0 +1,28 @@
+diff -ur a/e2fsck/e2fsck.h b/e2fsck/e2fsck.h
+--- a/e2fsck/e2fsck.h	2024-12-18 17:06:42.712503044 +0100
++++ b/e2fsck/e2fsck.h	2024-12-18 17:27:10.189747773 +0100
+@@ -145,7 +145,9 @@
+ 
+ struct encrypted_file_info;
+ 
+-#define RESOURCE_TRACK
++// Disabled as this functionality needs sbrk() which is not available
++// universally.
++//#define RESOURCE_TRACK
+ 
+ #ifdef RESOURCE_TRACK
+ /*
+diff -ur a/resize/resize2fs.h b/resize/resize2fs.h
+--- a/resize/resize2fs.h	2024-12-18 17:44:23.787355886 +0100
++++ b/resize/resize2fs.h	2024-12-18 17:41:49.903721007 +0100
+@@ -171,7 +171,9 @@
+ extern errcode_t online_resize_fs(ext2_filsys fs, const char *mtpt,
+ 				  blk64_t *new_size, int flags);
+ 
+-#define RESOURCE_TRACK
++// Disabled as this functionality needs sbrk() which is not available
++// universally.
++//#define RESOURCE_TRACK
+ 
+ /* resource_track.c */
+ #ifdef RESOURCE_TRACK
