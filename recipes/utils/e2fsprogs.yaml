@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, patch]
 
 metaEnvironment:
     PKG_VERSION: "1.47.1"
@@ -8,6 +8,10 @@ checkoutSCM:
     url: ${KERNEL_MIRROR}/linux/kernel/people/tytso/e2fsprogs/v${PKG_VERSION}/e2fsprogs-${PKG_VERSION}.tar.xz
     digestSHA256: "5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1"
     stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@e2fsprogs/*.patch@>
 
 buildTools: [host-toolchain]
 buildScript: |
