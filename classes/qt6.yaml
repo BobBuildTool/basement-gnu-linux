@@ -1,0 +1,18 @@
+inherit: [qt6-base]
+
+depends:
+    - libs::qt6-base-dev
+
+    - use: []
+      depends:
+          - libs::qt6-base-tgt
+
+    # depend on the host tools build
+    - name: libs::qt6-base-tools
+      tools:
+          target-toolchain: host-native-toolchain
+      use: [tools]
+
+buildTools: [qt6-base-tools]
+buildSetup: |
+    export QT_HOST_PATH=$(realpath ${BOB_TOOL_PATHS[qt6-base-tools]}/..)

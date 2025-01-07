@@ -1,0 +1,16 @@
+inherit: [qt6-base]
+
+depends:
+    # depend on the host tools build
+    - name: libs::qt6-base-tools
+      tools:
+          target-toolchain: host-native-toolchain
+      use: [tools]
+
+buildTools: [qt6-base-tools]
+
+packageScript: |
+    # We have to package everything for the tools, including cmake
+    # configs, ... files.
+    cmakePackageDev
+    cmakePackageBin
