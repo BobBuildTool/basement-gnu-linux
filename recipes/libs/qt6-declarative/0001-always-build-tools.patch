@@ -1,0 +1,17 @@
+--- a/tools/CMakeLists.txt	2025-01-06 15:32:20.018504753 +0100
++++ b/tools/CMakeLists.txt	2025-01-06 15:32:48.409717127 +0100
+@@ -34,12 +34,11 @@
+         if(QT_FEATURE_qml_preview)
+             add_subdirectory(qmlpreview)
+         endif()
+-        if(QT_BUILD_SHARED_LIBS AND TARGET Qt::Quick)
++        if(TARGET Qt::Quick)
+             add_subdirectory(qmlscene)
+             add_subdirectory(qmltime)
+         endif()
+-        if(QT_BUILD_SHARED_LIBS
+-            AND QT_FEATURE_process
++        if(QT_FEATURE_process
+             AND QT_FEATURE_regularexpression
+             AND TARGET Qt::Quick)
+             add_subdirectory(qmlplugindump)
