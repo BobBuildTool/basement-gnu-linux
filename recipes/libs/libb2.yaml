@@ -1,0 +1,21 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.98.1"
+    PKG_LICENSE: "CC0-1.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/BLAKE2/libb2/releases/download/v${PKG_VERSION}/libb2-${PKG_VERSION}.tar.gz
+    digestSHA1: 85abee1e611cda21775f4a7dd77d11671d300bb4
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageTgt
