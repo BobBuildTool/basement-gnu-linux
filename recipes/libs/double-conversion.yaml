@@ -1,0 +1,21 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "3.3.0"
+    PKG_LICENSE: "BSD-3-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/google/double-conversion/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA1: 31bbee2c38287a71901e818010dd9427567e6c1f
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1 \
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+
+    tgt:
+        packageScript: cmakePackageLib
