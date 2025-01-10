@@ -1,0 +1,30 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "10.44"
+    PKG_LICENSE: "BSD-3-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/PCRE2Project/pcre2/releases/download/pcre2-${PKG_VERSION}/pcre2-${PKG_VERSION}.tar.bz2
+    digestSHA1: ddc37244d49d74ecae510d9d860b812e6e59611a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-pcre2-8 \
+        --enable-pcre2-16
+
+multiPackage:
+    "":
+        depends:
+            - name: libs::pcre2-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib

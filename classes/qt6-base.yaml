@@ -1,0 +1,69 @@
+inherit: [cmake]
+
+privateEnvironment:
+    QT6_VERSION: "6.8.1"
+    QT6_MIRROR: "https://download.qt.io/archive/qt/6.8/6.8.1/submodules"
+
+buildSetup: |
+    # Build the actual target qt6 package
+    #
+    # $1: target directory
+    # $2+: additional cmake options
+    qt6Build()
+    {
+        # add all libs::qt6-* dependencies to an extra dep list, so qt find those
+        QT_PACKAGES_PREFIX_PATH=
+        for i in "${!BOB_DEP_PATHS[@]}" ; do
+            if [[ $i == libs::qt6-*-dev ]] ; then
+                QT_PACKAGES_PREFIX_PATH+="${QT_PACKAGES_PREFIX_PATH:+;}${BOB_DEP_PATHS[$i]}/usr"
+            fi
+        done
+        # add all qt6-* tools to an extra dep list, so qt find those; also make sure we set the path correctly
+        QT_HOST_PACKAGES_PREFIX_PATH=
+        for i in "${!BOB_TOOL_PATHS[@]}" ; do
+            if [[ $i == qt6-*-tools ]] ; then
+                QT_HOST_PACKAGES_PREFIX_PATH+="${QT_HOST_PACKAGES_PREFIX_PATH:+;}$(realpath ${BOB_TOOL_PATHS[$i]}/..)"
+                # some tools have executables in libexec
+                if [ -d ${BOB_TOOL_PATHS[$i]}/../libexec ]; then
+                    PATH+="${PATH:+:}$(realpath ${BOB_TOOL_PATHS[$i]}/../libexec)"
+                fi
+            fi
+        done
+
+        export PATH
+
+        cmakeBuild $1 \
+            -DQT_ADDITIONAL_PACKAGES_PREFIX_PATH="${QT_PACKAGES_PREFIX_PATH}" \
+            -DQT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH="${QT_HOST_PACKAGES_PREFIX_PATH}" \
+            -DQT_GENERATE_SBOM=OFF \
+            -DQT_BUILD_DOCS=OFF \
+            -DQT_BUILD_TESTS=OFF \
+            -DQT_BUILD_EXAMPLES=OFF \
+            -DBUILD_WITH_PCH=OFF \
+            ${@:2}
+    }
+
+packageSetup: |
+    qt6PackageDev()
+    {
+        cmakePackageDev "${1:-}" "/usr/plugins/***" "/usr/qml/***" \
+                                 "/usr/mkspecs/***" "/usr/metatypes/***"
+    }
+
+    qt6PackageLib()
+    {
+        cmakePackageLib "${1:-}" "/usr/plugins/***" "/usr/qml/***"
+    }
+
+    qt6PackageBin()
+    {
+        cmakePackageBin "${1:-}" "!/usr/doc" "!/usr/mkspecs" \
+                                 "!/usr/metatypes" "!/usr/modules" \
+                                 "!*objects-Bob*" "!*.prl"
+    }
+
+    qt6PackageTgt()
+    {
+        qt6PackageBin "$@"
+        qt6PackageLib "$@"
+    }
