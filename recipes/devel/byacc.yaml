@@ -1,0 +1,33 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "20240109"
+    PKG_LICENSE: "PD"
+
+checkoutSCM:
+    scm: url
+    url: https://invisible-island.net/archives/byacc/byacc-${PKG_VERSION}.tgz
+    digestSHA1: 99ecf4bc8b9de8b7352f939c7ba327e69458eb36
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --program-prefix=b
+
+multiPackage:
+    "":
+        depends:
+            - name: devel::byacc-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+        provideTools:
+            byacc: "usr/bin"
+
+    dev:
+       packageScript: |
+          autotoolsPackageDev
+
+    tgt:
+       packageScript: |
+          autotoolsPackageLib
