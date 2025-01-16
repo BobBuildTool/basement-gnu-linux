@@ -21,7 +21,8 @@ buildScript: |
     autotoolsBuild $1 \
         --without-plugins \
         --without-debug \
-        --without-python
+        --without-python \
+        --without-crypto
 
 multiPackage:
     dev:
