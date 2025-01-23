@@ -1,0 +1,37 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT, MIT-open-group, SMLNJ"
+    PKG_VERSION: "1.8.2"
+    PKG_DESCRIPTION: "X11 Input Extension Library"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXext-dev
+    - libs::xorg::libXfixes-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXext-tgt
+          - libs::xorg::libXfixes-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/libXi-${PKG_VERSION}.tar.xz
+    digestSHA256: "d0e0555e53d6e2114eabfa44226ba162d2708501a25e18d99cfb35c094c6c104"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
