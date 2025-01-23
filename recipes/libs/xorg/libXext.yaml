@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT AND ISC"
+    PKG_VERSION: "1.3.6"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXau-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXau-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXext-${PKG_VERSION}.tar.xz
+    digestSHA256: edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
