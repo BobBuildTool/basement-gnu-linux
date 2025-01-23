@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11"
+    PKG_VERSION: "0.5"
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/libpthread-stubs-${PKG_VERSION}.tar.xz
+    digestSHA256: 59da566decceba7c2a7970a4a03b48d9905f1262ff94410a649224e33d2442bc
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt
