@@ -1,0 +1,40 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-2-Clause, BSD-4-Clause-UC, HPND-sell-variant, MIT-open-group, SMLNJ, X11"
+    PKG_VERSION: "2.0.7"
+    PKG_DESCRIPTION: "X11 font rasterisation library"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::xtrans-dev
+    - libs::xorg::libfontenc-dev
+    - libs::freetype-dev
+    - libs::libxml2-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::xorg::xtrans-tgt
+          - libs::xorg::libfontenc-tgt
+          - libs::freetype-tgt
+          - libs::libxml2-tgt
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/libXfont2-${PKG_VERSION}.tar.xz
+    digestSHA256: "8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
