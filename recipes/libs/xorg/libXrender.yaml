@@ -1,0 +1,30 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "0.9.12"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libX11-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXrender-${PKG_VERSION}.tar.xz
+    digestSHA256: b832128da48b39c8d608224481743403ad1691bf4e554e4be9c174df171d1b97
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
