@@ -1,0 +1,35 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "HPND-sell-variant"
+    PKG_VERSION: "2.3.9"
+    PKG_DESCRIPTION: "FreeType-based font drawing library for X"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::freetype-dev
+    - libs::fontconfig-dev
+    - libs::xorg::libXrender-dev
+    - use: []
+      depends:
+          - libs::freetype-tgt
+          - libs::fontconfig-tgt
+          - libs::xorg::libXrender-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/libXft-${PKG_VERSION}.tar.xz
+    digestSHA256: 60a25b78945ed6932635b3bb1899a517d31df7456e69867ffba27f89ff3976f5
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
