@@ -122,6 +122,7 @@ depends:
     - net::ifenslave
     - net::ifupdown
     - net::iperf
+    - net::iperf3
     - net::iproute2
     - net::iptables
     - net::lighttpd
