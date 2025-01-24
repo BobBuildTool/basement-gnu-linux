@@ -33,6 +33,7 @@ multiPackage:
             - all
             - bsp::grub2
             - bsp::intel::microcode
+            - utils::iucode-tool # uses cpuid which is not available on !x86
 
 buildScript: |
   /bin/true
