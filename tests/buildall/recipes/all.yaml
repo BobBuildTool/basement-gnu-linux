@@ -74,6 +74,7 @@ depends:
     - libs::mesa3d-tgt
     - libs::mtdev-tgt
     - libs::nettle-tgt
+    - libs::nlohmann-json-tgt
     - libs::npth-tgt
     - libs::openssl
     - name: libs::openssl
