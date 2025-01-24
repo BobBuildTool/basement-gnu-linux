@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.43.2"
+    PKG_LICENSE: "LGPL-2.1-only"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/libivykis/ivykis-${PKG_VERSION}.tar.gz
+    digestSHA256: 93e3e9b237695437cd63d4aa48a8d9dfd8b39bc28a192a5770d113c4fe9099ef
+    stripComponents: 1
+
+buildScript: |
+   autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt

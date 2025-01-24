@@ -37,6 +37,7 @@ depends:
     - libs::gcrypt-tgt
     - libs::gnutls-tgt
     - libs::harfbuzz-tgt
+    - libs::ivykis-tgt
     - libs::jpeg-turbo-tgt
     - libs::jsonc-tgt
     - libs::libaio-tgt
