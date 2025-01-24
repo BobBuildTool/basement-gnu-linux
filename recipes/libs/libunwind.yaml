@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.8.1"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libunwind/libunwind/releases/download/v${PKG_VERSION}/libunwind-${PKG_VERSION}.tar.gz
+    digestSHA256: ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 --disable-tests
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt
