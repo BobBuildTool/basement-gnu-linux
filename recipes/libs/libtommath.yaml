@@ -1,0 +1,22 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "1.3.0"
+    PKG_LICENSE: "LicenseRef-libtom"
+    PKG_LICENSE_PATH: |
+        libtom:LICENSE
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libtom/libtommath/releases/download/v${PKG_VERSION}/ltm-${PKG_VERSION}.tar.xz
+    digestSHA256: 296272d93435991308eb73607600c034b558807a07e829e751142e65ccfa9d08
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+    tgt:
+        packageScript: cmakePackageTgt
