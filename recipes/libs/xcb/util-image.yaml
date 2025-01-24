@@ -1,0 +1,34 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11-distribute-modifications-variant"
+    PKG_VERSION: "0.4.1"
+    PKG_DESCRIPTION: "XCB port of Xlibs XImage and XShmImage"
+
+depends:
+    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xcb::libxcb-dev
+    - libs::xcb::util-dev
+    - use: []
+      depends:
+          - libs::xcb::libxcb-tgt
+          - libs::xcb::util-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-util-image-${PKG_VERSION}.tar.gz
+    digestSHA256: 0ebd4cf809043fdeb4f980d58cdcf2b527035018924f8c14da76d1c81001293b
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
