@@ -21,6 +21,7 @@ depends:
     - graphics::fonts::xorg::schumacher-misc
     - graphics::fonts::xorg::sony-misc
     - graphics::fonts::xorg::sun-misc
+    - graphics::freerdp
     - graphics::imagemagick
     - graphics::kmscube
     - graphics::ratpoison
