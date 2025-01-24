@@ -1,0 +1,23 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "0.5.1"
+    PKG_DESCRIPTION: "X.org framebuffer video driver"
+
+depends:
+    - graphics::xorg::xserver-dev
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/driver/xf86-video-fbdev-${PKG_VERSION}.tar.xz
+    digestSHA256: 9c2bc0fb9af092804138e8d5cb5627cabf2919ef60f0d1544a95c4ac2047f387
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
