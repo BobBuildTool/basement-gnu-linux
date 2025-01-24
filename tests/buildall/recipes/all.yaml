@@ -194,6 +194,7 @@ depends:
     - utils::genimage
     - utils::gnupg
     - utils::luajit
+    - utils::mtd-utils
     - utils::minicom
     - utils::mingetty
     - utils::mtools
