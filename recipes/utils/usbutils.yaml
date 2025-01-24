@@ -1,0 +1,28 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_LICENSE: "GPL-2.0-or-later"
+    PKG_VERSION: "019"
+
+depends:
+    - libs::libusb-dev
+    - libs::zlib-dev
+    - virtual::core::udev-dev
+    - use: []
+      depends:
+          - libs::zlib-tgt
+          - libs::libusb-tgt
+          - virtual::core::udev-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/gregkh/usbutils/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: f0df341a2125a4bdf2f88c77c3828af9f24c2d58e30928c45b23f41e1315df7a
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1
+
+provideDeps: ['*-tgt']
+packageScript: |
+    mesonPackageTgt

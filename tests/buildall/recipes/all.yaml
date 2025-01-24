@@ -211,6 +211,7 @@ depends:
     - utils::sysbench
     - utils::tidy
     - utils::ttysnoop
+    - utils::usbutils
     - utils::xorriso
     - utils::xxd
 
