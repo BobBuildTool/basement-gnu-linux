@@ -93,6 +93,7 @@ depends:
     - libs::qt6-shadertools-tgt
     - libs::qt6-wayland-tgt
     - libs::slirp-tgt
+    - libs::tinyxml2-tgt
     - libs::yajl-tgt
 
     - multimedia::alsa-utils
