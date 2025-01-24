@@ -15,6 +15,7 @@ depends:
     - graphics::fonts::unicode
     - graphics::fonts::xorg::alias
     - graphics::fonts::xorg::cursor-misc
+    - graphics::fonts::xorg::dec-misc
     - graphics::imagemagick
     - graphics::kmscube
 
