@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.3"
+    PKG_DESCRIPTION: "X utility to set your root window background to a given pattern or color"
+    PKG_LICENSE_FILE: "COPYING"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::xbitmaps
+
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXcursor-dev
+    - libs::xorg::libXmu-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXcursor-tgt
+          - libs::xorg::libXmu-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/app/xsetroot-${PKG_VERSION}.tar.xz
+    digestSHA256: 6081b45a9eb4426e045d259d1e144b32417fb635e5b96aa90647365ac96638d1
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageBin
