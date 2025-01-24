@@ -1,0 +1,44 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11"
+    PKG_VERSION: "1.2.2"
+    PKG_DESCRIPTION: "X server resource database utility"
+    LICENCE_FILE: "COPYING"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - core::util-linux-dev
+    - libs::xcb::libxcb-dev
+    - libs::xorg::libICE-dev
+    - libs::xorg::libSM-dev
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXau-dev
+    - libs::xorg::libXdmcp-dev
+    - libs::xorg::libXmu-dev
+    - libs::xorg::libXt-dev
+    - use: []
+      depends:
+          - core::util-linux-tgt
+          - libs::xcb::libxcb-tgt
+          - libs::xorg::libICE-tgt
+          - libs::xorg::libSM-tgt
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXau-tgt
+          - libs::xorg::libXdmcp-tgt
+          - libs::xorg::libXmu-tgt
+          - libs::xorg::libXt-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/app/xrdb-${PKG_VERSION}.tar.xz
+    digestSHA256: 31f5fcab231b38f255b00b066cf7ea3b496df712c9eb2d0d50c670b63e5033f4
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageBin
