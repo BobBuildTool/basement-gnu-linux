@@ -210,6 +210,8 @@ depends:
     - utils::mtools
     - utils::nano
     - utils::pciutils
+    - utils::rauc-client
+    - utils::rauc-host
     - utils::s390-tools-ttyrun
     - utils::screen
     - utils::strace
