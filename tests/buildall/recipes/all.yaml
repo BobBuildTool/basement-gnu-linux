@@ -23,6 +23,7 @@ depends:
     - graphics::fonts::xorg::sun-misc
     - graphics::imagemagick
     - graphics::kmscube
+    - graphics::ratpoison
 
     - graphics::wayland::wayland
 
