@@ -60,6 +60,7 @@ depends:
     - libs::libssh-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
+    - libs::libtomcrypt-tgt
     - libs::libtommath-tgt
     - libs::libunistring-tgt
     - libs::libusb-tgt

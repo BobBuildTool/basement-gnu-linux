@@ -1,0 +1,46 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "1.18.2"
+    PKG_LICENSE: "LicenseRef-libtom"
+    PKG_LICENSE_PATH: |
+        libtom:LICENSE
+
+depends:
+    - libs::libtommath-dev
+    - use: []
+      depends:
+          - libs::libtommath-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libtom/libtomcrypt/releases/download/v${PKG_VERSION}/crypt-${PKG_VERSION}.tar.xz
+    digestSHA256: 96ad4c3b8336050993c5bc2cf6c057484f2b0f9f763448151567fbab5e767b84
+    stripComponents: 1
+
+buildVars: [AR, CC, RANLIB]
+buildScript: |
+    mkdir -p build && pushd build
+    rsync -aH $1/ .
+    makeParallel -f makefile.unix AR=${AR} CC=${CC} RANLIB=${RANLIB} \
+        CFLAGS="${CPPFLAGS:-} -DUSE_LTM -DLTM_DESC" \
+        EXTRALIBS=${BOB_DEP_PATHS['libs::libtommath-dev']}/usr/lib/libtommath.* \
+        all
+    make -f makefile.unix DESTDIR=../install PREFIX="/usr" install install_bins
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: installPackageDev $1/install/
+
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: installPackageLib $1/install/
+    "":
+        depends:
+            - name: libs::libtomcrypt-tgt
+              use: []
+        provideDeps: ['*-tgt']
+        packageScript: installPackageBin $1/install/
+        provideTools:
+            hashsum: "usr/bin"
