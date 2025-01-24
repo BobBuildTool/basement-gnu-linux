@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "HPND, ICU"
+    PKG_VERSION: "1.1.3"
+    PKG_DESCRIPTION: "X.Org bitmap files"
+
+depends:
+    - libs::xorg::libX11-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/data/xbitmaps-${PKG_VERSION}.tar.xz
+    digestSHA256: ad6cad54887832a17d86c2ccfc5e52a1dfab090f8307b152c78b0e1529cd0f7a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    installCopy $1/install/
