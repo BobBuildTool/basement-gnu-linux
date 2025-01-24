@@ -1,0 +1,21 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "A JSON implementation in C"
+    PKG_VERSION: "0.18-20240915"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/json-c/json-c/archive/refs/tags/json-c-0.18-20240915.tar.gz
+    digestSHA256: 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
+    stripComponents: 1
+
+buildScript: |
+   cmakeBuild $1
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+    tgt:
+        packageScript: cmakePackageTgt

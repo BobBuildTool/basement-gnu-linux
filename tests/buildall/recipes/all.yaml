@@ -36,6 +36,7 @@ depends:
     - libs::gnutls-tgt
     - libs::harfbuzz-tgt
     - libs::jpeg-turbo-tgt
+    - libs::jsonc-tgt
     - libs::libaio-tgt
     - libs::libb2-tgt
     - libs::libcap-ng-tgt
