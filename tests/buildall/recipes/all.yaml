@@ -61,6 +61,7 @@ depends:
     - libs::libxml2-tgt
     - libs::libxslt-tgt
     - libs::libyaml-tgt
+    - libs::lvm2
     - libs::mesa3d-tgt
     - libs::mtdev-tgt
     - libs::nettle-tgt
