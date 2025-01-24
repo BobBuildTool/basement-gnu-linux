@@ -16,6 +16,7 @@ depends:
     - graphics::fonts::xorg::alias
     - graphics::fonts::xorg::cursor-misc
     - graphics::fonts::xorg::dec-misc
+    - graphics::fonts::xorg::mutt-misc
     - graphics::fonts::xorg::schumacher-misc
     - graphics::fonts::xorg::sony-misc
     - graphics::fonts::xorg::sun-misc
