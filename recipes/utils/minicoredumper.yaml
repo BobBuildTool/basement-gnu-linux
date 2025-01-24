@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.0.7"
+    PKG_LICENSE: "LicenseRef-minicoredumper"
+    PKG_LICENSE_PATH: |
+        minicoredumper:COPYING
+
+depends:
+    - libs::elfutils-libelf-dev
+    - libs::jsonc-dev
+    - use: []
+      depends:
+          - libs::elfutils-libelf-tgt
+          - libs::jsonc-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.linutronix.de/minicoredumper/files/minicoredumper-${PKG_VERSION}.tar.xz
+    digestSHA256: 4ec3c96eea1141e1aee65717a60d32967afd5ca76f8d4a114b7563806d0e148a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --without-minicoredumper_regd \
+       --without-minicoredumper_trigger \
+       --without-libminicoredumper \
+       --without-coreinject
+
+provideDeps: ['*-tgt']
+packageScript: |
+    autotoolsPackageTgt

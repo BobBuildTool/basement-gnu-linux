@@ -196,6 +196,7 @@ depends:
     - utils::luajit
     - utils::mtd-utils
     - utils::minicom
+    - utils::minicoredumper
     - utils::mingetty
     - utils::mtools
     - utils::nano
