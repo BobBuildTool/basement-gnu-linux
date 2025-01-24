@@ -45,6 +45,7 @@ depends:
     - libs::libconfuse-tgt
     - libs::libdrm-tgt
     - libs::libevdev-tgt
+    - libs::libfaketime
     - libs::libgpg-error-tgt
     - libs::libiconv-tgt
     - libs::libjpeg-tgt
