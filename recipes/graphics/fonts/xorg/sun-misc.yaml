@@ -1,0 +1,16 @@
+inherit: ["xorg::font"]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.4"
+    PKG_LICENSE: "LicenseRef-xorg-font-sun-misc"
+    PKG_LICENSE_PATH: |
+        xorg-font-sun-misc:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-sun-misc-${PKG_VERSION}.tar.xz
+    digestSHA256: dd84dd116d927affa4fa0fa29727b3ecfc0f064238817c0a1e552a0ac384db9f
+    stripComponents: 1
+
+buildScript: autotoolsBuild $1
+packageScript: autotoolsPackageTgt

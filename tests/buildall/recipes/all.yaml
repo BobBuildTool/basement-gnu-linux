@@ -17,6 +17,7 @@ depends:
     - graphics::fonts::xorg::cursor-misc
     - graphics::fonts::xorg::dec-misc
     - graphics::fonts::xorg::schumacher-misc
+    - graphics::fonts::xorg::sun-misc
     - graphics::imagemagick
     - graphics::kmscube
 
