@@ -216,6 +216,7 @@ depends:
     - utils::screen
     - utils::strace
     - utils::sysbench
+    - utils::sysvinit
     - utils::tidy
     - utils::ttysnoop
     - utils::usbutils

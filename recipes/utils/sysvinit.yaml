@@ -1,0 +1,31 @@
+inherit: [make, cpackage, install]
+
+metaEnvironment:
+    PKG_LICENSE: "GPL-2.0-or-later"
+    PKG_VERSION: "3.14"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/slicer69/sysvinit/releases/download/${PKG_VERSION}/sysvinit-${PKG_VERSION}.tar.xz
+    digestSHA256: c90874b8c054a35991fb8c4d30c443ed1e9b1815ff6165c7b483f558be4e4b53
+    stripComponents: 1
+
+depends:
+    - libs::libxcrypt-dev
+    - use: []
+      depends:
+          - libs::libxcrypt-tgt
+
+buildVars: [CC, AR]
+buildTools: [target-toolchain]
+buildSetup: |
+    export CFLAGS="${CFLAGS:-} $CPPFLAGS"
+buildScript: |
+    mkdir -p build
+    rsync -a --delete $1/ build/
+    pushd build
+    makeParallel -C $(pwd)/src
+    make -C $(pwd)/src DESTDIR=$(pwd)/../install install
+
+provideDeps: ['*-tgt']
+packageScript: installPackageTgt $1/install/
