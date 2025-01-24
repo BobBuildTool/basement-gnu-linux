@@ -130,6 +130,7 @@ depends:
     - net::net-tools
     - net::nftables
     - net::ntp
+    - net::openldap
     - net::openssh
     - net::socat
     - net::strongswan
