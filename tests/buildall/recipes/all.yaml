@@ -125,6 +125,7 @@ depends:
     - net::iperf3
     - net::iproute2
     - net::iptables
+    - net::iputils
     - net::lighttpd
     - net::net-tools
     - net::nftables

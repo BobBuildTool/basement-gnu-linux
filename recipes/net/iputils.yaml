@@ -1,0 +1,24 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause AND GPL-2.0-or-later"
+    PKG_VERSION: "20250605"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/iputils/iputils/releases/download/${PKG_VERSION}/iputils-${PKG_VERSION}.tar.xz
+    digestSHA256: 6f213700dbf96b5cc4499ca70cb15ecd69c09f405b06785bb4a1a10b572b6276
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -DUSE_CAP=false \
+        -DUSE_IDN=false \
+        -DBUILD_MANS=false \
+        -DBUILD_CLOCKDIFF=false \
+        -DBUILD_HTML_MANS=false \
+        -DUSE_GETTEXT=false \
+        -DSKIP_TESTS=true
+
+packageScript: |
+    mesonPackageTgt
