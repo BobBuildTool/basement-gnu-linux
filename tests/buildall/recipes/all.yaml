@@ -110,6 +110,7 @@ depends:
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
     - multimedia::pipewire
+    - multimedia::v4l-utils
     - multimedia::wireplumber
 
     - net::bridge-utils
