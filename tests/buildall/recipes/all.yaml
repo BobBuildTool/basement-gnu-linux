@@ -39,6 +39,7 @@ depends:
     - libs::dbus-glib-tgt
     - libs::double-conversion-tgt
     - libs::elfutils
+    - libs::fltk-tgt
     - libs::fontconfig-tgt
     - libs::freetype-tgt
     - libs::fribidi-tgt
