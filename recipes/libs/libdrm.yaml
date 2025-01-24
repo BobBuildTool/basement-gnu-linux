@@ -4,11 +4,25 @@ metaEnvironment:
     PKG_VERSION: "2.4.131"
     PKG_LICENSE: "MIT"
 
+Config:
+    LIBDRM_INTEL:
+        type: choice
+        default: disabled
+        help: Enable support for Intel's KMS API.
+        choice:
+            auto:
+            enabled:
+            disabled:
+
 depends:
+    - name: libs::xorg::libpciaccess-dev
+      if: "$(not,$(eq,${LIBDRM_INTEL},disabled))"
     - virtual::core::udev-dev
 
     - use: []
       depends:
+          - name: libs::xorg::libpciaccess-tgt
+            if: "$(not,$(eq,${LIBDRM_INTEL},disabled))"
           - virtual::core::udev-tgt
 
 checkoutSCM:
@@ -17,11 +31,12 @@ checkoutSCM:
     digestSHA256: 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
     stripComponents: 1
 
+buildVars: [LIBDRM_INTEL]
 buildScript: |
     mesonBuild $1 \
         -Dcairo-tests=disabled \
         -Dman-pages=disabled \
-        -Dintel=disabled \
+        -Dintel=${LIBDRM_INTEL} \
         -Dradeon=disabled \
         -Damdgpu=disabled \
         -Dnouveau=disabled \
