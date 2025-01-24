@@ -13,6 +13,14 @@ Config:
             auto:
             enabled:
             disabled:
+    LIBDRM_VMWGFX:
+        type: choice
+        default: disabled
+        help: Enable support for vmgfx's KMS API.
+        choice:
+            auto:
+            enabled:
+            disabled:
 
 depends:
     - name: libs::xorg::libpciaccess-dev
@@ -31,7 +39,7 @@ checkoutSCM:
     digestSHA256: 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
     stripComponents: 1
 
-buildVars: [LIBDRM_INTEL]
+buildVars: [LIBDRM_INTEL, LIBDRM_VMWGFX]
 buildScript: |
     mesonBuild $1 \
         -Dcairo-tests=disabled \
@@ -40,7 +48,7 @@ buildScript: |
         -Dradeon=disabled \
         -Damdgpu=disabled \
         -Dnouveau=disabled \
-        -Dvmwgfx=disabled \
+        -Dvmwgfx=${LIBDRM_VMWGFX} \
         -Domap=disabled \
         -Detnaviv=disabled \
         -Dexynos=disabled \
