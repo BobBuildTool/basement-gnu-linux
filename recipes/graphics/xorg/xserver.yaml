@@ -1,0 +1,105 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "21.1.18"
+    PKG_DESCRIPTION: "X.Org X Server"
+    PKG_LICENSE_FILE: "COPYING"
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-${PKG_VERSION}.tar.xz
+    digestSHA256: "c878d1930d87725d4a5bf498c24f4be8130d5b2646a9fd0f2994deff90116352"
+    stripComponents: 1
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - graphics::xorg::xkbcomp-dev
+    - graphics::fonts::font-util-dev
+    - libs::libepoxy-dev
+
+    - libs::xcb::util-image-dev
+    - libs::xcb::util-keysyms-dev
+    - libs::xcb::util-renderutil-dev
+    - libs::xcb::util-wm-dev
+
+    - libs::xorg::libfontenc-dev
+    - libs::xorg::libpciaccess-dev
+    - libs::xorg::libxkbfile-dev
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXau-dev
+    - libs::xorg::libXaw-dev
+    - libs::xorg::libxcvt-dev
+    - libs::xorg::libXdamage-dev
+    - libs::xorg::libXdmcp-dev
+    - libs::xorg::libXext-dev
+    - libs::xorg::libXfixes-dev
+    - libs::xorg::libXfont2-dev
+    - libs::xorg::libXi-dev
+    - libs::xorg::libXinerama-dev
+    - libs::xorg::libXmu-dev
+    - libs::xorg::libXpm-dev
+    - libs::xorg::libXrender-dev
+    - libs::xorg::libXshmfence-dev
+    - libs::xorg::libXt-dev
+    - libs::xorg::libXv-dev
+    - libs::xorg::libXxf86vm-dev
+    - libs::pixman-dev
+    - libs::mesa3d-dev
+    - libs::fontconfig-dev
+    - libs::libunwind-dev
+    - libs::openssl-dev
+    - virtual::core::udev-dev
+    - virtual::libs::libdrm-dev
+    - use: []
+      depends:
+          - graphics::xorg::xkbcomp-tgt
+          - graphics::fonts::font-util-tgt
+          - libs::libepoxy-tgt
+
+          - libs::xcb::util-image-tgt
+          - libs::xcb::util-keysyms-tgt
+          - libs::xcb::util-renderutil-tgt
+          - libs::xcb::util-wm-tgt
+
+          - libs::xorg::libfontenc-tgt
+          - libs::xorg::libpciaccess-tgt
+          - libs::xorg::libxkbfile-tgt
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXau-tgt
+          - libs::xorg::libXaw-tgt
+          - libs::xorg::libxcvt-tgt
+          - libs::xorg::libXdamage-tgt
+          - libs::xorg::libXdmcp-tgt
+          - libs::xorg::libXext-tgt
+          - libs::xorg::libXfixes-tgt
+          - libs::xorg::libXfont2-tgt
+          - libs::xorg::libXi-tgt
+          - libs::xorg::libXinerama-tgt
+          - libs::xorg::libXmu-tgt
+          - libs::xorg::libXpm-tgt
+          - libs::xorg::libXrender-tgt
+          - libs::xorg::libXshmfence-tgt
+          - libs::xorg::libXt-tgt
+          - libs::xorg::libXv-tgt
+          - libs::xorg::libXxf86vm-tgt
+          - libs::pixman-tgt
+          - libs::mesa3d-tgt
+          - libs::fontconfig-tgt
+          - libs::libunwind-tgt
+          - libs::openssl-tgt
+          - virtual::core::udev-tgt
+          - virtual::libs::libdrm-tgt
+
+buildScript: |
+    mesonBuild $1 \
+      -Dsecure-rpc=false
+
+multiPackage:
+    "":
+        provideDeps: ['*-tgt']
+        packageScript: mesonPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: mesonPackageDev $1 "usr/share/***"
