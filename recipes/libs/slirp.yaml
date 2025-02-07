@@ -1,0 +1,30 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "4.7.0"
+    PKG_LICENSE: "BSD-3-Clause"
+
+checkoutSCM:
+    - scm: url
+      url: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v${PKG_VERSION}/libslirp-v${PKG_VERSION}.tar.bz2
+      digestSHA1: f0c1d7d4b9de05864b4559bf1ba8018117ad299b
+      stripComponents: 1
+
+depends:
+    - libs::glib-dev
+
+    - use: []
+      depends:
+          - libs::glib-tgt
+
+buildScript: |
+    mesonBuild $1
+
+multiPackage:
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: mesonPackageLib
+        provideDeps: [ "*-tgt" ]

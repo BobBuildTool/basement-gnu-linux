@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.16.03"
+    PKG_LICENSE: "BSD-2-Clause"
+
+checkoutSCM:
+    scm: url
+    url: https://www.nasm.us/pub/nasm/releasebuilds/${PKG_VERSION}/nasm-${PKG_VERSION}.tar.xz
+    digestSHA1: d3ceab29f8c62bdf9240032349deb594cb642863
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideTools:
+    nasm: "usr/bin"
