@@ -212,6 +212,7 @@ depends:
     - utils::tidy
     - utils::ttysnoop
     - utils::usbutils
+    - utils::qpdf
     - utils::xorriso
     - utils::xxd
 
