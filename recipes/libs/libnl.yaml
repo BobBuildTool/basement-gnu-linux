@@ -11,7 +11,7 @@ checkoutSCM:
     digestSHA256: 49b3e2235fdb58f5910bbb3ed0de8143b71ffc220571540502eb6c2471f204f5
     stripComponents: 1
 
-buildTools: [bison, flex]
+buildTools: [bison, flex, m4]
 buildScript: |
     autotoolsBuild $1
 

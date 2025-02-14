@@ -17,7 +17,7 @@ checkoutSCM:
     digestSHA1: 6c9b00437feb6389470bb6dbce66f6f7d16f09bc
     stripComponents: 1
 
-buildTools: [bison]
+buildTools: [bison, m4]
 buildScript: |
     mesonBuild $1 \
         -Denable-x11=false \
