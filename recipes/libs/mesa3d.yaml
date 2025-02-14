@@ -29,7 +29,7 @@ checkoutSCM:
     digestSHA1: c7994d1bf40879518b6ae331dd92e04b6e9d436e
     stripComponents: 1
 
-buildTools: [bison, flex]
+buildTools: [bison, flex, m4]
 buildVars: [CONFIG_MESA3D_GALLIUM_DRIVERS]
 buildScript: |
     # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
