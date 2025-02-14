@@ -10,6 +10,7 @@ checkoutSCM:
     digestSHA1: ddc37244d49d74ecae510d9d860b812e6e59611a
     stripComponents: 1
 
+buildTools: [m4]
 buildScript: |
     autotoolsBuild $1 \
         --enable-pcre2-8 \

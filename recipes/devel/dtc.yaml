@@ -9,7 +9,7 @@ checkoutSCM:
     digestSHA256: 65cec529893659a49a89740bb362f507a3b94fc8cd791e76a8d6a2b6f3203473
     stripComponents: 1
 
-buildTools: [bison, flex, target-toolchain]
+buildTools: [bison, flex, target-toolchain, m4]
 buildVars: [AR, CC, LD, CFLAGS, LDFLAGS]
 buildScript: |
     mkdir -p build install
