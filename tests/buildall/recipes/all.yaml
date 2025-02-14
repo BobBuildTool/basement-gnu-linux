@@ -112,6 +112,7 @@ depends:
     - multimedia::gstreamer-tgt
     - multimedia::ogg-tgt
     - multimedia::opus-tgt
+    - multimedia::speex-tgt
     - multimedia::pipewire
     - multimedia::vorbis-tgt
     - multimedia::wireplumber
