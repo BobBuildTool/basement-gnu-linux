@@ -110,6 +110,7 @@ depends:
     - multimedia::gst-plugins-base-tgt
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
+    - multimedia::libsdl2
     - multimedia::ogg-tgt
     - multimedia::opus-tgt
     - multimedia::speex-tgt
