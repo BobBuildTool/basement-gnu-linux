@@ -9,6 +9,7 @@ checkoutSCM:
     digestSHA1: 4b06176c1c71b2818dc2f9d772346c5902238c33
     stripComponents: 1
 
+checkoutDeterministic: True
 checkoutScript: |
     autoconfReconfigure
 

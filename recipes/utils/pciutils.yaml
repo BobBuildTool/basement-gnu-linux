@@ -21,13 +21,14 @@ checkoutSCM:
     digestSHA1: 83ea1394a2095442731f639b16f38292be67201f
     stripComponents: 1
 
-buildVars: [CC, AR, RANLIB, CFLAGS, LDFLAGS]
+buildVars: [CC, AR, RANLIB, CFLAGS, LDFLAGS, AUTOCONF_HOST]
 buildScript: |
     mkdir -p build install
-    cp -as $1/* build/
+    cp -fas $1/* build/
     makeParallel -C build \
         AR="$AR" \
         RANLIB="$RANLIB" \
+        HOST="${AUTOCONF_HOST}" \
         STRIP= \
         CC="$CC" \
         CFLAGS="$CFLAGS" \

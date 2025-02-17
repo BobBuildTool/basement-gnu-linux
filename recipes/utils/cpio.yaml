@@ -1,12 +1,12 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "2.12"
+    PKG_VERSION: "2.15"
 
 checkoutSCM:
     scm: url
     url: ${GNU_MIRROR}/cpio/cpio-${PKG_VERSION}.tar.bz2
-    digestSHA1: "60358408c76db354f6716724c4bcbcb6e18ab642"
+    digestSHA1: "db5e3845eb5475ddcb7e8915c3a1458a0c13d787"
     stripComponents: 1
 
 buildScript: |

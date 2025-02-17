@@ -9,6 +9,13 @@ checkoutSCM:
     url: https://buildroot.org/downloads/buildroot-${PKG_VERSION}.tar.gz
     digestSHA1: ecb7e941a4e2ba28a151522c476ed8925f0e8c7b
     extract: False
+
+depends:
+    - libs::libxcrypt-dev
+    - use: []
+      depends:
+          - libs::libxcrypt-tgt
+
 checkoutDeterministic: True
 checkoutVars: [PKG_VERSION]
 checkoutScript: |
@@ -21,11 +28,11 @@ buildVars: [CC, CFLAGS, LDFLAGS]
 buildScript: |
     mkdir -p install/usr/bin
     # mkpasswd
-    $CC $CFLAGS $(cpackageLibraryTypeCheck "-static" "-shared") $LDFLAGS \
+    $CC $CFLAGS $CPPFLAGS $(cpackageLibraryTypeCheck "-static" "-shared") $LDFLAGS \
         -I$1 $1/mkpasswd.c $1/utils.c -lcrypt \
         -o install/usr/bin/mkpasswd
     # makedevs
-    $CC $CFLAGS $LDFLAGS \
+    $CC $CFLAGS $CPPFLAGS $LDFLAGS \
         $1/makedevs.c \
         -o install/usr/bin/makedevs
     # mkusers

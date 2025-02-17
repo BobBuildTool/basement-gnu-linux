@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "0.18.4"
+    PKG_VERSION: "0.21.1"
 
 depends:
     - libs::gmp-dev
@@ -14,14 +14,15 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: http://www.bastoul.net/cloog/pages/download/cloog-${PKG_VERSION}.tar.gz
-    digestSHA256: "325adf3710ce2229b7eeb9e84d3b539556d093ae860027185e7af8a8b00a750e"
+    url: ${GITHUB_MIRROR}/periscop/cloog/releases/download/cloog-${PKG_VERSION}/cloog-${PKG_VERSION}.tar.gz
+    digestSHA256: d370cf9990d2be24bfb24750e355bac26110051248cabf2add61f9b3867fb1d7
     stripComponents: 1
 
 buildScript: |
-    LDFLAGS="-lisl -lgmp"
     autotoolsBuild $1 \
         --with-isl=system \
+        --with-gmp=system \
+        --with-gmp-prefix=${BOB_DEP_PATHS[libs::gmp-dev]} \
         --with-polylib=no
 
 multiPackage:
