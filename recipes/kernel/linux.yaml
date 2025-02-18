@@ -8,7 +8,7 @@ inherit: [make, patch]
 
 depends:
     - if: "${LINUX_CUSTOM_CONFIG:-}"
-      name: kernel::linux-custom-config
+      name: "${LINUX_CUSTOM_CONFIG_PKG:-kernel::linux-custom-config}"
 
 metaEnvironment:
     PKG_VERSION: "6.6.17"
