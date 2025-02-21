@@ -20,7 +20,7 @@ checkoutSCM:
     stripComponents: 1
 
 buildTools: [bison, flex, host-toolchain]
-buildVars: [ARCH, LINUX_CONFIG, LINUX_CUSTOM_CONFIG]
+buildVars: [ARCH, LINUX_CONFIG, LINUX_CUSTOM_CONFIG, LINUX_CUSTOM_CONFIG_PKG]
 buildScript: |
     # prevent timestamps in configuration
     export KCONFIG_NOTIMESTAMP=1
@@ -49,7 +49,8 @@ buildScript: |
     # Use plain "defconfig" if we have no specific target. Otherwise check if
     # defconfig has changed.
     if [[ ${LINUX_CUSTOM_CONFIG:+true} ]] ; then
-        cp -u "${BOB_DEP_PATHS[kernel::linux-custom-config]}/$LINUX_CUSTOM_CONFIG" .config
+        PKG="${LINUX_CUSTOM_CONFIG_PKG:-kernel::linux-custom-config}"
+        cp -u "${BOB_DEP_PATHS[$PKG]}/$LINUX_CUSTOM_CONFIG" .config
         make -C "$1" O=$PWD olddefconfig
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
         if [[ ( ! -e ".config" ) ||
