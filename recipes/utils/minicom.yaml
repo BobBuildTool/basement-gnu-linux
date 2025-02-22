@@ -1,7 +1,7 @@
-inherit: [autotools, autoconf, patch]
+inherit: [autotools, autoconf]
 
 metaEnvironment:
-    PKG_VERSION: "2.9"
+    PKG_VERSION: "2.10"
     PKG_LICENSE: "GPL-2.0+"
 
 depends:
@@ -14,12 +14,10 @@ depends:
 checkoutSCM:
     scm: url
     url: https://salsa.debian.org/minicom-team/minicom/-/archive/${PKG_VERSION}/minicom-${PKG_VERSION}.tar.bz2
-    digestSHA1: c25af7dda22a83671c75a145de288e3e0bb5c1b4
+    digestSHA256: 90e7ce2856b3eaaa3f452354d17981c49d32c426a255b6f0d3063a227c101538
     stripComponents: 1
 
 checkoutDeterministic: True
-checkoutScript: |
-    patchApplySeries $<@minicom/*.patch@>
 
 buildScript: |
     autotoolsBuild $1 \
