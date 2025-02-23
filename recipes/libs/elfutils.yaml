@@ -15,6 +15,7 @@ checkoutSCM:
     digestSHA256: 8e00a3a9b5f04bc1dc273ae86281d2d26ed412020b391ffcc23198f10231d692
     stripComponents: 1
 
+buildTools: [m4]
 buildScript: |
     mkdir -p all
     pushd all

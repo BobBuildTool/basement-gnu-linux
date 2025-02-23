@@ -25,7 +25,7 @@ checkoutDeterministic: True
 checkoutScript: |
     patchApplySeries $<<gstreamer/*.patch>>
 
-buildTools: [flex, bison, glib]
+buildTools: [flex, bison, glib, m4]
 buildScript: |
     mesonBuild $1
 

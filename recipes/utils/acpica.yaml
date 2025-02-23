@@ -10,7 +10,7 @@ checkoutSCM:
     digestSHA256: cc167c0825c3807f9812f892e77ec918b7f62c3faeaf9a2e3664de7639b00b6b
     stripComponents: 1
 
-buildTools: [bison, flex, target-toolchain]
+buildTools: [bison, flex, target-toolchain, m4]
 buildVars: [CC, STRIP]
 buildScript: |
     rsync -a --delete $1/ .

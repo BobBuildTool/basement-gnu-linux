@@ -17,7 +17,7 @@ checkoutSCM:
     digestSHA1: f5998171fd6902d2f29bffc90790b6214cbdf88f
     stripComponents: 1
 
-buildTools: [target-toolchain, host-toolchain, bison, flex]
+buildTools: [target-toolchain, host-toolchain, bison, flex, m4]
 buildVars: [CROSS_COMPILE, CC]
 buildScript: |
     # call the default config which should be suitable for the tools we want to
