@@ -33,6 +33,9 @@ buildScript: |
     # remove this tool option, cause it has to much deps on other libs
     sed -i "s/^CONFIG_TOOLS_MKEFICAPSULE=y/# CONFIG_TOOLS_MKEFICAPSULE is not set/" .config
 
+    # disable CONFIG_VIDEO_LOGO as it break cross build
+    sed -i "s/^CONFIG_VIDEO_LOGO=y/# CONFIG_VIDEO_LOGO is not set/" .config
+
     makeParallel -C $1 O=$PWD \
         CROSS_COMPILE="$CROSS_COMPILE" \
         HOSTCFLAGS="$CFLAGS $CPPFLAGS" \
@@ -42,7 +45,7 @@ buildScript: |
         tools-only
 
     install -D -m 0755 \
-        tools/{bmp_logo,fdtgrep,proftool,mkimage,mkenvimage,dumpimage,fit_info,fit_check_sign} \
+        tools/{fdtgrep,proftool,mkimage,mkenvimage,dumpimage,fit_info,fit_check_sign} \
         -t install/usr/bin
 
 packageScript: |
