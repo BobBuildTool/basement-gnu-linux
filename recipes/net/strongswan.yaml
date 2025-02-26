@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "5.9.14"
+    PKG_VERSION: "6.0.0"
     PKG_LICENSE: "GPL-2.0+"
 
 depends:
@@ -19,8 +19,8 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://download.strongswan.org/strongswan-${PKG_VERSION}.tar.gz
-    digestSHA1: 4f8a41b219caebb1bd7337da4a99116280172596
+    url: https://download.strongswan.org/strongswan-${PKG_VERSION}.tar.bz2
+    digestSHA256: 72fe58b7523155703b65b08c3cc559c2c9a5c96da54afebd8136f6623e7dda82
     stripComponents: 1
 
 buildScript: |
