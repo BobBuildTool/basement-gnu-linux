@@ -1,0 +1,34 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "6.13.0"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${KERNEL_MIRROR}/linux/utils/net/iproute2/iproute2-${PKG_VERSION}.tar.xz
+    digestSHA256: "a43aa43338d882b44d01e549f3f105a92ae9feea32a82fae45a88e7a49302819"
+    stripComponents: 1
+
+buildVars: [CC, AR]
+buildTools: [host-toolchain, bison, flex, m4]
+buildScript: |
+    cp -a $1/ build/
+
+    pushd build
+    ./configure
+
+    makeParallel \
+        CC="$CC" \
+        HOSTCC="gcc" \
+        SHARED_LIBS=$([[ $(cpackageLibraryType) == static ]] && echo n || echo y) \
+        all
+
+    makeParallel \
+        DESTDIR=$BOB_CWD/install \
+        install
+
+    popd
+
+packageScript: |
+    installPackageBin "$1/install/"
