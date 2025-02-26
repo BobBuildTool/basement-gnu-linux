@@ -1,0 +1,54 @@
+inherit: [rootfs]
+
+depends:
+    - tools:
+        target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - utils::mtools
+
+buildToolsWeak: [mtools]
+buildSetup: |
+    # Creates a vfat image from a source directory. The target image
+    # size can be optionally specified. If not, it is automatically calculated.
+    #
+    # $1: image source directory
+    # $2: output name
+    # $3: output size (optional)
+    #     This can be:
+    #     - nothing: auto calc size + head room (18%)
+    #     - number:  absolute overall size in kbytes
+    #     - number%: percentage in the form of 1.20% to add 20%
+    #     - number+: absolute free space in kbytes in the form of 1024+ to add 1MB
+    createVfatImage()
+    {
+        SIZE=${3:-1.18%}
+        if [[ $SIZE == *% ]]; then
+            # automatic: calc size and add head room/free space in % as specified
+            # by the user
+            SIZE="\$(dir_size_in_kb $1 ${SIZE%\%})"
+        elif [[ $SIZE == *+ ]]; then
+            # automatic: calc size and add head room/free space in absolute bytes
+            # as specified by the user
+            SIZE="\$(dir_size_in_kb $1 1 ${SIZE%\+})"
+        fi # default: manually specified
+
+        cat >create_vfat_img.sh <<EOF
+
+    # return size of dir in kbytes
+    #
+    # \$1: source dir
+    # \$2: multiply by factor (optional; default 1)
+    # \$3: add additional size in kb (optional; default 0)
+    function dir_size_in_kb()
+    {
+        printf %0.f \$(echo "\$(du -xsb -- \$1 | cut -f 1)*\${2:-1}+\${3:-0}*1024" | bc) | numfmt --to-unit=1024
+    }
+
+    dd if=/dev/zero of=$2.img bs=1K count=$SIZE
+    mformat -i $2.img ::
+    mcopy -i $2.img -s $1/* ::
+    EOF
+
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_vfat_img.sh
+    }
