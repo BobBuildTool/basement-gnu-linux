@@ -126,6 +126,7 @@ depends:
     - net::iproute2
     - net::iptables
     - net::iputils
+    - net::iw
     - net::lighttpd
     - net::net-tools
     - net::nftables
