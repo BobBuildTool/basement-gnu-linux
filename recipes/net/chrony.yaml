@@ -1,0 +1,43 @@
+inherit: [cpackage, pkg-config, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "4.6.1"
+    PKG_LICENSE: "GPL-2.0"
+
+checkoutSCM:
+    scm: url
+    url: https://chrony-project.org/releases/chrony-${PKG_VERSION}.tar.gz
+    digestSHA1: 35b070fdd446080232844ac9f70f84ca1823206f
+    stripComponents: 1
+
+depends:
+    - libs::libcap-dev
+
+    - use: []
+      depends:
+          - libs::libcap-tgt
+
+buildVars: [CC, CFLAGS, CPPFLAGS, LDFLAGS]
+buildScript: |
+    cp -afs $1/ build/
+
+    pushd build
+    ./configure \
+        --prefix=/usr \
+        --without-tomcrypt \
+        --with-user=chrony
+
+    makeParallel \
+        DESTDIR="$BOB_CWD/install" \
+        install
+    popd
+
+    mkdir -p install/.bob
+    cat >install/.bob/chrony.user-table <<EOF
+    chrony -1 chrony -1 * /run/chrony - - Time daemon
+    EOF
+
+    cp $1/examples/chrony.conf.example1 install/etc/chrony.conf
+
+packageScript: installCopy "$1/install/"
+provideDeps: [ "*-tgt" ]
