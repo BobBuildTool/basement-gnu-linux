@@ -137,6 +137,7 @@ depends:
     - net::strongswan
     - net::tcpdump
     - net::wget
+    - net::wpa-supplicant
 
     - perl::cache-memcached-tgt
     - perl::string-crc32-tgt
