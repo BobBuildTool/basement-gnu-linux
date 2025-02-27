@@ -11,6 +11,7 @@ depends:
     - core::tz-zic
 
     - graphics::graphviz
+    - graphics::fonts::bitstream-vera
     - graphics::fonts::dejavu
     - graphics::fonts::unicode
     - graphics::fonts::xorg::alias
