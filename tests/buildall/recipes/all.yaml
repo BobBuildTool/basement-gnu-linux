@@ -191,6 +191,7 @@ depends:
     - utils::brtools
     - utils::cpio
     - utils::cryptsetup
+    - utils::dmidecode
     - utils::dosfstools
     - utils::e2fsprogs
     - utils::evtest

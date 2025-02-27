@@ -1,0 +1,23 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "3.7"
+    PKG_LICENSE: "GPL-2.0-or-later"
+
+checkoutSCM:
+    scm: url
+    url: "https://download.savannah.gnu.org/releases/dmidecode/dmidecode-${PKG_VERSION}.tar.xz"
+    digestSHA256: 2c3aed12c85a1e6a9410d406d5e417c455466dc1bc7c89278bb32cf7cad91e8a
+    stripComponents: 1
+
+buildVars: [CC]
+buildScript: |
+    mkdir -p __src__
+    rsync -a --delete $1/ __src__
+    pushd __src__
+    makeParallel prefix=/usr
+    make install DESTDIR=$(pwd)/../install/ prefix=/usr
+    popd
+
+packageScript: |
+    installPackageTgt $1/install/
