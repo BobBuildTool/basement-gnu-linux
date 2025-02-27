@@ -207,6 +207,7 @@ depends:
     - utils::strace
     - utils::sysbench
     - utils::tidy
+    - utils::tigervnc
     - utils::ttysnoop
     - utils::xorriso
     - utils::xxd
