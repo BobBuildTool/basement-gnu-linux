@@ -107,6 +107,7 @@ depends:
 
     - multimedia::alsa-utils
     - multimedia::flac-tgt
+    - multimedia::ffmpeg
     - multimedia::gst-plugins-base-tgt
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
