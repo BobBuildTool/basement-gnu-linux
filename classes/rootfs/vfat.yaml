@@ -20,7 +20,7 @@ buildSetup: |
     #     - number:  absolute overall size in kbytes
     #     - number%: percentage in the form of 1.20% to add 20%
     #     - number+: absolute free space in kbytes in the form of 1024+ to add 1MB
-    createVfatImage()
+    rootfsVFatCreateImage()
     {
         SIZE=${3:-1.18%}
         if [[ $SIZE == *% ]]; then
