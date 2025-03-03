@@ -1,0 +1,22 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.0.34"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/project/acpid2/acpid-${PKG_VERSION}.tar.xz
+    digestSHA1: 9322112027e4aa5a8d1b97ec64ef1d150ff0f4fc
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+    # Add default action for the poweroff event
+    mkdir -p install/etc/acpi/events
+    printf 'event=button[ /]power\naction=%s\n' '/sbin/poweroff' \
+        > install/etc/acpi/events/powerbtn
+
+packageScript: |
+    autotoolsPackageTgt

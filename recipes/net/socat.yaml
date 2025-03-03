@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.8.0.3"
+    PKG_LICENSE: "GPL-2.0 with OpenSSL exception"
+
+depends:
+    - libs::readline-dev
+    - libs::openssl-dev
+
+    - use: []
+      depends:
+          - libs::readline-tgt
+          - libs::openssl-tgt
+
+checkoutSCM:
+    scm: url
+    url: http://www.dest-unreach.org/socat/download/socat-${PKG_VERSION}.tar.bz2
+    digestSHA1: 3bb44ae67b846dc76a3fe717ef3380928c9ee340
+    stripComponents: 1
+
+buildVars: [AR]
+buildScript: |
+    mkdir -p build
+    # install is broken for the scripts for out of tree builds; link them so
+    # make install finds them
+    ln -s $1/{socat-chain.sh,socat-mux.sh,socat-broker.sh} build/
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]
