@@ -1,0 +1,22 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.2.5"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: http://pyyaml.org/download/libyaml/yaml-${PKG_VERSION}.tar.gz
+    digestSHA256: c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild "$1"
+
+multiPackage:
+    dev:
+        packageScript: |
+            autotoolsPackageDev
+    tgt:
+        packageScript: |
+            autotoolsPackageTgt
