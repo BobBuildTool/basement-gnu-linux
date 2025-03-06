@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.6.37"
+    PKG_VERSION: "1.6.47"
 
 depends:
     - libs::zlib-dev
@@ -13,7 +13,7 @@ depends:
 checkoutSCM:
     scm: url
     url: ${SOURCEFORGE_MIRROR}/libpng/libpng-${PKG_VERSION}.tar.xz
-    digestSHA1: 3ab93fabbf4c27e1c4724371df408d9a1bd3f656
+    digestSHA256: b213cb381fbb1175327bd708a77aab708a05adde7b471bc267bd15ac99893631
     stripComponents: 1
 
 buildScript: |
