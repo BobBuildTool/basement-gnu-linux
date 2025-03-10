@@ -1,9 +1,34 @@
 inherit: [ python3-cext-pkg ]
 
-buildNetAccess: True
+depends:
+    # The Cython compiler is needed for the host environment during pyyaml
+    # builds. Not needed on target after build.
+    - name: python::cython
+      tools:
+          target-toolchain: host-compat-toolchain
+
+    - libs::libyaml-dev
+
+    - use: []
+      depends:
+          - libs::libyaml-tgt
+
+metaEnvironment:
+    PKG_VERSION: "6.0.2"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    - scm: url
+      url: "https://files.pythonhosted.org/packages/54/ed/\
+          79a089b6be93607fa5cdaedf301d7dfb23af5f25c398d5ead2525b063e17/pyyaml-${PKG_VERSION}.tar.gz"
+      digestSHA256: d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e
+      stripComponents: 1
+
 buildScript: |
-    python3InstallPip \
-        pyyaml==6.0.2
+    export PYYAML_FORCE_CYTHON=1
+    python3CExtBuildSetuptools "$1"
 
 packageScript: |
-    python3PackageTgt
+    python3CExtPackageTgt
+
+provideDeps: [ "*-tgt" ]
