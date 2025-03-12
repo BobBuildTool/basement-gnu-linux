@@ -1,0 +1,41 @@
+inherit: [patch, python3-cext-pkg]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause"
+    PKG_VERSION: "5.3.1"
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - libs::libxml2-bin
+          - libs::libxslt-bin
+    - name: python::cython
+      tools:
+          target-toolchain: host-compat-toolchain
+
+    - libs::libxml2-dev
+    - libs::libxslt-dev
+    - use: []
+      depends:
+          - libs::libxml2-tgt
+          - libs::libxslt-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/lxml/lxml/archive/refs/tags/lxml-${PKG_VERSION}.tar.gz
+    digestSHA1: f2c04d861f72d7119697194f6e46d3cdfd272e0c
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@lxml/*.patch@>
+
+buildTools: [libxslt-tools, libxml2-tools, target-toolchain]
+buildScript: |
+    python3CExtBuildSetuptools "$1"
+
+packageScript: |
+    python3CExtPackageTgt
+provideDeps: [ "*-tgt" ]
