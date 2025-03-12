@@ -1,0 +1,20 @@
+inherit: ["python3-pkg", "strip"]
+
+metaEnvironment:
+    PKG_VERSION: "3.0.12"
+    PKG_LICENSE: "Apache-2.0"
+
+checkoutSCM:
+    scm: url
+    url: "https://files.pythonhosted.org/packages/\
+        5a/25/886e197c97a4b8e254173002cdc141441e878ff29aaa7d9ba560cd6e4866/cython-${PKG_VERSION}.tar.gz"
+    digestSHA256: b988bb297ce76c671e28c97d017b95411010f7c77fa6623dd0bb47eed1aee1bc
+    stripComponents: 1
+
+buildTools: [target-toolchain]
+buildScript: |
+    python3BuildSetuptools "$1"
+
+packageScript: |
+    python3PackageTgt
+    stripAll .
