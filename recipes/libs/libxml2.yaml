@@ -10,17 +10,27 @@ checkoutSCM:
     digestSHA1: 170889cc11c53a96b18e6957f07ec6f823cad2c6
     stripComponents: 1
 
+depends:
+    - libs::libiconv-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::libiconv-tgt
+          - libs::zlib-tgt
+
 buildScript: |
-    autotoolsBuild $1 \
+    autotoolsBuild ${1} \
         --with-gnu-ld \
         --without-debug \
         --without-python
 
 multiPackage:
     dev:
+        provideDeps: ['*-dev']
         packageScript: autotoolsPackageDev
 
     tgt:
+        provideDeps: ['*-tgt']
         packageScript: autotoolsPackageLib
 
     bin:

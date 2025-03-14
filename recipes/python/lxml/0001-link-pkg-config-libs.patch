@@ -1,0 +1,19 @@
+The standard build script needs to use any additional libraries that are named
+by pkg-config. Otherwise, transitive dependencies will be missed which results
+in undefined symbols for static libraries.
+
+--- workspace/setupinfo.py.orig	2025-03-12 22:36:10.085863235 +0100
++++ workspace/setupinfo.py	2025-03-12 22:36:13.993897597 +0100
+@@ -305,6 +305,12 @@
+         libs = standard_libs
+     else:
+         libs = ['xslt', 'exslt', 'xml2'] + standard_libs
++        possible_libraries = flags('libs')
++        for possible_library in possible_libraries:
++            if possible_library.startswith('-l'):
++                possible_library = possible_library[2:]
++                if possible_library not in libs:
++                    libs.append(possible_library)
+     return libs
+ 
+ def library_dirs(static_library_dirs):
