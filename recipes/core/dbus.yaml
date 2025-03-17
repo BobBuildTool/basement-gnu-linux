@@ -19,7 +19,12 @@ checkoutSCM:
     digestSHA1: f44e9a36af548909e46aec8b29b965aeabc3bfbd
     stripComponents: 1
 
-buildVars: [CONFIG_DEBUG_DBUS]
+Config:
+    DBUS_DEBUG:
+        type: bool
+        help: Enable DBus verbose mode and assertions.
+
+buildVars: [DBUS_DEBUG]
 buildScript: |
     CONFIG_OPTS=(\
         "-Ddatadir=/etc"        \
@@ -29,7 +34,7 @@ buildScript: |
         "-Ddoxygen_docs=disabled"  \
         )
 
-    if [[ "${CONFIG_DEBUG_DBUS:-0}" == 1 ]]; then
+    if [[ "${DBUS_DEBUG:-0}" == 1 ]]; then
         CONFIG_OPTS+=(\
             "-Dverbose_mode=enabled" \
             "-Dasserts=enabled"      \
