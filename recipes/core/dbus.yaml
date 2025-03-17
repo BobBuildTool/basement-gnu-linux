@@ -1,9 +1,9 @@
-inherit: [autotools, autoconf]
+inherit: [meson]
 
 metaEnvironment:
     PKG_DESCRIPTION: "D-Bus is a simple system for interprocess communication and coordination."
     PKG_LICENSE: "AFL-2.1"
-    PKG_VERSION: "1.15.8"
+    PKG_VERSION: "1.16.2"
 
 depends:
     - libs::expat-dev
@@ -16,45 +16,34 @@ depends:
 checkoutSCM:
     scm: url
     url: https://dbus.freedesktop.org/releases/dbus/dbus-${PKG_VERSION}.tar.xz
-    digestSHA1: 73538c86a0b3da9a1c054383543da652eeea122e
+    digestSHA1: f44e9a36af548909e46aec8b29b965aeabc3bfbd
     stripComponents: 1
-
-checkoutDeterministic: True
-checkoutScript: |
-    autoconfReconfigure
 
 buildVars: [CONFIG_DEBUG_DBUS]
 buildScript: |
-   CONFIG_OPTS=(\
-      "--datadir=/etc"         \
-      "--sysconfdir=/legacy"   \
-      "--disable-doxygen-docs" \
-      "--disable-static"       \
-      "--enable-inotify"       \
-      "--without-x"            \
-      "--disable-xml-docs"     \
-      )
-   if [[ "${CONFIG_DEBUG_DBUS:-0}" == 1 ]]; then
-      CONFIG_OPTS+=(\
-         "--enable-verbose-mode" \
-         "--enable-asserts" \
-         "--enable-checks" \
-         )
-   else
-      CONFIG_OPTS+=("--disable-stats")
-   fi
+    CONFIG_OPTS=(\
+        "-Ddatadir=/etc"        \
+        "-Dsysconfdir=/legacy" \
+        "-Dinotify=enabled"        \
+        "-Dxml_docs=disabled"      \
+        "-Ddoxygen_docs=disabled"  \
+        )
 
-   autotoolsBuild $1 ${CONFIG_OPTS[@]}
-   # the pkg-config file is not using {prefix} on the libdir.
-   pushd install
-   sed -i 's@libdir=/usr/lib@libdir=${prefix}/lib@' usr/lib/pkgconfig/dbus-1.pc
-   popd
+    if [[ "${CONFIG_DEBUG_DBUS:-0}" == 1 ]]; then
+        CONFIG_OPTS+=(\
+            "-Dverbose_mode=enabled" \
+            "-Dasserts=enabled"      \
+            "-Dchecks=enabled"       \
+            )
+    else
+        CONFIG_OPTS+=("-Dstats=false")
+    fi
+    mesonBuild $1 ${CONFIG_OPTS[@]}
 
 multiPackage:
     dev:
         provideDeps: ['*-dev']
-        packageScript: autotoolsPackageDev $1 "/usr/lib/dbus-1.0/***"
+        packageScript: mesonPackageDev $1 "/usr/lib/dbus-1.0/***"
     tgt:
         provideDeps: ['*-tgt']
-        packageScript: |
-            autotoolsPackageTgt
+        packageScript: mesonPackageTgt
