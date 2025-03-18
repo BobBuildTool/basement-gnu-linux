@@ -1,0 +1,26 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.8"
+    PKG_LICENSE: "LGPLv2.1+"
+
+checkoutSCM:
+    scm: url
+    url: https://gnupg.org/ftp/gcrypt/npth/npth-${PKG_VERSION}.tar.bz2
+    digestSHA256: 8bd24b4f23a3065d6e5b26e98aba9ce783ea4fd781069c1b35d149694e90ca3e
+    stripComponents: 1
+
+buildTools: [host-toolchain]
+buildScript: |
+    autotoolsBuild $1 \
+        --enable-install-npth-config
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt
+    tool:
+        packageScript: autotoolsPackageBin
+        provideTools:
+            npth: "usr/bin"

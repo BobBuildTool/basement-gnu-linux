@@ -1,0 +1,37 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.6.7"
+    PKG_LICENSE: "LGPLv3.0+ OR GPLv2+"
+
+checkoutSCM:
+    scm: url
+    url: https://gnupg.org/ftp/gcrypt/libksba/libksba-${PKG_VERSION}.tar.bz2
+    digestSHA256: cf72510b8ebb4eb6693eef765749d83677a03c79291a311040a5bfd79baab763
+    stripComponents: 1
+
+depends:
+    - name: libs::libgpg-error-tool
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+    - libs::libgpg-error-dev
+    - use: []
+      depends:
+          - libs::libgpg-error-tgt
+
+buildTools: [gpg-error, host-toolchain]
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    tool:
+        packageScript: autotoolsPackageBin
+        provideTools:
+            ksba: "usr/bin"
