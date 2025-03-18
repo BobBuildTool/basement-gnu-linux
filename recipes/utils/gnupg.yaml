@@ -1,0 +1,59 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "GPLv3+"
+    PKG_VERSION: "2.4.7"
+
+checkoutSCM:
+    scm: url
+    url: https://gnupg.org/ftp/gcrypt/gnupg/gnupg-${PKG_VERSION}.tar.bz2
+    digestSHA256: 7b24706e4da7e0e3b06ca068231027401f238102c41c909631349dcc3b85eb46
+    stripComponents: 1
+
+depends:
+    - use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+        - libs::libassuan-tool
+        - libs::libgpg-error-tool
+        - libs::libksba-tool
+        - libs::gcrypt-tool
+        - libs::npth-tool
+
+    - libs::libassuan-dev
+    - libs::libgpg-error-dev
+    - libs::libksba-dev
+    - libs::gcrypt-dev
+    - libs::npth-dev
+    - use: []
+      depends:
+          - libs::libassuan-tgt
+          - libs::libgpg-error-tgt
+          - libs::libksba-tgt
+          - libs::gcrypt-tgt
+          - libs::npth-tgt
+
+buildTools: [gpg-error, gcrypt, ksba, npth, assuan, host-toolchain]
+buildScript: |
+    export CC_FOR_BUILD=gcc
+    autotoolsBuild $1
+
+provideDeps: ['*-tgt']
+packageScript: |
+    autotoolsPackageBin
+
+    # gnupg tries to start gpg-agent using absolute PATH to /usr/bin/gpg-agent
+    # by default. This is not working if gnupg is used as tool during build process.
+    # Add a wrapper using `--agent-program` to use `gpg-agent` from PATH
+    pushd usr/bin
+    mv gpg _gpg
+    cat > gpg << 'EOF'
+    #!/bin/bash
+    _gpg --agent-program $(which gpg-agent) "$@"
+    EOF
+    chmod +x gpg
+    popd
+
+provideTools:
+    gnupg: "usr/bin"
