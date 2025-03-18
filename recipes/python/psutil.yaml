@@ -1,0 +1,16 @@
+inherit: [python3-cext-pkg]
+
+metaEnvironment:
+    PKG_VERSION: "7.0.0"
+
+checkoutSCM:
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/p/psutil/psutil-${PKG_VERSION}.tar.gz
+    digestSHA256: 7be9c3eba38beccb6495ea33afd982a44074b78f28c434a1f51cc07fd315c456
+    stripComponents: 1
+
+buildScript: |
+    python3CExtBuildSetuptools $1
+
+packageScript: |
+    python3CExtPackageTgt

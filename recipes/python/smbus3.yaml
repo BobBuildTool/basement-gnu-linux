@@ -1,0 +1,16 @@
+inherit: [python3-pkg]
+
+metaEnvironment:
+    PKG_VERSION: "0.5.5"
+
+checkoutSCM:
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/s/smbus3/smbus3-${PKG_VERSION}.tar.gz
+    digestSHA256: 91eed38fb6b7d2f893fbfc3f37006aa41e6913fdda5b3a9a79238b353760f92e
+    stripComponents: 1
+
+buildScript: |
+    python3BuildSetuptools $1
+
+packageScript: |
+    python3PackageTgt
