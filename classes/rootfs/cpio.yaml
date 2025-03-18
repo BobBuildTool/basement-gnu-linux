@@ -24,5 +24,5 @@ buildSetup: |
          gzip > $BOB_CWD/$2.cpio.gz
     EOF
 
-        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_cpio_img.sh
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- bash create_cpio_img.sh
     }

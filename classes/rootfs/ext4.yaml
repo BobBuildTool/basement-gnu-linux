@@ -49,5 +49,5 @@ buildSetup: |
     mkfs.ext4 -d $1 $BOB_CWD/$2.img $SIZE
     EOF
 
-        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_ext4_img.sh
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- bash create_ext4_img.sh
     }

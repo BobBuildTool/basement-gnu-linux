@@ -50,5 +50,5 @@ buildSetup: |
     mcopy -i $2.img -s $1/* ::
     EOF
 
-        FAKEROOTDONTTRYCHOWN=1 fakeroot -- sh create_vfat_img.sh
+        FAKEROOTDONTTRYCHOWN=1 fakeroot -- bash create_vfat_img.sh
     }
