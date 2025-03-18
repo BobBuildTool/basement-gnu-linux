@@ -1,0 +1,27 @@
+# SUMMARY = "Cron daemon for executing programs at set times"
+# HOMEPAGE = "https://github.com/cronie-crond/cronie/"
+
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Cronie contains the standard UNIX daemon crond that runs
+                      specified programs at scheduled times and related tools.
+                      It is based on the original cron and has security and
+                      configuration enhancements like the ability to use pam
+                      and SELinux."
+
+    PKG_VERSION: "1.7.2"
+    PKG_LICENSE: "GPL-2.0"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/cronie-crond/cronie/releases/download/cronie-${PKG_VERSION}/cronie-${PKG_VERSION}.tar.gz
+    digestSHA256: f1da374a15ba7605cf378347f96bc8b678d3d7c0765269c8242cfe5b0789c571
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --prefix=/usr
+
+packageScript: |
+    autotoolsPackageTgt
