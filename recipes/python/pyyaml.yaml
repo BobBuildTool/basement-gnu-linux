@@ -1,4 +1,4 @@
-inherit: [ python3-cext-pkg ]
+inherit: [ "python3::setuptools", "python3::cext" ]
 
 depends:
     # The Cython compiler is needed for the host environment during pyyaml
@@ -26,7 +26,7 @@ checkoutSCM:
 
 buildScript: |
     export PYYAML_FORCE_CYTHON=1
-    python3CExtBuildSetuptools "$1"
+    python3BuildSetuptools "$1"
 
 packageScript: |
     python3CExtPackageTgt
