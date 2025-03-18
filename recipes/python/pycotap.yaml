@@ -1,0 +1,16 @@
+inherit: [python3-pkg]
+
+metaEnvironment:
+    PKG_VERSION: "1.3.1"
+
+checkoutSCM:
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/p/pycotap/pycotap-${PKG_VERSION}.tar.gz
+    digestSHA256: 674355f01300be03df7f871784e498652c2d89ac19cd77ee8e61652634a2f83a
+    stripComponents: 1
+
+buildScript: |
+    python3BuildSetuptools $1
+
+packageScript: |
+    python3PackageTgt
