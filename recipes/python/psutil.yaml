@@ -1,4 +1,4 @@
-inherit: [python3-cext-pkg]
+inherit: ["python3::setuptools", "python3::cext"]
 
 metaEnvironment:
     PKG_VERSION: "7.0.0"
@@ -10,7 +10,7 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-    python3CExtBuildSetuptools $1
+    python3BuildSetuptools $1
 
 packageScript: |
     python3CExtPackageTgt

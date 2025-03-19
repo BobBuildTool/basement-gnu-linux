@@ -1,4 +1,4 @@
-inherit: [patch, python3-cext-pkg]
+inherit: [patch, "python3::setuptools", "python3::cext"]
 
 metaEnvironment:
     PKG_LICENSE: "BSD-3-Clause"
@@ -34,7 +34,7 @@ checkoutScript: |
 
 buildTools: [libxslt-tools, libxml2-tools, target-toolchain]
 buildScript: |
-    python3CExtBuildSetuptools "$1"
+    python3BuildSetuptools "$1"
 
 packageScript: |
     python3CExtPackageTgt
