@@ -1,0 +1,15 @@
+metaEnvironment:
+    PKG_VERSION: "15.1.05"
+    PKG_LICENSE: "GPL-2.0-or-later with Font-exception-2.0 OR OFL-1.1"
+
+checkoutSCM:
+    scm: url
+    url: https://unifoundry.com/pub/unifont/unifont-15.1.05/font-builds/unifont-${PKG_VERSION}.pcf.gz
+    digestSHA256: ce973d6785d7be66bfb574583af000408a63c984bed573e268b645e3160f4dbc
+
+buildVars: [PKG_VERSION]
+buildScript: |
+    ln -snf $1/unifont-${PKG_VERSION}.pcf
+
+packageScript: |
+    cp -L $1/unifont-${PKG_VERSION}.pcf unifont.pcf
