@@ -1,0 +1,87 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_VERSION: "2.12"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+Config:
+    GRUB2_BOOTSTRAP:
+        help: Run bootstrap in the sources. This is only needed if a git repo is used
+        type: bool
+    GRUB2_TARGET:
+        help: "target selection. (i386, x86_64,..). Default: $ARCH"
+        type: str
+    GRUB2_PLATFORM:
+        help: |
+          Host platform passed as `--with-platform` to configure.
+          Default: efi
+        type: str
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/grub/grub-${PKG_VERSION}.tar.gz
+    digestSHA256: b30919fa5be280417c17ac561bb1650f60cfb80cc6237fa1e2b6f56154cb9c91
+    stripComponents: 1
+
+depends:
+  - graphics::fonts::unicode
+  # freetype is needed for grub-mkfont host tool.
+  - name: libs::freetype-dev
+    tools:
+        target-toolchain: host-compat-toolchain
+
+checkoutTools:
+    - name: gettext
+      if: "$(eq,${GRUB2_BOOTSTRAP:-0},1)"
+    - name: python3
+      if: "$(eq,${GRUB2_BOOTSTRAP:-0},1)"
+
+checkoutDeterministic: True
+checkoutVars: [GRUB2_BOOTSTRAP]
+checkoutScript: |
+    # support overriding the scm with a git repo
+    if [[ ${GRUB2_BOOTSTRAP:-0} == 1 ]]; then
+        ./bootstrap
+    fi
+
+buildTools: [bison, flex, python3, host-toolchain, m4]
+buildVars: [GRUB2_PLATFORM, GRUB2_TARGET, ARCH]
+buildScript: |
+    # rsync the sources. Out of tree build not working:
+    # cp: cannot create regular file 'dev/src/bsp/grub2/1/workspace/docs/stamp-1': Read-only file system
+
+    rsync -a --delete $1/ __src__
+    pushd __src__
+    if [ ! -e grub-core/extra_deps.lst ]; then
+      # Add a file missing from the release tarball:
+      echo depends bli part_gpt > grub-core/extra_deps.lst
+    fi
+    popd
+
+    unset {C,CPP,CXX,LD}FLAGS
+    autotoolsBuild $(pwd)/__src__ \
+      --disable-werror \
+      --disable-device-mapper \
+      --disable-grub-mount \
+      --disable-grub-themes \
+      --disable-grub-emu-pci \
+      --disable-grub-emu-sdl \
+      --disable-nls \
+      --disable-libzfs \
+      --disable-liblzma \
+      --disable-cache-stats \
+      --with-platform=${GRUB2_PLATFORM:-efi} \
+      --target=${GRUB2_TARGET:-${ARCH}} \
+      --with-unifont=${BOB_DEP_PATHS['graphics::fonts::unicode']}/unifont.pcf
+
+multiPackage:
+  "":
+    packageScript: |
+      # Do not use autotoolsPackage or install-class here since both use strip.
+      # and stripped grub-modules are not working.
+      rsync -a --delete $1/install/ .
+  tools:
+    packageScript: |
+      autotoolsPackageBin
+    provideTools:
+      grub2-tools: "usr/bin"
