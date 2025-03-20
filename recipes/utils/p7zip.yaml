@@ -1,0 +1,36 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "17.05"
+    PKG_LICENSE: "LGPL-2.1+ with unRAR restriction"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/p7zip-project/p7zip/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA1: f8c03d6b55759867fb464bfe5caf49149de34b01
+    stripComponents: 1
+
+buildVars: [CC, CXX, CFLAGS, CPPFLAGS, LDFLAGS]
+buildScript: |
+    mkdir -p build
+    pushd build
+    cp -arfs $1/* .
+    makeParallel \
+        CC="$CC" ALLFLAGS_C="$CFLAGS" \
+        CXX="$CXX" ALLFLAGS_CPP="$CPPFLAGS" \
+        LDFLAGS="$LDFLAGS" \
+        7z 7za 7zr
+
+    makeParallel \
+        DEST_HOME=/usr \
+        DEST_DIR=$BOB_CWD/install \
+        install
+    popd
+
+packageScript: |
+    installCopy "$1/install/"
+
+provideTools:
+    # Note that you have to use an absolute path to 7z, otherwise it doesn't
+    # find it plugins.
+    "p7zip": "usr/lib/p7zip"
