@@ -9,7 +9,7 @@ checkoutSCM:
     digestSHA256: 0d8d66b687b8e765d19d2d0560f182457aa78cdbc45fef9430655ccaf1cd34b1
     stripComponents: 1
 
-depends:
+depends: &deps
     - python::pathspec
     - python::pluggy
     - python::trove-classifiers
@@ -20,4 +20,5 @@ buildScript: |
 packageScript: |
     python3PackageTgt
 
-provideDeps: ['python::*']
+# Beware: the python3::build class adds build time dependencies!
+provideDeps: *deps
