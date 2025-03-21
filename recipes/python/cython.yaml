@@ -12,6 +12,7 @@ checkoutSCM:
     stripComponents: 1
 
 buildTools: [target-toolchain]
+buildVars: [CC]
 buildScript: |
     python3BuildSetuptools "$1"
 
