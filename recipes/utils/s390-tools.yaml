@@ -1,0 +1,25 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "2.37.0"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/ibm-s390-linux/s390-tools/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: d701413fe80a1185c1c96a0678c2441c22447420722c7f44286c9faf5eeb5d5a
+    stripComponents: 1
+
+multiPackage:
+    ttyrun:
+        buildTools: [target-toolchain]
+        buildVars: [CROSS_COMPILE]
+        buildScript: |
+            rsync -a --delete $1/ .
+            pushd iucvterm/src
+            makeParallel ttyrun
+            popd
+            mkdir -p install/sbin
+            cp iucvterm/src/ttyrun install/sbin
+        packageScript: |
+            installPackageTgt $1/install/
