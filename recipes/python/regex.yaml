@@ -1,0 +1,18 @@
+inherit: ['python3::setuptools', 'python3::cext']
+
+metaEnvironment:
+    PKG_VERSION: "2025.2.13"
+    PKG_DESCRIPTION: "Python3 regex packet (extends re)"
+    PKG_LICENSE: "Apache-2.0"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/mrabarnett/mrab-regex/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: d44c8b925245f5c07dd2ee7b69139902f24df0d5b43c5f14225d7071dd1a2b1a
+    stripComponents: 1
+
+buildScript: |
+    python3BuildSetuptools $1
+
+packageScript: |
+    python3CExtPackageTgt
