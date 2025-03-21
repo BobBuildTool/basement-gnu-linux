@@ -1,0 +1,154 @@
+depends:
+    - core::acpid
+    - core::busybox
+    - core::dbus-tgt
+    - core::eudev-tgt
+    - core::hwdata
+    - core::tz-data
+    - core::tz-zic
+
+    #  FIXME: See https://github.com/BobBuildTool/basement-gnu-linux/issues/5
+    # - graphics::graphviz
+    - graphics::fonts::dejavu
+    - graphics::fonts::unicode
+    - graphics::imagemagick
+    - graphics::kmscube
+
+    - graphics::wayland::wayland
+    - graphics::xorg::proto::xproto
+
+    - kernel::kmod
+    - kernel::linux-image
+
+    - libs::alsa-lib-tgt
+    - libs::libassuan-tgt
+    - libs::libksba-tgt
+    - libs::botan-tgt
+    - libs::cairo-tgt
+    - libs::cloog-tgt
+    - libs::dbus-glib-tgt
+    - libs::double-conversion-tgt
+    - libs::elfutils
+    - libs::fontconfig-tgt
+    - libs::freetype-tgt
+    - libs::fribidi-tgt
+    - libs::gcrypt-tgt
+    - libs::gnutls-tgt
+    - libs::harfbuzz-tgt
+    - libs::jpeg-turbo-tgt
+    - libs::libb2-tgt
+    - libs::libcap-ng-tgt
+    - libs::libconfuse-tgt
+    - libs::libdrm-tgt
+    - libs::libevdev-tgt
+    - libs::libgpg-error-tgt
+    - libs::libiconv-tgt
+    - libs::libjpeg-tgt
+    - libs::libmnl-tgt
+    - libs::libnftnl-tgt
+    - libs::libnl-tgt
+    - libs::liborc-tgt
+    - libs::libpcap-tgt
+    - libs::libpng-tgt
+    - libs::libseccomp-tgt
+    - libs::libtasn1-tgt
+    - libs::libtirpc-tgt
+    - libs::libunistring-tgt
+    - libs::libusb-tgt
+    - libs::libxcrypt-tgt
+    - libs::libxkbcommon-tgt
+    - libs::libxml2-tgt
+    - libs::libxslt-tgt
+    - libs::libyaml-tgt
+    - libs::mesa3d-tgt
+    - libs::mtdev-tgt
+    - libs::nettle-tgt
+    - libs::npth-tgt
+    - libs::pango-tgt
+    - libs::pcre2-tgt
+    - libs::pixman-tgt
+    - libs::qt6-base-tgt
+    - libs::qt6-declarative-tgt
+    - libs::qt6-remoteobjects-tgt
+    - libs::qt6-shadertools-tgt
+    - libs::qt6-wayland-tgt
+    - libs::slirp-tgt
+    - libs::yajl-tgt
+
+    - multimedia::alsa-utils
+    - multimedia::gst-plugins-base-tgt
+    - multimedia::gst-plugins-good-tgt
+    - multimedia::gstreamer-tgt
+    - multimedia::pipewire
+    - multimedia::wireplumber
+
+    - net::bridge-utils
+    - net::chrony
+    - net::dnsmasq
+    - net::ebtables
+    - net::ethtool
+    - net::ifenslave
+    - net::ifupdown
+    - net::iperf
+    - net::iptables
+    - net::lighttpd
+    - net::net-tools
+    - net::nftables
+    - net::ntp
+    - net::openssh
+    - net::socat
+    - net::strongswan
+    - net::tcpdump
+    - net::wget
+
+    - python::build
+    - python::calver
+    - python::colorama
+    - python::cython
+    - python::docutils
+    - python::funcy
+    - python::hatchling
+    - python::lxml
+    - python::mako
+    - python::markupsafe
+    - python::packaging
+    - python::pathspec
+    - python::pbr
+    - python::pluggy
+    - python::psutil
+    - python::pycparser
+    - python::pycotap
+    - python::pyproject-hooks
+    - python::pyyaml
+    - python::regex
+    - python::setuptools-scm
+    - python::smbus3
+    - python::stevedore
+    - python::tqdm
+    - python::trove-classifiers
+
+    - utils::acpica
+    - utils::brtools
+    - utils::cpio
+    - utils::dosfstools
+    - utils::e2fsprogs
+    - utils::evtest
+    - utils::genext2fs
+    - utils::genimage
+    - utils::gnupg
+    - utils::minicom
+    - utils::mingetty
+    - utils::mtools
+    - utils::nano
+    - utils::pciutils
+    - utils::s390-tools-ttyrun
+    - utils::screen
+    - utils::strace
+    - utils::tidy
+    - utils::ttysnoop
+    - utils::uboot-tools
+    - utils::xorriso
+    - utils::xxd
+
+buildScript: "/bin/true"
+packageScript: "/bin/true"

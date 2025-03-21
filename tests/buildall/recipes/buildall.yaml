@@ -1,0 +1,40 @@
+inherit: ['basement::rootrecipe']
+
+depends:
+    # devel stuff (usually) not deployed to targets -> host compat toolchain
+    - devel::byacc
+    - devel::dtc
+    # - devel::intltool # FIXME: configure: error: XML::Parser perl module is required for intltool
+    - devel::lua-bin
+    - devel::makedepend
+    - devel::nasm
+    - devel::rpcsvc-proto
+    - devel::squashfs-tools
+
+    - name: libs::glib-tools
+      use: [tools]
+      forward: true
+
+multiPackage:
+    aarch64:
+        depends:
+            - name: devel::cross-toolchain-aarch64-linux-gnu
+              use: [tools]
+              forward: true
+
+            - all
+
+    x86_64:
+        depends:
+            - name: devel::cross-toolchain-x86_64-linux-gnu
+              use: [tools]
+              forward: true
+
+            - all
+            - bsp::grub2
+
+buildScript: |
+  /bin/true
+
+packageScript: |
+  /bin/true
