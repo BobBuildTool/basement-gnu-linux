@@ -1,0 +1,28 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.5"
+    PKG_DESCRIPTION: "Set parameter setting utility for X"
+    PKG_LICENSE_FILE: "COPYING"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXmu-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXmu-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/app/xset-${PKG_VERSION}.tar.xz
+    digestSHA256: 9f692d55635b3862cd63633b1222a87680ec283c7a8e8ed6dd698a3147f75e2f
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageBin
