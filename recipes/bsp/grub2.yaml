@@ -77,11 +77,14 @@ buildScript: |
 multiPackage:
     "":
         packageScript: |
-            # Do not use autotoolsPackage or install-class here since both use strip.
-            # and stripped grub-modules are not working.
-            rsync -a --delete $1/install/ .
+            # Ignore the grub modules on target install, cause stripping destroys them.
+            # The rest is handled as usual.
+            autotoolsPackageTgt "$1" "!/usr/lib/grub"
+            # Now simply copy the unstripped modules.
+            installCopy "$1/install/" "/usr/" "/usr/lib/" "/usr/lib/grub/***" "!*"
+
     tools:
         packageScript: |
-            autotoolsPackageBin
+            autotoolsPackageBin "$1" "!/usr/lib/grub"
         provideTools:
             grub2-tools: "usr/bin"
