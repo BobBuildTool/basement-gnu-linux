@@ -25,9 +25,9 @@ multiPackage:
             byacc: "usr/bin"
 
     dev:
-       packageScript: |
-          autotoolsPackageDev
+        packageScript: |
+            autotoolsPackageDev
 
     tgt:
-       packageScript: |
-          autotoolsPackageLib
+        packageScript: |
+            autotoolsPackageLib

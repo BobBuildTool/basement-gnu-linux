@@ -38,7 +38,6 @@ rules:
     indentation:
         spaces: 4
         indent-sequences: consistent
-        level: warning
     key-duplicates:
         forbid-duplicated-merge-keys: true
     key-ordering: disable

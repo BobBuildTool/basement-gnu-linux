@@ -14,13 +14,13 @@ depends:
 checkoutSCM:
     - scm: url
       url:
-        https://snapshot.debian.org/archive/debian/20050326T000000Z/pool/main/t/ttysnoop/ttysnoop_${PKG_VERSION}.orig.tar.gz
+          https://snapshot.debian.org/archive/debian/20050326T000000Z/pool/main/t/ttysnoop/ttysnoop_${PKG_VERSION}.orig.tar.gz
       digestSHA256: 645f9c174f2d1785a2f333a585175212ba3e8911c69e62d555fc2ab92dd815d8
       dir: ttysnoop
       stripComponents: 1
     - scm: url
       url:
-        https://snapshot.debian.org/archive/debian/20130824T214307Z/pool/main/t/ttysnoop/ttysnoop_${PKG_VERSION_PATCH}.debian.tar.gz
+          https://snapshot.debian.org/archive/debian/20130824T214307Z/pool/main/t/ttysnoop/ttysnoop_${PKG_VERSION_PATCH}.debian.tar.gz
       dir: patches
       digestSHA256: 8e741475becdbb962ed152a221d0ac02ff1c30ed60d994c761c7a18a2c73cd64
       stripComponents: 1
