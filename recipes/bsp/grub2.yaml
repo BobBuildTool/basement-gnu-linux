@@ -13,8 +13,8 @@ Config:
         type: str
     GRUB2_PLATFORM:
         help: |
-          Host platform passed as `--with-platform` to configure.
-          Default: efi
+            Host platform passed as `--with-platform` to configure.
+            Default: efi
         type: str
 
 checkoutSCM:
@@ -24,11 +24,11 @@ checkoutSCM:
     stripComponents: 1
 
 depends:
-  - graphics::fonts::unicode
-  # freetype is needed for grub-mkfont host tool.
-  - name: libs::freetype-dev
-    tools:
-        target-toolchain: host-compat-toolchain
+    - graphics::fonts::unicode
+    # freetype is needed for grub-mkfont host tool.
+    - name: libs::freetype-dev
+      tools:
+          target-toolchain: host-compat-toolchain
 
 checkoutTools:
     - name: gettext
@@ -53,35 +53,38 @@ buildScript: |
     rsync -a --delete $1/ __src__
     pushd __src__
     if [ ! -e grub-core/extra_deps.lst ]; then
-      # Add a file missing from the release tarball:
-      echo depends bli part_gpt > grub-core/extra_deps.lst
+        # Add a file missing from the release tarball:
+        echo depends bli part_gpt > grub-core/extra_deps.lst
     fi
     popd
 
     unset {C,CPP,CXX,LD}FLAGS
     autotoolsBuild $(pwd)/__src__ \
-      --disable-werror \
-      --disable-device-mapper \
-      --disable-grub-mount \
-      --disable-grub-themes \
-      --disable-grub-emu-pci \
-      --disable-grub-emu-sdl \
-      --disable-nls \
-      --disable-libzfs \
-      --disable-liblzma \
-      --disable-cache-stats \
-      --with-platform=${GRUB2_PLATFORM:-efi} \
-      --target=${GRUB2_TARGET:-${ARCH}} \
-      --with-unifont=${BOB_DEP_PATHS['graphics::fonts::unicode']}/unifont.pcf
+        --disable-werror \
+        --disable-device-mapper \
+        --disable-grub-mount \
+        --disable-grub-themes \
+        --disable-grub-emu-pci \
+        --disable-grub-emu-sdl \
+        --disable-nls \
+        --disable-libzfs \
+        --disable-liblzma \
+        --disable-cache-stats \
+        --with-platform=${GRUB2_PLATFORM:-efi} \
+        --target=${GRUB2_TARGET:-${ARCH}} \
+        --with-unifont=${BOB_DEP_PATHS['graphics::fonts::unicode']}/unifont.pcf
 
 multiPackage:
-  "":
-    packageScript: |
-      # Do not use autotoolsPackage or install-class here since both use strip.
-      # and stripped grub-modules are not working.
-      rsync -a --delete $1/install/ .
-  tools:
-    packageScript: |
-      autotoolsPackageBin
-    provideTools:
-      grub2-tools: "usr/bin"
+    "":
+        packageScript: |
+            # Ignore the grub modules on target install, cause stripping destroys them.
+            # The rest is handled as usual.
+            autotoolsPackageTgt "$1" "!/usr/lib/grub"
+            # Now simply copy the unstripped modules.
+            installCopy "$1/install/" "/usr/" "/usr/lib/" "/usr/lib/grub/***" "!*"
+
+    tools:
+        packageScript: |
+            autotoolsPackageBin "$1" "!/usr/lib/grub"
+        provideTools:
+            grub2-tools: "usr/bin"
