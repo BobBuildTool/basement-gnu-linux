@@ -15,11 +15,11 @@ depends:
       tools:
           target-toolchain: host-compat-toolchain
       depends:
-        - libs::libassuan-tool
-        - libs::libgpg-error-tool
-        - libs::libksba-tool
-        - libs::gcrypt-tool
-        - libs::npth-tool
+          - libs::libassuan-tool
+          - libs::libgpg-error-tool
+          - libs::libksba-tool
+          - libs::gcrypt-tool
+          - libs::npth-tool
 
     - libs::libassuan-dev
     - libs::libgpg-error-dev
