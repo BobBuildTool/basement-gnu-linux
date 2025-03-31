@@ -111,6 +111,8 @@ depends:
     - net::tcpdump
     - net::wget
 
+    - perl::xml-parser-tgt
+
     - python::build
     - python::calver
     - python::colorama
