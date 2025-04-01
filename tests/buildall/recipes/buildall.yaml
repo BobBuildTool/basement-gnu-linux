@@ -32,6 +32,7 @@ multiPackage:
 
             - all
             - bsp::grub2
+            - bsp::intel::microcode
 
 buildScript: |
   /bin/true
