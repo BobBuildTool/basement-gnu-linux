@@ -53,6 +53,7 @@ depends:
     - libs::libpcap-tgt
     - libs::libpng-tgt
     - libs::libseccomp-tgt
+    - libs::libssh-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
     - libs::libunistring-tgt
