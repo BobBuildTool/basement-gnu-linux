@@ -36,6 +36,8 @@ depends:
     - libs::gnutls-tgt
     - libs::harfbuzz-tgt
     - libs::jpeg-turbo-tgt
+    - libs::jsonc-tgt
+    - libs::libaio-tgt
     - libs::libb2-tgt
     - libs::libcap-ng-tgt
     - libs::libconfuse-tgt
@@ -51,6 +53,7 @@ depends:
     - libs::libpcap-tgt
     - libs::libpng-tgt
     - libs::libseccomp-tgt
+    - libs::libssh-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
     - libs::libunistring-tgt
@@ -60,6 +63,7 @@ depends:
     - libs::libxml2-tgt
     - libs::libxslt-tgt
     - libs::libyaml-tgt
+    - libs::lvm2
     - libs::mesa3d-tgt
     - libs::mtdev-tgt
     - libs::nettle-tgt
@@ -67,6 +71,7 @@ depends:
     - libs::pango-tgt
     - libs::pcre2-tgt
     - libs::pixman-tgt
+    - libs::popt-tgt
     - libs::qt6-base-tgt
     - libs::qt6-declarative-tgt
     - libs::qt6-remoteobjects-tgt
@@ -130,6 +135,7 @@ depends:
     - utils::acpica
     - utils::brtools
     - utils::cpio
+    - utils::cryptsetup
     - utils::dosfstools
     - utils::e2fsprogs
     - utils::evtest

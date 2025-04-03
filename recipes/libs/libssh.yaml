@@ -1,0 +1,30 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_LICENSE: "LGPL-2.1"
+    PKG_VERSION: "0.11.1"
+
+checkoutSCM:
+    scm: url
+    url: https://www.libssh.org/files/0.11/libssh-${PKG_VERSION}.tar.xz
+    digestSHA256: 14b7dcc72e91e08151c58b981a7b570ab2663f630e7d2837645d5a9c612c1b79
+    stripComponents: 1
+
+depends:
+    - libs::openssl-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::openssl-tgt
+          - libs::zlib-tgt
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: cmakePackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: cmakePackageTgt

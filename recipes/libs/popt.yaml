@@ -1,0 +1,21 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "library to parse command-line options"
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.19"
+
+checkoutSCM:
+    scm: url
+    url: https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${PKG_VERSION}.tar.gz
+    digestSHA256: c25a4838fc8e4c1c8aacb8bd620edb3084a3d63bf8987fdad3ca2758c63240f9
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt

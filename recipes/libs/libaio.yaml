@@ -1,0 +1,24 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Linux-native asynchronous I/O access library"
+    PKG_LICENSE: "LGPL-2.0-or-later"
+    PKG_VERSION: "0.3.113"
+
+checkoutSCM:
+    scm: url
+    url: https://pagure.io/libaio/archive/libaio-${PKG_VERSION}/libaio-${PKG_VERSION}.tar.gz
+    digestSHA256: 1c561c20670c5c09cc8437a622008c0693c6a7816c1f30332da3796953b2f454
+    stripComponents: 1
+
+buildVars: [CC, AR, RANLIB]
+buildScript: |
+    rsync -a --delete $1/ .
+    makeParallel
+    makeSequential install prefix=$(pwd)/install/usr/
+
+multiPackage:
+    dev:
+        packageScript: installPackageDev $1/install/
+    tgt:
+        packageScript: installPackageTgt $1/install/

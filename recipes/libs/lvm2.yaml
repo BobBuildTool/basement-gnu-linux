@@ -1,0 +1,47 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "lvm userspace tools and device mapper library/tool"
+    PKG_VERSION: "2.03.31"
+    PKG_LICENSE: "LGPL-2.1-only AND GPL-2.0-only"
+
+depends:
+    - libs::libaio-dev
+    - use: []
+      depends:
+          - libs::libaio-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://sourceware.org/ftp/lvm2/LVM2.${PKG_VERSION}.tgz
+    digestSHA256: 5db2956a00fbf87d92274cccc92436387ec0c3faadece7413ece1ba1c10c98ff
+    stripComponents: 1
+
+buildScript: |
+    SHARED_STATIC=()
+    if cpackageCrossCompiling ; then
+        SHARED_STATIC=( "--enable-static_link" )
+    fi
+
+    export CFLAGS="${CFLAGS} -I $(pwd)/build"
+    autotoolsBuild $1 \
+       --disable-selinux \
+       --enable-udev_rules \
+       ${SHARED_STATIC[@]}
+
+multiPackage:
+    "":
+        depends:
+            - use: []
+              name: libs::lvm2-tgt
+        provideDeps: ['*-tgt']
+        packageScript:
+            autotoolsPackageBin
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            autotoolsPackageTgt

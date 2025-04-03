@@ -1,0 +1,47 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "cryptsetup is used to set up transparent encryption of block devices"
+    PKG_VERSION: "2.7.5"
+    PKG_LICENSE: "GPL-2.0-or-later"
+
+depends:
+    - core::util-linux-dev
+    - libs::jsonc-dev
+    - libs::libssh-dev
+    - libs::lvm2-dev
+    - libs::popt-dev
+    - use: []
+      depends:
+          - core::util-linux-tgt
+          - libs::jsonc-tgt
+          - libs::libssh-tgt
+          - libs::lvm2-tgt
+          - libs::popt-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${KERNEL_MIRROR}/linux/utils/cryptsetup/v2.7/cryptsetup-${PKG_VERSION}.tar.xz
+    digestSHA256: d2be4395b8f503b0ebf4b2d81db90c35a97050a358ee21fe62a0dfb66e5d5522
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-asciidoc
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            autotoolsPackageLib
+    "":
+        depends:
+            - use: []
+              name: utils::cryptsetup-tgt
+        provideDeps: ['*-tgt']
+        packageScript:
+            autotoolsPackageBin
