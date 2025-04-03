@@ -1,0 +1,33 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "2.1"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/LuaJIT/LuaJIT/archive/refs/tags/v${PKG_VERSION}.ROLLING.tar.gz
+    digestSHA256: 31d7a4853df4c548bf91c13d3b690d19663d4c06ae952b62606c8225d0b410ad
+    stripComponents: 1
+
+buildTools: [target-toolchain, host-toolchain]
+buildVars: [CC, STRIP, CROSS_COMPILE]
+buildScript: |
+    mkdir -p build
+    rsync -a --delete $1/ build
+    pushd build
+    makeParallel HOST_CC=gcc CROSS=${CROSS_COMPILE}
+    make install DESTDIR=$(pwd)/../install PREFIX=/usr
+    popd
+
+multiPackage:
+    dev:
+        packageScript: installPackageDev $1/install/
+    tgt:
+        packageScript: installPackageLib $1/install/
+    "":
+        depends:
+            - use: []
+              name: utils::luajit-tgt
+        provideDeps: ['*-tgt']
+        packageScript: installPackageBin $1/install/

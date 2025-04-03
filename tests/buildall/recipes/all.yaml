@@ -137,6 +137,7 @@ depends:
     - utils::genext2fs
     - utils::genimage
     - utils::gnupg
+    - utils::luajit
     - utils::minicom
     - utils::mingetty
     - utils::mtools
