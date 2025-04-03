@@ -1,0 +1,24 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.7.2"
+    PKG_LICENSE: "BSD-2-Clause AND Apache-2.0 AND Intel"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/concurrencykit/ck/archive/refs/tags/${PKG_VERSION}.tar.gz
+    stripComponents: 1
+    digestSHA256: 568ebe0bc1988a23843fce6426602e555b7840bf6714edcdf0ed530214977f1b
+
+buildVars: [ARCH, AR, CC]
+buildScript: |
+    rsync -a --delete $1/ .
+    autotoolsBuild $(pwd) --platform=${ARCH}
+
+multiPackage:
+    dev:
+        packageScript: |
+            autotoolsPackageDev
+    tgt:
+        packageScript: |
+            autotoolsPackageTgt

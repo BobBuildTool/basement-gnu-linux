@@ -26,6 +26,7 @@ depends:
     - libs::botan-tgt
     - libs::cairo-tgt
     - libs::cloog-tgt
+    - libs::concurrency_kit-tgt
     - libs::dbus-glib-tgt
     - libs::double-conversion-tgt
     - libs::elfutils
@@ -142,6 +143,7 @@ depends:
     - utils::genext2fs
     - utils::genimage
     - utils::gnupg
+    - utils::luajit
     - utils::minicom
     - utils::mingetty
     - utils::mtools
@@ -150,6 +152,7 @@ depends:
     - utils::s390-tools-ttyrun
     - utils::screen
     - utils::strace
+    - utils::sysbench
     - utils::tidy
     - utils::ttysnoop
     - utils::uboot-tools
