@@ -146,6 +146,7 @@ depends:
     - utils::s390-tools-ttyrun
     - utils::screen
     - utils::strace
+    - utils::sysbench
     - utils::tidy
     - utils::ttysnoop
     - utils::uboot-tools

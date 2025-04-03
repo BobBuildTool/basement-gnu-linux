@@ -1,0 +1,34 @@
+inherit: [autotools, autoconf, patch]
+
+metaEnvironment:
+    PKG_VERSION: 1.0.20
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/akopytov/sysbench/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: e8ee79b1f399b2d167e6a90de52ccc90e52408f7ade1b9b7135727efe181347f
+    stripComponents: 1
+
+depends:
+    - libs::concurrency_kit-dev
+    - utils::luajit-dev
+    - use: []
+      depends:
+          - libs::concurrency_kit-tgt
+          - utils::luajit-tgt
+
+checkoutDeterministic: True
+checkoutScript: |
+  patchApplySeries -p0 $<@sysbench/*.patch@>
+  autoconfReconfigure
+
+buildVars: [CC]
+buildScript: |
+  # rsync -a --delete $1/ build
+  autotoolsBuild -o V=1 -o VERBOSE=1 $1 --without-mysql \
+      --with-system-ck \
+      --with-system-luajit
+
+provideDeps: ['*-tgt']
+packageScript: |
+  autotoolsPackageTgt
