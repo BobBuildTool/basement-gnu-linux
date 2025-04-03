@@ -26,6 +26,7 @@ depends:
     - libs::botan-tgt
     - libs::cairo-tgt
     - libs::cloog-tgt
+    - libs::concurrency_kit-tgt
     - libs::dbus-glib-tgt
     - libs::double-conversion-tgt
     - libs::elfutils
