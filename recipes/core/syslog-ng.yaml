@@ -1,0 +1,36 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.8.1"
+    PKG_LICENSE: "LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/syslog-ng/syslog-ng/releases/download/syslog-ng-${PKG_VERSION}/syslog-ng-${PKG_VERSION}.tar.gz
+    digestSHA1: ee8d59da990f93e9ef921b160c8fd36366ecb7b5
+    stripComponents: 1
+
+depends:
+    - libs::glib-dev
+    - libs::pcre2-dev
+    - libs::openssl-dev
+    - libs::jsonc-dev
+    - use: []
+      depends:
+          - libs::glib-tgt
+          - libs::pcre2-tgt
+          - libs::openssl-tgt
+          - libs::jsonc-tgt
+
+buildTools: [m4, flex, bison]
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-java \
+        --disable-java-modules \
+        --disable-mongodb \
+        --disable-python \
+        --disable-example-modules
+
+packageScript: |
+    autotoolsPackageTgt
+provideDeps: ['*-tgt']
