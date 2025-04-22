@@ -4,11 +4,19 @@ metaEnvironment:
     PKG_VERSION: "3.2.14"
     PKG_LICENSE: "GPL-2.0+, LGPL-2.1+"
 
+depends:
+    - name: devel::gperf
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/eudev-project/eudev/releases/download/v${PKG_VERSION}/eudev-${PKG_VERSION}.tar.gz
     digestSHA1: 242801bd31ff45a3fdc4a3b9d078ffa69ccae3c9
     stripComponents: 1
+
+buildTools: [gperf]
 
 multiPackage:
     "":
