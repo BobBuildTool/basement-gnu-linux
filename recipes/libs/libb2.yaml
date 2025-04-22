@@ -4,62 +4,16 @@ metaEnvironment:
     PKG_VERSION: "0.98.1"
     PKG_LICENSE: "CC0-1.0"
 
-Config:
-    LIBB2_HAVE_AVX:
-        help: Enable AVX support
-        type: choice
-        choice: &choice
-            "yes":
-            "no":
-    LIBB2_HAVE_MMX:
-        help: Enable MMX support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSE:
-        help: Enable SSE support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSE2:
-        help: Enable SSE2 support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSE3:
-        help: Enable SSE3 support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSSE3:
-        help: Enable SSSE3 support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSE41:
-        help: Enable SSE4.1 support
-        type: choice
-        choice: *choice
-    LIBB2_HAVE_SSE42:
-        help: Enable SSE4.2 support
-        type: choice
-        choice: *choice
-
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/BLAKE2/libb2/releases/download/v${PKG_VERSION}/libb2-${PKG_VERSION}.tar.gz
     digestSHA1: 85abee1e611cda21775f4a7dd77d11671d300bb4
     stripComponents: 1
 
-buildVars: [ARCH, LIBB2_HAVE_AVX, LIBB2_HAVE_MMX, LIBB2_HAVE_SSE, LIBB2_HAVE_SSE2,
-            LIBB2_HAVE_SSE3, LIBB2_HAVE_SSSE3, LIBB2_HAVE_SSE41, LIBB2_HAVE_SSE42]
 buildScript: |
-    if [[ "${ARCH}" == "x86_64" ]]; then
-        export ax_cv_have_avx_ext=${LIBB2_HAVE_AVX:-no} \
-               ax_cv_have_mmx_ext=${LIBB2_HAVE_MMX:-no} \
-               ax_cv_have_sse_ext=${LIBB2_HAVE_SSE:-no} \
-               ax_cv_have_sse2_ext=${LIBB2_HAVE_SSE2:-no} \
-               ax_cv_have_sse3_ext=${LIBB2_HAVE_SSE3:-no} \
-               ax_cv_have_ssse3_ext=${LIBB2_HAVE_SSSE3:-no} \
-               ax_cv_have_sse41_ext=${LIBB2_HAVE_SSE41:-no} \
-               ax_cv_have_sse42_ext=${LIBB2_HAVE_SSE42:-no}
-    fi
-    autotoolsBuild $1
+    autotoolsBuild $1 \
+        --disable-native \
+        --disable-fat
 
 multiPackage:
     dev:
