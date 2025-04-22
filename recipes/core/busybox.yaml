@@ -1,4 +1,4 @@
-inherit: [make, install]
+inherit: [make, install, kconfig]
 
 depends:
     - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
@@ -27,10 +27,18 @@ buildScript: |
         make -C $1 O=$PWD oldconfig
     else
         make -C $1 O=$PWD defconfig
+        kconfigEnable CONFIG_DEBUG
+        make -C $1 O=$PWD oldconfig
     fi
     makeParallel
     make CONFIG_PREFIX=${BOB_CWD}/install install
     popd #build
+
+    if [[ -f build/busybox_unstripped ]] ; then
+        mkdir install/bin/.debug
+        cp build/busybox_unstripped install/bin/.debug/busybox
+        ${CROSS_COMPILE}objcopy --add-gnu-debuglink=install/bin/.debug/busybox install/bin/busybox
+    fi
 
     mkdir -p install/.bob
 
