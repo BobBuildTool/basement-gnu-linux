@@ -28,7 +28,7 @@ buildScript: |
     makeParallel -C build \
         AR="$AR" \
         RANLIB="$RANLIB" \
-        HOST="${AUTOCONF_HOST}" \
+        ${AUTOCONF_HOST:+HOST="${AUTOCONF_HOST}"} \
         STRIP= \
         CC="$CC" \
         CFLAGS="$CFLAGS" \

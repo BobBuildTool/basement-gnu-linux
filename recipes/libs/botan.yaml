@@ -21,14 +21,14 @@ checkoutScript: |
     patchApplySeries $<@botan/*@>
 
 buildToolsWeak: [python3]
-buildVars: [AR, CXX, CXXFLAGS, CPPFLAGS, ARCH]
+buildVars: [AR, AUTOCONF_BUILD, AUTOCONF_HOST, CXX, CXXFLAGS, CPPFLAGS, ARCH]
 buildScript: |
     mkdir -p build install
     pushd build
 
     declare -a EXTRA_ARGS=( )
 
-    case "$AUTOCONF_HOST" in
+    case "${AUTOCONF_HOST:-$AUTOCONF_BUILD}" in
       *-l4re) target_os=l4re
               EXTRA_ARGS+=( --without-stack-protector )
               ;;
