@@ -95,7 +95,7 @@ buildSetup: |
     rootfsMergeUserTables()
     {
         # Search for all user-table files and cat them into one file
-        TABLES=`find "${@:2}" -regex ".bob/.*.user-table"`
+        TABLES=`find "${@:2}" -regex "".*/\.bob/[^/]*\.user-table`
         if [ "$TABLES" != "" ]; then
           cat $TABLES > "$1"
         fi
@@ -109,7 +109,7 @@ buildSetup: |
     rootfsMergeDeviceTables()
     {
         # Search for all device-table files and cat them into one file
-        TABLES=`find "${@:2}" -regex ".bob/.*.device-table"`
+        TABLES=`find "${@:2}" -regex ".*/\.bob/[^/]*\.device-table"`
         if [ "$TABLES" != "" ]; then
           cat $TABLES > "$1"
         fi
@@ -123,7 +123,7 @@ buildSetup: |
     rootfsMergeShellTables()
     {
         # Search for all shell-table files and cat them into one file
-        TABLES=`find "${@:2}" -regex ".bob/.*.shell-table"`
+        TABLES=`find "${@:2}" -regex ".*/\.bob/[^/]*\.shell-table"`
         if [ "$TABLES" != "" ]; then
           cat $TABLES > "$1"
         fi
