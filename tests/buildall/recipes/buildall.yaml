@@ -35,6 +35,13 @@ multiPackage:
             - bsp::intel::microcode
             - utils::iucode-tool # uses cpuid which is not available on !x86
 
+            - name: libs::mesa3d-tgt
+              alias: libs::mesa3d-intel-tgt
+              environment:
+                  MESA3D_PLATFORM: "x11"
+                  MESA3D_INTEL: "true"
+                  MESA3D_GALLIUM_DRIVERS: "iris"
+
 buildScript: |
   /bin/true
 
