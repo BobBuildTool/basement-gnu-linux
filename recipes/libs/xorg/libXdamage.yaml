@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.1.6"
+    PKG_DESCRIPTION: "X Damage Library"
+    COPYRIGHT: "Copyright © 2001,2003 Keith Packard\n
+                Copyright © 2007 Eric Anholt"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libXfixes-dev
+    - use: []
+      depends:
+          - libs::xorg::libXfixes-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXdamage-${PKG_VERSION}.tar.xz
+    digestSHA256: 52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

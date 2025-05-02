@@ -1,0 +1,35 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.5.4"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXext-dev
+    - libs::xorg::libXrender-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXext-tgt
+          - libs::xorg::libXrender-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXrandr-${PKG_VERSION}.tar.xz
+    digestSHA256: 1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
