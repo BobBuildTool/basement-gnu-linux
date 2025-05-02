@@ -1,7 +1,8 @@
 inherit: [meson, wayland-scanner]
 
 metaEnvironment:
-    PKG_VERSION: "24.2.8"
+    PKG_DESCRIPTION: "Mesa OpenGL library"
+    PKG_VERSION: "25.0.5"
     PKG_LICENSE: "MIT, SGI, Khronos"
 
 Config:
@@ -34,7 +35,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://archive.mesa3d.org/mesa-${PKG_VERSION}.tar.xz
-    digestSHA1: c7994d1bf40879518b6ae331dd92e04b6e9d436e
+    digestSHA1: d6427cb320fcbd8bbe223ad69b16619391812fee
     stripComponents: 1
 
 buildTools: [bison, flex, m4]
