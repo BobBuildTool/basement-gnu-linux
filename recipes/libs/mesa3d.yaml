@@ -9,25 +9,32 @@ Config:
     MESA3D_GALLIUM_DRIVERS:
         help: "List of gallium drivers to build"
         type: str
+    MESA3D_GLX:
+        help: "Build support for GLX platform. Default: auto"
+        type: str
+    MESA3D_GLX_READ_ONLY_TEXT:
+        help: "Disable writable .text section on x86"
+        type: str
+    MESA3D_PLATFORM:
+        help: "Window system to support. Default: wayland"
+        type: choice
+        choice:
+            wayland:
+            x11:
 
 depends:
-    - libs::zlib-dev
-    - virtual::libs::libdrm-dev
-    - graphics::wayland::wayland-protocols
-    - graphics::wayland::wayland-dev
-
     - tools:
           target-toolchain: host-compat-toolchain
       depends:
           - python::mako
           - python::pyyaml
-          - python::pycparser
+          - name: python::pycparser
+            if: "$(eq,${MESA3D_PLATFORM:-wayland},wayland)"
 
+    - libs::expat-dev
     - use: []
       depends:
-          - libs::zlib-tgt
-          - virtual::libs::libdrm-tgt
-          - graphics::wayland::wayland-tgt
+          - libs::expat-tgt
 
 checkoutSCM:
     scm: url
@@ -36,39 +43,158 @@ checkoutSCM:
     stripComponents: 1
 
 buildTools: [bison, flex, m4]
-buildVars: [MESA3D_GALLIUM_DRIVERS]
-buildScript: |
-    # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
-    # this is the maximum we support right now:
-    MESA3D_GALLIUM_DRIVERS=${MESA3D_GALLIUM_DRIVERS:-crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl}
-
-    mesonBuild $1 \
-        -Dglx=disabled \
-        -Dgallium-xa=disabled \
-        -Dglvnd=disabled \
-        -Dgallium-opencl=disabled \
-        -Dgallium-drivers="$MESA3D_GALLIUM_DRIVERS" \
-        -Dvulkan-drivers="" \
-        -Dplatforms=wayland \
-        -Dgbm=enabled \
-        -Degl=enabled \
-        -Dopengl=false \
-        -Dshared-glapi=enabled \
-        -Dgles1=enabled \
-        -Dgles2=enabled
 
 multiPackage:
+    clc:
+        inherit: [clang]
+        depends:
+            - devel::llvm-libclc-dev
+            - libs::spirv-tools-dev
+            - libs::spirv-llvm-translator-dev
+            - use: []
+              depends:
+                  - devel::llvm-libclc-tgt
+                  - libs::spirv-tools-tgt
+                  - libs::spirv-llvm-translator-tgt
+        buildSetup: |
+            export LLVM_LDFLAGS="${MESON_LDFLAGS[@]}"
+            export LLVM_CXXFLAGS="${MESON_CXXFLAGS[@]}"
+            export LLVM_CFLAGS="${MESON_CFLAGS[@]}"
+
+            if [ -e cross_file.txt ]; then
+                sed -i \
+                    "/\[binaries\]/a llvm-config = '${BOB_DEP_PATHS['devel::llvm-libs-dev']}\/usr\/bin\/llvm-config'" \
+                    cross_file.txt
+            fi
+        buildScript: |
+            mesonBuild $1 \
+                -Dintel-clc=enabled \
+                -Dinstall-intel-clc=True \
+                -Dmesa-clc=enabled \
+                -Dinstall-mesa-clc=True \
+                -Dgallium-xa=disabled \
+                -Dglvnd=disabled \
+                -Dgallium-opencl=disabled \
+                -Dgallium-drivers="" \
+                -Dvulkan-drivers="" \
+                -Dplatforms="" \
+                -Dvalgrind=disabled \
+                -Dosmesa=false \
+                -Dshared-llvm=disabled \
+
+        multiPackage:
+            dev:
+                packageScript: mesonPackageDev
+                provideDeps: ['*-dev']
+            tgt:
+                packageScript: mesonPackageLibs
+                provideDeps: ['*-tgt']
+            "":
+                depends:
+                    - use: []
+                      name: libs::mesa3d-clc-tgt
+                provideDeps: ['*-tgt']
+                packageScript: |
+                    mesonPackageBin
+                provideTools:
+                    mesa_intel_clc: "usr/bin"
+
     "":
         depends:
-            - name: libs::mesa3d-tgt
-              use: []
-        packageScript: mesonPackageBin
-        provideDeps: [ "*-tgt" ]
 
-    dev:
-        packageScript: mesonPackageDev
-        provideDeps: [ "*-dev" ]
+            - if: "$(eq,${MESA3D_PLATFORM:-wayland},wayland)"
+              depends:
+                  - graphics::wayland::wayland-protocols
+                  - graphics::wayland::wayland-dev
 
-    tgt:
-        packageScript: mesonPackageLib
-        provideDeps: [ "*-tgt" ]
+            - if: "$(eq,${MESA3D_PLATFORM:-x11},x11)"
+              depends:
+                  - graphics::xorg::proto::xorgproto
+                  - libs::xcb::libxcb-dev
+                  - libs::xorg::libX11-dev
+                  - libs::xorg::libXdamage-dev
+                  - libs::xorg::libXext-dev
+                  - libs::xorg::libXfixes-dev
+                  - libs::xorg::libXrandr-dev
+                  - libs::xorg::libXshmfence-dev
+                  - libs::xorg::libXt-dev
+                  - libs::xorg::libXxf86vm-dev
+                  - virtual::core::udev-dev
+
+            - if: "${MESA3D_INTEL:-false}"
+              tools:
+                  target-toolchain: host-compat-toolchain
+              depends:
+                  - name: libs::mesa3d-clc
+                    use: [tools]
+
+            - libs::libunwind-dev
+            - libs::zlib-dev
+            - virtual::libs::libdrm-dev
+            - use: []
+              depends:
+                  - libs::libunwind-tgt
+                  - libs::zlib-tgt
+                  - virtual::libs::libdrm-tgt
+
+                  - if: "$(eq,${MESA3D_PLATFORM:-wayland},wayland)"
+                    name: graphics::wayland::wayland-tgt
+
+                  - if: "$(eq,${MESA3D_PLATFORM:-x11},x11)"
+                    depends:
+                        - libs::xcb::libxcb-tgt
+                        - libs::xorg::libX11-tgt
+                        - libs::xorg::libXdamage-tgt
+                        - libs::xorg::libXext-tgt
+                        - libs::xorg::libXfixes-tgt
+                        - libs::xorg::libXrandr-tgt
+                        - libs::xorg::libXshmfence-tgt
+                        - libs::xorg::libXt-tgt
+                        - libs::xorg::libXxf86vm-tgt
+                        - virtual::core::udev-tgt
+
+        buildTools:
+            - if: ${MESA3D_INTEL:-false}
+              name: mesa_intel_clc
+        buildVars: [MESA3D_GALLIUM_DRIVERS, MESA3D_GLX, MESA3D_PLATFORM,
+                    MESA3D_GLX_READ_ONLY_TEXT]
+        buildScript: |
+            # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
+            # this is the maximum we support right now:
+            MESA3D_GALLIUM_DRIVERS=${MESA3D_GALLIUM_DRIVERS:-crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl}
+
+            mesonBuild $1 \
+                -Dglx=${MESA3D_GLX:-auto} \
+                -Dgallium-xa=disabled \
+                -Dglvnd=disabled \
+                -Dgallium-opencl=disabled \
+                -Dgallium-drivers="$MESA3D_GALLIUM_DRIVERS" \
+                -Dvulkan-drivers="" \
+                -Dplatforms=${MESA3D_PLATFORM:-wayland} \
+                -Dgbm=enabled \
+                -Degl=enabled \
+                -Dshared-glapi=enabled \
+                -Dgles1=enabled \
+                -Dgles2=enabled \
+                -Dglx-read-only-text=${MESA3D_GLX_READ_ONLY_TEXT:-false} \
+                -Dvalgrind=disabled \
+                -Dllvm=disabled \
+                -Dintel-clc=system \
+                -Dmesa-clc=system \
+                -Dosmesa=false
+
+        multiPackage:
+            "":
+                depends:
+                    - name: libs::mesa3d-tgt
+                      use: []
+                packageScript: mesonPackageBin
+                provideDeps: [ "*-tgt" ]
+
+            dev:
+                packageScript: mesonPackageDev
+                provideDeps: [ "*-dev" ]
+
+            tgt:
+                packageScript: mesonPackageLib
+                provideDeps: [ "*-tgt" ]
