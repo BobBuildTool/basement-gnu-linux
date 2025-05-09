@@ -16,6 +16,11 @@ Config:
             Host platform passed as `--with-platform` to configure.
             Default: efi
         type: str
+    GNULIB_URL:
+        help: |
+            Override URL for gnulib bootstrap. This is only needed if a git repo
+            is used. Default is savannah.org.
+        type: str
 
 checkoutSCM:
     scm: url
@@ -37,7 +42,7 @@ checkoutTools:
       if: "$(eq,${GRUB2_BOOTSTRAP:-0},1)"
 
 checkoutDeterministic: True
-checkoutVars: [GRUB2_BOOTSTRAP]
+checkoutVars: [GRUB2_BOOTSTRAP, GNULIB_URL]
 checkoutScript: |
     # support overriding the scm with a git repo
     if [[ ${GRUB2_BOOTSTRAP:-0} == 1 ]]; then
