@@ -1,0 +1,22 @@
+inherit: [linux]
+
+packageVars: [BASEMENT_DEBUG]
+packageSetup: |
+    # Install the linux kernel image, the system.map and the .config used to
+    # build the kernel.
+    #
+    # $1: linux kernel build directory
+    # $2: destination image name (optional)
+    linuxInstallImage()
+    {
+        src_img_name=$(make -s -C "$1" image_name)
+        dst_img_name=${2:-$(basename $src_img_name)}
+        cp "$1/$src_img_name" "${dst_img_name}"
+        cp "$1/System.map" "${dst_img_name}-System.map"
+        cp "$1/.config" "${dst_img_name}-config"
+
+        if [[ ${BASEMENT_DEBUG:-0} != "0" ]] ; then
+            mkdir -p .debug
+            cp "$1/$src_img_name" ".debug/${dst_img_name}"
+        fi
+    }

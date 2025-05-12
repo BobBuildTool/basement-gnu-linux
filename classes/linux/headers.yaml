@@ -1,0 +1,17 @@
+inherit: [linux]
+
+buildSetup: |
+    # Build the linux kernel headers.
+    linuxBuildHeaders()
+    {
+        make headers_install
+    }
+
+packageSetup: |
+    # Install the linux kernel headers.
+    #
+    # $1: linux kernel build directory
+    linuxInstallHeaders()
+    {
+        cp -a $1/usr .
+    }

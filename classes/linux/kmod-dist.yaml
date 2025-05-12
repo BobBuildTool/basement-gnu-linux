@@ -1,0 +1,25 @@
+inherit: [linux]
+
+packageSetup: |
+    _SCRIPT_DIR=$1/kmod-script
+
+    # Install the linux kernel modules distribution for building out-of-tree
+    # kernel modules.
+    #
+    # $1: linux kernel build directory
+    linuxInstallKmodDist()
+    {
+        OUT=$PWD
+        # If the kernel itself provides a script for extracting the files required to
+        # build external kernel modules, use that, otherwise use the downloaded fixed
+        # version.
+        # Default is kernel built-in script:
+        SCRIPT=$1/source/scripts/package/install-extmod-build
+        if [[ ! -e $SCRIPT ]]; then
+            SCRIPT=$_SCRIPT_DIR/install-extmod-build
+        fi
+        pushd $1
+        MAKE=make HOSTCC=gcc SRCARCH=$LINUX_ARCH srctree=$1/source KCONFIG_CONFIG=$1/.config \
+            sh "$SCRIPT" "$OUT"
+        popd
+    }

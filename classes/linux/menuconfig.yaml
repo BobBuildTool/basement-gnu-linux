@@ -1,0 +1,31 @@
+inherit: [linux]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - libs::ncurses-dev
+
+buildSetup: |
+    # Calls the linux savedefconfig target
+    #
+    # Especially in the sandbox this can be tricky. Provide some convenience method.
+    linuxSavedefconfig()
+    {
+        makeParallel savedefconfig
+    }
+
+    # Calls the linux menuconfig target
+    #
+    # Especially in the sandbox this can be tricky. Provide some convenience method.
+    linuxMenuconfig()
+    {
+        NCDEP=${BOB_DEP_PATHS[libs::ncurses-dev]}
+        makeParallel \
+            HOSTCC="gcc" \
+            HOSTCFLAGS="-I${NCDEP}/usr/include -DCURSES_LOC=\"<ncurses.h>\" -DLOCALE" \
+            HOSTLDLIBS="-L$(gcc --print-sysroot)/usr/lib -L${NCDEP}/usr/lib -lncurses -ltinfo" \
+            menuconfig
+        #  Always save a defconfig
+        linuxSavedefconfig
+    }

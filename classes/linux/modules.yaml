@@ -1,0 +1,30 @@
+inherit: [linux]
+
+packageToolsWeak: [kmod]
+packageVars: [BASEMENT_DEBUG, OBJCOPY]
+packageSetup: |
+    # Install the built-in linux kernel modules.
+    #
+    # $1: linux kernel build directory
+    linuxInstallModules()
+    {
+        make -C "$1" \
+            INSTALL_MOD_PATH="$PWD" modules_install
+        rm lib/modules/*/build
+
+        # Strip all modules. Shamelessly ripped from builddeb...
+        for module in $(find lib/modules/ -name *.ko -printf '%P\n'); do
+            module=lib/modules/$module
+            mkdir -p $(dirname lib/debug/$module)
+            # only keep debug symbols in the debug file
+            if [[ ${BASEMENT_DEBUG:-0} != "0" ]] ; then
+                $OBJCOPY --only-keep-debug $module lib/debug/$module
+            fi
+            # strip original module from debug symbols
+            $OBJCOPY --strip-debug $module
+            # then add a link to those
+            if [[ ${BASEMENT_DEBUG:-0} != "0" ]] ; then
+                $OBJCOPY --add-gnu-debuglink=lib/debug/$module $module
+            fi
+        done
+    }

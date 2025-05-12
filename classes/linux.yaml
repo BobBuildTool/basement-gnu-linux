@@ -1,0 +1,125 @@
+# Convenience methods for creating a Linux kernel
+#
+# Here we define helper methods for building the linux kernel and everything
+# around it. This means the kernel modules, any dtb's and dev targets like the
+# headers or an kmod-dist for building out-of-tree kernel modules.
+#
+# In its simplest form the usage looks something like the following. Note, that
+# the kernel is downloaded into the "linux" directory and that the
+# configuration files are put into the "conf" directory. Obviously you are free
+# to arrange this somehow differently. Of course you only need to implement the
+# targets required by your other recipes:
+#
+#  inherit: [linux]
+#
+#  ...
+#
+#  metaEnvironment:
+#      PKG_VERSION: 6.1.114
+#
+#  checkoutSCM:
+#      - scm: url
+#        url: ${KERNEL_MIRROR}/linux/kernel/v6.x/linux-${PKG_VERSION}.tar.xz
+#        digestSHA1: 72f98a7aa831dba4d56b6c28b1a5333b04fbae35
+#        stripComponents: 1
+#        dir: linux
+#      - scm: import
+#        url: src/linux
+#        dir: conf
+#
+#  buildScript: |
+#      linuxConfig $1/linux $1/conf/linux.config
+#
+#  multiPackage:
+#      "":
+#          buildScript: linuxBuild
+#
+#          multiPackage:
+#              image:
+#                  inherit: [linux::image]
+#                  packageScript: linuxInstallImage $1
+#
+#              modules:
+#                  inherit: [linux::modules]
+#                  packageScript: linuxInstallModules $1
+#
+#              kmod-dist:
+#                  inherit: [linux::kmod-dist]
+#                  packageScript: linuxInstallKmodDist $1
+#
+#      dtbs:
+#          inherit: [linux::dtbs]
+#          buildScript: linuxBuildDtbs
+#          packageScript: linuxInstallDtbs $1
+#
+#      headers:
+#          inherit: [linux::headers]
+#          buildScript: linuxBuildHeaders
+#          packageScript: linuxInstallHeaders $1
+#
+inherit: [cpackage, make, pkg-config]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - libs::elfutils-libelf-dev
+          - libs::openssl-dev
+          - name: kernel::kmod
+            use: [tools]
+
+privateEnvironment:
+    LINUX_ARCH: "$(if-then-else,$(or,$(eq,${ARCH},i386),$(eq,${ARCH},x86_64)),x86,$(if-then-else,\
+                 $(or,$(eq,${ARCH},sh),$(eq,${ARCH},sh64)),sh,$(if-then-else,$(or,$(eq,${ARCH},sparc32),\
+                 $(eq,${ARCH},sparc64)),sparc,$ARCH)))"
+
+checkoutSCM:
+    # Always download a script for extracting the files required to build
+    # external kernel modules. If the kernel itself doesn't have one, we will
+    # use this one.
+    scm: url
+    url: https://raw.githubusercontent.com/torvalds/linux/refs/tags/v6.11/scripts/package/install-extmod-build
+    digestSHA1: 47eb760cf215cb3a15752186a18715fb04d9ab95
+    dir: kmod-script
+
+buildVars: [LINUX_ARCH, ARCH, CROSS_COMPILE, CC]
+buildTools: [m4, bison, flex, target-toolchain, host-toolchain]
+buildSetup: |
+    # make sure we find our kmod-dist script in the package step
+    ln -sf $1/kmod-script .
+
+    # Build the initial linux config. This will be used by all other steps.
+    #
+    # $1: linux kernel source directory
+    # $2: defconfig (optional)
+    #     - if this is an actual file, use it as the config
+    #     - if this is not a file, check if a defconfig for the target arch by
+    #       that name exists and if yes, use that one
+    linuxConfig()
+    {
+        DEF_CFG=${2:-$1/arch/${LINUX_ARCH}/configs/defconfig}
+        if [[ -f "$1/arch/${LINUX_ARCH}/configs/${DEF_CFG}" ]] ; then
+            DEF_CFG=$1/arch/${LINUX_ARCH}/configs/${DEF_CFG}
+        fi
+        # check if the defconfig file exists
+        if [[ ! -f "$DEF_CFG" ]]; then
+            >&2 echo "Don't know how to use '$DEF_CFG' as linux kernel config!"
+            false
+        fi
+        # check if the source file is newer than .config
+        if [[ -f .config && .config -nt $DEF_CFG ]]; then
+            return 0
+        fi
+        # redo the .config file
+        cp -u "$DEF_CFG" .config
+        makeSequential -C $1 O=$PWD \
+            olddefconfig
+    }
+
+    # Build the actual target linux image and all configured modules
+    linuxBuild()
+    {
+        makeParallel \
+          CC="$CC" \
+          $(basename $(make -s image_name)) modules
+    }

@@ -1,0 +1,34 @@
+inherit: [linux]
+
+buildTools: [target-toolchain]
+buildVars: [CROSS_COMPILE]
+buildSetup: |
+    # Build the device tree files.
+    #
+    # $1: device tree file(s) (optional)
+    #     - if this isn't provided, all default dtb's in the kernel directory
+    #       are build
+    linuxBuildDtbs()
+    {
+        makeParallel ${1:-dtbs} "${@:2}"
+    }
+
+packageSetup: |
+    # Install the device tree files.
+    #
+    # $1: linux kernel build directory
+    # $2: device tree file(s) (optional)
+    #     - if this isn't provided, all default dtb's in the kernel directory
+    #       are installed
+    linuxInstallDtbs()
+    {
+        if [[ -n "${2:-}" ]]; then
+            if [[ -d "$1/arch/$LINUX_ARCH/boot/dts" ]] ; then
+                make -C "$1" INSTALL_DTBS_PATH="$PWD" dtbs_install
+            fi
+        else
+            for i in "${@:2}" ; do
+                cp "$1/arch/${LINUX_ARCH}/boot/dts/$i" "$PWD"
+            done
+        fi
+    }
