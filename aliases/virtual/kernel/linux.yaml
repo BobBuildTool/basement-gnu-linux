@@ -1,0 +1,6 @@
+multiPackage:
+    image:     ${CONFIG_SELECT_LINUX:-kernel::linux}-image
+    modules:   ${CONFIG_SELECT_LINUX:-kernel::linux}-modules
+    dtbs:      ${CONFIG_SELECT_LINUX:-kernel::linux}-dtbs
+    kmod-dist: ${CONFIG_SELECT_LINUX:-kernel::linux}-kmod-dist
+    headers:   ${CONFIG_SELECT_LINUX:-kernel::linux}-headers
