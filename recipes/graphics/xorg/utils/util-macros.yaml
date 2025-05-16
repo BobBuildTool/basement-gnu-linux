@@ -1,0 +1,17 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.20.2"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/util/util-macros-${PKG_VERSION}.tar.xz
+    digestSHA256: 9ac269eba24f672d7d7b3574e4be5f333d13f04a7712303b1821b2a51ac82e8e
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageDev $1 "usr/share/***"

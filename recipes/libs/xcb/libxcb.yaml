@@ -1,0 +1,44 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.17.0"
+    PKG_LICENSE: "X11"
+
+depends:
+    - graphics::xcb::xcb-proto
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xcb::pthread-stubs-dev
+    - libs::xorg::libXau-dev
+    - libs::xorg::libXdmcp-dev
+    - use: []
+      depends:
+          - libs::xcb::pthread-stubs-tgt
+          - libs::xorg::libXau-tgt
+          - libs::xorg::libXdmcp-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/archive/individual/lib/libxcb-${PKG_VERSION}.tar.xz
+    digestSHA256: 599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55
+    stripComponents: 1
+
+buildTools: [python3]
+buildScript: |
+    export PYTHON=python3
+    autotoolsBuild $1 \
+       --disable-xevie \
+       --disable-xprint \
+       --enable-dri3 \
+       --enable-selinux \
+       --enable-xinput \
+       --with-doxygen=no
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
