@@ -1,4 +1,7 @@
-inherit: [autotools, autoconf]
+inherit: [autotools, autoconf, "basement::update-config"]
+
+privateEnvironment:
+    APPLY_UPDATE_CONFIG: "$(if-then-else,${GRUB2_BOOTSTRAP:-0},no,yes)"
 
 metaEnvironment:
     PKG_VERSION: "2.12"
@@ -47,6 +50,7 @@ checkoutScript: |
     # support overriding the scm with a git repo
     if [[ ${GRUB2_BOOTSTRAP:-0} == 1 ]]; then
         ./bootstrap
+        updateConfigAllRecursive
     fi
 
 buildTools: [bison, flex, python3, host-toolchain, m4]
