@@ -1,0 +1,34 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT AND ISC"
+    PKG_VERSION: "1.2.6"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::libICE-dev
+    - use: []
+      depends:
+          - libs::xorg::libICE-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libSM-${PKG_VERSION}.tar.xz
+    digestSHA256: be7c0abdb15cbfd29ac62573c1c82e877f9d4047ad15321e7ea97d1e43d835be
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull \
+       --enable-fast-install \
+       --without-libuuid
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

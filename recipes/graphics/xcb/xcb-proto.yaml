@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11"
+    PKG_VERSION: "1.17.0"
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-proto-${PKG_VERSION}.tar.xz
+    digestSHA256: 2c1bacd2110f4799f74de6ebb714b94cf6f80fb112316b1219480fd22562148c
+    stripComponents: 1
+
+buildTools: [python3]
+buildScript: |
+    export PYTHON=python3
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageDev $1 \
+       "usr/share/***" "usr/lib/python*/***"
