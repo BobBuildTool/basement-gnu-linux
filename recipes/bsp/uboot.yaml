@@ -1,0 +1,61 @@
+inherit: [uboot, install]
+
+metaEnvironment:
+    PKG_VERSION: "2025.04"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: https://ftp.denx.de/pub/u-boot/u-boot-${PKG_VERSION}.tar.bz2
+    digestSHA1: 6bc4fd62d5b135ff2fbb11fcecbb4b8ca055022a
+    stripComponents: 1
+
+multiPackage:
+    "":
+        depends:
+            - if: "${UBOOT_CUSTOM_CONFIG:-}"
+              name: "${UBOOT_CUSTOM_CONFIG_PKG:-uboot-custom-cfg}"
+
+        buildVars: [UBOOT_CONFIG, UBOOT_TARGETS, UBOOT_CUSTOM_CONFIG, UBOOT_CUSTOM_CONFIG_PKG]
+        buildScript: |
+            # Use plain "defconfig" if we have no specific target. Otherwise check if
+            # defconfig has changed.
+            if [[ ${UBOOT_CUSTOM_CONFIG:+true} ]] ; then
+                PKG="${UBOOT_CUSTOM_CONFIG_PKG:-uboot-custom-cfg}"
+                LCFG="${BOB_DEP_PATHS[$PKG]}/$UBOOT_CUSTOM_CONFIG"
+                # Copy all files from custom config, in case the config file
+                # refers to some of them (e.g. env files)
+                cp -f ${BOB_DEP_PATHS[$PKG]}/* .
+            elif [[ ${UBOOT_CONFIG:+true} ]] ; then
+                LCFG="${UBOOT_CONFIG}"
+            else
+                LCFG="sandbox_defconfig"
+            fi
+
+            ubootConfig $1 $LCFG
+            ubootBuild \
+                ${UBOOT_TARGETS:-u-boot.bin}
+
+        packageVars: [UBOOT_TARGETS]
+        packageScript: |
+            ubootPackage $1 \
+                ${UBOOT_TARGETS:-u-boot.bin}
+
+    "tools":
+        buildScript: |
+            # we need a defconfig, so use the sandbox defconfig which is ok for
+            # a tools only build
+            ubootConfig $1 \
+                sandbox_defconfig
+            ubootBuild \
+                CROSS_BUILD_TOOLS=y \
+                tools-only
+
+            install -D -m 0755 \
+                $(find tools/ -executable -type f) \
+                -t install/usr/bin
+
+        packageScript: |
+            installPackageBin "$1/install/"
+        provideTools:
+            uboot-tools: "usr/bin"
