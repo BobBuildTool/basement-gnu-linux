@@ -1,0 +1,39 @@
+From ed78322adf2d90455a51ed19b3fc1d3a9394a65b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 11:45:27 +0200
+Subject: [PATCH 1/5] Don't build docs
+
+---
+ Makefile | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7d471da..d7e921f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,20 +27,16 @@ include Make.rules
+ 
+ EFISIGNED = $(patsubst %.efi,%-signed.efi,$(EFIFILES))
+ 
+-all: $(EFISIGNED) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
++all: $(EFISIGNED) $(BINARIES) noPK.auth $(KEYAUTH) \
+ 	$(KEYUPDATEAUTH) $(KEYBLACKLISTAUTH) $(KEYHASHBLACKLISTAUTH)
+ 
+ 
+ install: all
+-	$(INSTALL) -m 755 -d $(MANDIR)
+-	$(INSTALL) -m 644 $(MANPAGES) $(MANDIR)
+ 	$(INSTALL) -m 755 -d $(EFIDIR)
+ 	$(INSTALL) -m 755 $(EFIFILES) $(EFIDIR)
+ 	$(INSTALL) -m 755 -d $(BINDIR)
+ 	$(INSTALL) -m 755 $(BINARIES) $(BINDIR)
+ 	$(INSTALL) -m 755 mkusb.sh $(BINDIR)/efitool-mkusb
+-	$(INSTALL) -m 755 -d $(DOCDIR)
+-	$(INSTALL) -m 644 README COPYING $(DOCDIR)
+ 
+ lib/lib.a lib/lib-efi.a: FORCE
+ 	$(MAKE) -C lib $(notdir $@)
+-- 
+2.39.5
+

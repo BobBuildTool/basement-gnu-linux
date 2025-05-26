@@ -1,0 +1,61 @@
+inherit: [cpackage, patch, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "1.9.2"
+    PKG_LICENSE: "GPL-2 LGPL-2.1"
+
+checkoutSCM:
+    scm: url
+    url: https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot/${PKG_VERSION}.tar.gz
+    digestSHA1: 351105b03d6589d4fdbca059a0cdfb517728fc75
+    stripComponents: 1
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - use: [tools]
+            depends:
+                - libs::openssl
+                - utils::sbsigntools
+                - name: utils::xxd
+
+    - libs::openssl-dev
+    - libs::gnu-efi-dev
+    - use: []
+      depends:
+          - libs::openssl-tgt
+          - libs::gnu-efi-tgt
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@efitools/*.patch@>
+
+buildTools: [target-toolchain, openssl, sbsigntools, xxd]
+buildVars: [CC, AR, LD, NM, ARCH, OBJCOPY]
+buildScript: |
+    mkdir -p build install
+    cp -arsf $1/* build/
+
+    # openssl needs a conf file; create an empty one
+    touch openssl.cnf
+    export OPENSSL_CONF=$PWD/openssl.cnf
+
+    GNUEFI="${BOB_DEP_PATHS[libs::gnu-efi-dev]}/usr"
+    export CFLAGS="$CFLAGS -I${GNUEFI}/include -I${GNUEFI}/include/efi $(pkg-config --cflags libcrypto openssl)"
+    export LDFLAGS="-L${GNUEFI}/lib $(pkg-config --libs-only-L libcrypto openssl)"
+    makeSequential -C build \
+        OBJCOPY="$OBJCOPY" \
+        LD="$LD" \
+        AR="$AR" \
+        NM="$NM" \
+        LDSCRIPT="${GNUEFI}/lib/elf_${ARCH}_efi.lds" \
+        CRTPATHS="${GNUEFI}/lib" \
+        LDFLAGS_TOOLS="$(pkg-config --libs libcrypto)" \
+        DESTDIR=$BOB_CWD/install \
+        install
+
+packageScript: |
+    installPackageTgt "$1/install/"
+provideTools:
+    efitools: "usr/bin"
