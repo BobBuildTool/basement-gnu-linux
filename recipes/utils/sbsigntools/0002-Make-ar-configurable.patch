@@ -1,0 +1,25 @@
+From e705935cdab58b6931b5ee2836aa9d632a53cecf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 09:04:50 +0200
+Subject: [PATCH 2/3] Make ar configurable
+
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index 8a5340a..a5b98e1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -16,6 +16,7 @@ AC_PROG_MKDIR_P
+ 
+ AC_CHECK_TOOL(OBJCOPY, [objcopy])
+ AC_CHECK_TOOL(STRIP, [strip])
++AC_CHECK_TOOL(AR, [ar])
+ 
+  AC_CHECK_HEADER([bfd.h], [],
+   AC_MSG_ERROR([bfd.h not found.]
+-- 
+2.39.5
+
