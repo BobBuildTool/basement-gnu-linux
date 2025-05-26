@@ -1,5 +1,6 @@
 inherit: [linux]
 
+packageVars: [LINUX_ARCH]
 packageSetup: |
     _SCRIPT_DIR=$1/kmod-script
 
