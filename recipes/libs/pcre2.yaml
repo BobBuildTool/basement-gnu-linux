@@ -25,7 +25,12 @@ multiPackage:
         provideDeps: [ "*-tgt" ]
 
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: |
+            autotoolsPackageDev
+            # install pcre2-config and fix it for bob usage
+            mkdir -p usr/bin
+            sed 's,prefix=/usr,prefix=$(dirname $0)/..,' $1/install/usr/bin/pcre2-config > usr/bin/pcre2-config
+            chmod a+x usr/bin/pcre2-config
 
     tgt:
         packageScript: autotoolsPackageLib
