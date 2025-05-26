@@ -1,0 +1,98 @@
+# Convenience methods for creating a uboot build
+#
+# Here we define helper methods for building the uboot bootloader
+inherit: [make, pkg-config, python3]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - python::pylibfdt      # python support
+          - libs::openssl-dev     # FIT
+          - libs::gnutls-dev      # mkeficapsule/tools
+          - name: utils::efitools # uefi
+            use: [tools]
+          - name: utils::xxd      # UBOOT_ENV
+            use: [tools]
+          - name: devel::dtc      # dts
+            use: [tools]
+
+buildTools: [target-toolchain, host-toolchain, m4, bison, flex, dtc, python3, efitools]
+buildToolsWeak: [xxd]
+buildVars: [CROSS_COMPILE]
+buildSetup: |
+    HOSTCC=gcc
+    DTC=$(which dtc)
+    # All the dependencies are for the host tools. We have to manually collect
+    # the paths and provide them to the make command.
+    for i in "${@:2}" ; do
+        if [[ -d "$i/usr/include" ]] ; then
+            HOSTCFLAGS+=" -I$i/usr/include"
+        fi
+        for j in lib usr/lib ; do
+            if [[ -d "$i/$j" ]] ; then
+                HOSTLDFLAGS+=" -L$i/$j"
+                if compgen -G "$i/$j/*.so" >/dev/null ; then
+                    HOSTLDFLAGS+=" -Wl,-rpath-link=$i/$j"
+                fi
+            fi
+        done
+    done
+
+    # Build the initial uboot config. This will be used by all other steps.
+    #
+    # $1: uboot source directory
+    # $2: defconfig (optional)
+    #     - if this is an actual file, use it as the config
+    #     - if this is not a file, check if a defconfig for the target arch by
+    #       that name exists and if yes, use that one
+    ubootConfig()
+    {
+        DEF_CFG=${2:-defconfig}
+        if [[ -f "$1/configs/${DEF_CFG}" ]] ; then
+            DEF_CFG=$1/configs/${DEF_CFG}
+        fi
+        # check if the defconfig file exists
+        if [[ ! -f "$DEF_CFG" ]]; then
+            >&2 echo "Don't know how to use $DEF_CFG as uboot config!"
+            false
+        fi
+        # check if the source file is newer than .config
+        if [[ -f .config && .config -nt $DEF_CFG ]]; then
+            break;
+        fi
+        # redo the .config file
+        cp -u "$DEF_CFG" .config
+        makeSequential -C $1 O=$PWD \
+            CROSS_COMPILE="$CROSS_COMPILE" \
+            DTC="$DTC" \
+            HOSTCC="$HOSTCC" \
+            HOSTCFLAGS="$HOSTCFLAGS" \
+            HOSTLDFLAGS="$HOSTLDFLAGS" \
+            olddefconfig
+    }
+
+    # Build the actual target uboot image(s) and all configured modules
+    #
+    # $@: list of targets to package
+    ubootBuild()
+    {
+        makeParallel \
+            CROSS_COMPILE="$CROSS_COMPILE" \
+            DTC="$DTC" \
+            HOSTCC="$HOSTCC" \
+            HOSTCFLAGS="$HOSTCFLAGS" \
+            HOSTLDFLAGS="$HOSTLDFLAGS" \
+            $@
+    }
+
+packageSetup: |
+    # Install the uboot files
+    #
+    # $@: list of targets to package
+    ubootPackage()
+    {
+        for i in "${@:2}" ; do
+            cp "$1/$i" "$PWD"
+        done
+    }
