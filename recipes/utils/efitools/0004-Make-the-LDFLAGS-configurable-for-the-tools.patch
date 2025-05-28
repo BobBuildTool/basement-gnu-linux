@@ -1,0 +1,58 @@
+From a167f15dcde0e7a703a5a498858ccf6195177e3b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 11:44:52 +0200
+Subject: [PATCH 4/5] Make the LDFLAGS configurable for the tools
+
+---
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index d7e921f..f79599e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -84,31 +84,31 @@ HelloWorld.so: lib/lib-efi.a
+ ShimReplace.so: lib/lib-efi.a
+ 
+ cert-to-efi-sig-list: cert-to-efi-sig-list.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ sig-list-to-certs: sig-list-to-certs.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ sign-efi-sig-list: sign-efi-sig-list.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ hash-to-efi-sig-list: hash-to-efi-sig-list.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS)
+ 
+ cert-to-efi-hash-list: cert-to-efi-hash-list.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ efi-keytool: efi-keytool.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS)
+ 
+ efi-readvar: efi-readvar.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ efi-updatevar: efi-updatevar.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS) -lcrypto
+ 
+ flash-var: flash-var.o lib/lib.a
+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(LDFLAGS_TOOLS)
+ 
+ clean:
+ 	rm -f PK.* KEK.* DB.* $(EFIFILES) $(EFISIGNED) $(BINARIES) *.o *.so
+-- 
+2.39.5
+

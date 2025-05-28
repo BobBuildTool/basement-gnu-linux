@@ -1,0 +1,30 @@
+From f9683194c1bf16e520489a0112ca97f0fe22e274 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 12:07:52 +0200
+Subject: [PATCH 3/5] Make it possible to extend CFLAGS/CPPFLAGS/LDFLAGS
+
+---
+ Make.rules | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Make.rules b/Make.rules
+index 5797cea..fc2575f 100644
+--- a/Make.rules
++++ b/Make.rules
+@@ -14,9 +14,9 @@ else
+ $(error unknown architecture $(ARCH))
+ endif
+ INCDIR	   = -I$(TOPDIR)include/ -I/usr/include/efi -I/usr/include/efi/$(ARCH) -I/usr/include/efi/protocol
+-CPPFLAGS   = -DCONFIG_$(ARCH)
+-CFLAGS	   = -O2 -g $(ARCH3264) -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants -fno-stack-protector -ffreestanding -fno-stack-check
+-LDFLAGS	   = -nostdlib
++CPPFLAGS  += -DCONFIG_$(ARCH)
++CFLAGS	  += -O2 -g $(ARCH3264) -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants -fno-stack-protector -ffreestanding -fno-stack-check
++LDFLAGS	  += -nostdlib
+ CRTOBJ		= crt0-efi-$(ARCH).o
+ CRTPATHS	= /lib /lib64 /lib/efi /lib64/efi /usr/lib /usr/lib64 /usr/lib/efi /usr/lib64/efi /usr/lib/gnuefi /usr/lib64/gnuefi
+ CRTPATH		= $(shell for f in $(CRTPATHS); do if [ -e $$f/$(CRTOBJ) ]; then echo $$f; break; fi; done)
+-- 
+2.39.5
+

@@ -1,0 +1,42 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "4.0.1"
+    PKG_LICENSE: "BSD-3-Clause and/or GPL-2.0+ (gnuefi), BSD-3-Clause (efilib), BSD-2-Clause-Patent (EDK2 routines)"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/ncroxon/gnu-efi/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 603db6264741da9f84e2a8e386a36fdf69464ba8
+    stripComponents: 1
+
+buildTools: [host-toolchain, target-toolchain]
+buildVars: [CROSS_COMPILE]
+buildScript: |
+    mkdir -p build
+    cp -arsf $1/* build/
+
+    unset LDFLAGS
+    makeParallel -C build \
+        CROSS_COMPILE="${CROSS_COMPILE}" \
+        HOSTCC="gcc"
+
+    makeParallel -C build \
+        DESTDIR=$BOB_CWD/install \
+        PREFIX=/usr \
+        install
+
+multiPackage:
+    dev:
+        packageScript: |
+            installPackageDev "$1/install/"
+            # gnu-efi is somewhat special, because it delivers .efi/.lds/.o
+            # files for the final linking step of an efi app. We have to ensure
+            # they are available to the user of this package.
+            installCopy "$1/install/" \
+                "/usr/" "/usr/lib/" "/usr/lib/*.lds" "/usr/lib/*.o" \
+                "/usr/lib/gnuefi/" "/usr/lib/gnuefi/***" \
+                "!*"
+
+    tgt:
+        packageScript: installPackageTgt "$1/install/"

@@ -1,4 +1,7 @@
 depends:
+    - bsp::uboot
+    - bsp::uboot-tools
+
     - core::acpid
     - core::busybox
     - core::dbus-tgt
@@ -155,7 +158,6 @@ depends:
     - utils::sysbench
     - utils::tidy
     - utils::ttysnoop
-    - utils::uboot-tools
     - utils::xorriso
     - utils::xxd
 
