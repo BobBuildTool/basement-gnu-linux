@@ -1,0 +1,105 @@
+# Generic recipe for building l4re.
+#
+# Use it like this in your own recipes:
+#
+# inherit: [l4re]
+#
+# depends:
+#     # add additional dependencies here, like linux kernels or external
+#     # device trees
+#     - fiasco
+#
+# checkoutSCM:
+#     # our configuration:
+#     - scm: import
+#       url: src/l4re
+#       dir: conf
+#
+#     # l4re repositories we want to use
+#     - scm: git
+#       url: ${GITHUB_MIRROR}/kernkonzept/mk.git
+#       dir: l4re
+#     - scm: git
+#       url: ${GITHUB_MIRROR}/kernkonzept/bootstrap.git
+#       dir: l4re/pkg/bootstrap
+#     - ...
+#
+# buildSetup: |
+#     # Add additional paths to dependencies here:
+#     export MODULE_SEARCH_PATH+=:$1/conf
+# buildScript: |
+#        l4reBuild $1/l4re \
+#           $1/conf/defconfig_l4re \
+#           pkg/bootstrap pkg/... ...
+#
+#        l4reBuildImage $1/l4re \
+#           uimage \
+#           demo \
+#           $1/conf/modules.list
+#
+# packageScript: |
+#        l4reInstall $1 \
+#           bootstrap.uimage
+
+inherit: [pkg-config, make]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - name: devel::dtc
+            use: [tools]
+          - name: bsp::uboot-tools
+            use: [tools]
+
+buildTools: [host-toolchain, target-toolchain, m4, flex, bison, dtc, uboot-tools]
+buildVars: [CROSS_COMPILE]
+buildSetup: |
+    # Add all dependencies to the l4re module search path
+    MODULE_SEARCH_PATH=""
+    for i in "$@" ; do
+        MODULE_SEARCH_PATH+=":$i"
+    done
+    export MODULE_SEARCH_PATH
+
+    # $1: source dir
+    # $2: defconfig
+    # $3: targets (optional)
+    l4reBuild()
+    {
+        if [[ ! -e build/.bob-init-done ]] ; then
+            rm -rf $BOB_CWD/build
+            make -C $1 B=$BOB_CWD/build \
+                DEFCONFIG="$2"
+            make -C $1 O=$BOB_CWD/build \
+                olddefconfig
+            touch build/.bob-init-done
+        fi
+
+        makeParallel -C $1 O=$BOB_CWD/build \
+            ${3:-}
+    }
+
+    # $1: source dir
+    # $2: image type
+    # $3: modules entry
+    # $4: modules list
+    l4reBuildImage()
+    {
+        # we may want to replace this with l4image in a separate step
+        makeParallel -C $1 O=$BOB_CWD/build \
+            "$2" \
+            E="$3" \
+            MODULES_LIST="$4" \
+            MODULE_SEARCH_PATH="$MODULE_SEARCH_PATH"
+    }
+
+packageSetup: |
+    # $1: build dir
+    # $2+: image name(s)
+    l4reInstall()
+    {
+        for i in ${@:2}; do
+            cp -L "$1/build/images/$i" .
+        done
+    }

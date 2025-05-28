@@ -1,0 +1,63 @@
+# Generic recipe for building fiasco.
+#
+# Use it like this in your own recipes:
+#
+# inherit: [fiasco]
+#
+# checkoutSCM:
+#     # our configuration:
+#     - scm: import
+#       url: src/l4re
+#       dir: conf
+#
+#     # fiasco:
+#     - scm: git
+#       url: ${GITHUB_MIRROR}/kernkonzept/fiasco.git
+#       dir: fiasco
+#
+# buildScript: |
+#     fiascoBuild $1/fiasco \
+#         $1/conf/defconfig_fiasco
+#
+# packageScript: |
+#     fiascoInstall $1
+
+inherit: [pkg-config, make]
+
+buildTools: [host-toolchain, target-toolchain, m4, flex, bison]
+buildVars: [CC, CXX, LD, CROSS_COMPILE]
+buildSetup: |
+    # $1: source dir
+    # $2: defconfig
+    fiascoBuild()
+    {
+        # If this is the first run, create the build directory. However, delete
+        # the default config, so it is updated below.
+        test -e build || (make -C "$1" BUILDDIR=$PWD/build && rm $PWD/build/globalconfig.out)
+
+        # Is the defconfig a default config?
+        DEF_CFG=$2
+        if [[ -f "$1/src/templates/globalconfig.out.$2" ]] ; then
+            DEF_CFG="$1/src/templates/globalconfig.out.$2"
+        fi
+        # check if the defconfig file exists
+        if [[ ! -f "$DEF_CFG" ]]; then
+            >&2 echo "Don't know how to use $DEF_CFG as kernel config!"
+            false
+        fi
+        # check if the source file is newer than .config
+        if [[ ! -f build/globalconfig.out || $DEF_CFG -nt build/globalconfig.out ]]; then
+            # redo the .config file
+            cp -u "$DEF_CFG" build/globalconfig.out
+            makeParallel -C $PWD/build olddefconfig
+        fi
+
+        makeParallel -C $PWD/build
+    }
+
+packageSetup: |
+    # $1: build dir
+    fiascoInstall()
+    {
+        cp -L "$1/build/fiasco" .
+    }
