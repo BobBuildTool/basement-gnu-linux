@@ -13,6 +13,7 @@ buildSetup: |
         makeParallel ${1:-dtbs} "${@:2}"
     }
 
+packageVars: [LINUX_ARCH]
 packageSetup: |
     # Install the device tree files.
     #
@@ -22,7 +23,7 @@ packageSetup: |
     #       are installed
     linuxInstallDtbs()
     {
-        if [[ -n "${2:-}" ]]; then
+        if [[ ! "${2+set}" ]]; then
             if [[ -d "$1/arch/$LINUX_ARCH/boot/dts" ]] ; then
                 make -C "$1" INSTALL_DTBS_PATH="$PWD" dtbs_install
             fi
