@@ -1,0 +1,46 @@
+inherit: [autotools, autoconf, make, patch]
+
+metaEnvironment:
+    PKG_VERSION: "0.9.5"
+    PKG_LICENSE: "GPL-3.0"
+
+depends:
+    - devel::binutils-dev
+    - core::util-linux-dev
+    - libs::openssl-dev
+    - libs::gnu-efi-dev
+    - use: []
+      depends:
+          # devel::binutils-tgt doesn't exists
+          - core::util-linux-tgt
+          - libs::openssl-tgt
+          - libs::gnu-efi-tgt
+
+checkoutSCM:
+    - scm: git
+      url: https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
+      tag: v${PKG_VERSION}
+      submodules: True
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@sbsigntools/*.patch@>
+
+buildVars: [ARCH, CC]
+buildScript: |
+    # we need to call autogen, so copy the sources
+    rsync -aH --delete $1/ src/
+    pushd src
+    ./autogen.sh
+    popd
+
+    GNUEFI="${BOB_DEP_PATHS[libs::gnu-efi-dev]}/usr"
+    autotoolsBuild "$PWD/src" \
+        CFLAGS=-Wno-error=maybe-uninitialized \
+        CRTPATH="${GNUEFI}/lib" \
+        EFI_CPPFLAGS="-I${GNUEFI}/include/efi -I${GNUEFI}/include/efi/${ARCH}"
+
+packageScript: |
+    autotoolsPackageTgt
+provideTools:
+    sbsigntools: "usr/bin"

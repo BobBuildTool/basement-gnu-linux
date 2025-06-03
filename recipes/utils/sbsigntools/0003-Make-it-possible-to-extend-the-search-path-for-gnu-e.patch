@@ -1,0 +1,26 @@
+From 6586ce9d2fde7cfad02c09950aceee74b09f905e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 09:25:39 +0200
+Subject: [PATCH 3/3] Make it possible to extend the search path for gnu-efi
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index a5b98e1..e7a5925 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -83,7 +83,7 @@ if test -z "$CRTPATH"; then
+    AC_MSG_ERROR([cannot find the gnu-efi crt path])
+ fi
+ 
+-EFI_CPPFLAGS="-I/usr/include/efi -I/usr/include/efi/$EFI_ARCH \
++EFI_CPPFLAGS="$EFI_CPPFLAGS -I/usr/include/efi -I/usr/include/efi/$EFI_ARCH \
+  -DEFI_FUNCTION_WRAPPER"
+ CPPFLAGS_save="$CPPFLAGS"
+ CPPFLAGS="$CPPFLAGS $EFI_CPPFLAGS"
+-- 
+2.39.5
+

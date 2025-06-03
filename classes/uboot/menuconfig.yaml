@@ -1,0 +1,33 @@
+inherit: [uboot]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - libs::ncurses-dev
+
+buildSetup: |
+    # Calls the uboot savedefconfig target
+    #
+    # Especially in the sandbox this can be tricky. Provide some convenience method.
+    ubootSavedefconfig()
+    {
+        makeParallel \
+            HOSTCC="$HOSTCC" \
+            savedefconfig
+    }
+
+    # Calls the uboot menuconfig target
+    #
+    # Especially in the sandbox this can be tricky. Provide some convenience method.
+    ubootMenuconfig()
+    {
+        NCDEP=${BOB_DEP_PATHS[libs::ncurses-dev]}/usr
+        makeParallel \
+            HOSTCC="$HOSTCC" \
+            HOSTCFLAGS="-I${NCDEP}/include -DCURSES_LOC=\"<ncurses.h>\" -DLOCALE $(pkg-config --cflags ncurses)" \
+            HOSTLDLIBS="-L${NCDEP}/lib $(pkg-config --libs ncurses)" \
+            menuconfig
+        #  Always save a defconfig
+        ubootSavedefconfig
+    }

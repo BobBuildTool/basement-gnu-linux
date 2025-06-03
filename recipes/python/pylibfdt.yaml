@@ -1,0 +1,24 @@
+inherit: ["python3::setuptools", "python3::cext"]
+
+metaEnvironment:
+    PKG_VERSION: "1.7.2.post1"
+
+checkoutSCM:
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/p/pylibfdt/pylibfdt-${PKG_VERSION}.tar.gz
+    digestSHA256: 08ec69755f7565dc25e4e640e0315795888d4caeb7f146de4e05bf12b03c94c8
+    stripComponents: 1
+
+depends:
+    - python::setuptools-scm
+    - name: devel::swig-tools
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
+buildTools: [swig]
+buildScript: |
+    python3BuildSetuptools $1
+
+packageScript: |
+    python3CExtPackageTgt

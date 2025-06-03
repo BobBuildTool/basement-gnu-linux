@@ -1,0 +1,42 @@
+From 3e999f1d6d34119c4667518e6feb5f7a7b91202d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 12:15:53 +0200
+Subject: [PATCH 5/5] Replace xxdi.pl with xxd -i
+
+We don't have prober perl modules support right now, however, we have
+xxd. So use that.
+---
+ Make.rules | 2 +-
+ Makefile   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Make.rules b/Make.rules
+index fc2575f..7de152c 100644
+--- a/Make.rules
++++ b/Make.rules
+@@ -68,7 +68,7 @@ endif
+ 	$(NM) -D $@ | grep ' U ' && exit 1 || exit 0
+ 
+ %.h: %.auth
+-	./xxdi.pl $< > $@
++	xxd -i $< > $@
+ 
+ %.hash: %.efi hash-to-efi-sig-list
+ 	./hash-to-efi-sig-list $< $@
+diff --git a/Makefile b/Makefile
+index f79599e..4b6a33d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -69,7 +69,7 @@ ms-%.esl: ms-%.crt cert-to-efi-sig-list
+ 
+ hashlist.h: HashTool.hash
+ 	cat $^ > /tmp/tmp.hash
+-	./xxdi.pl /tmp/tmp.hash > $@
++	xxd -i /tmp/tmp.hash > $@
+ 	rm -f /tmp/tmp.hash
+ 
+ 
+-- 
+2.39.5
+

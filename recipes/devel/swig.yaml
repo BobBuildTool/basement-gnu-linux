@@ -1,0 +1,45 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.3.1"
+    PKG_LICENSE: "GPL-3.0+, BSD-2-Clause, BSD-3-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${SOURCEFORGE_MIRROR}/swig/swig-${PKG_VERSION}.tar.gz
+    digestSHA1: a111f4433c2348a3186698e1b750b4944bc34c7b
+    stripComponents: 1
+
+depends:
+    - libs::pcre2-dev
+    - use: []
+      depends:
+          - libs::pcre2-tgt
+
+buildScript: |
+    autotoolsBuild $1 \
+        --with-pcre2-prefix=${BOB_DEP_PATHS[libs::pcre2-dev]}/usr
+
+multiPackage:
+    "":
+        packageScript: |
+            autotoolsPackageTgt
+
+    "tools":
+        packageVars: [PKG_VERSION]
+        packageScript: |
+            autotoolsPackageTgt
+            # swig has runtime files it needs to find. Create a wrapper script
+            # which sets the runtime path to the correct location and call the
+            # real binary afterwards.
+            mv usr/bin/swig usr/bin/swig_real
+            cat > usr/bin/swig <<EOF
+            #!/bin/sh
+            export SWIG_LIB=\$(realpath \$(dirname \$0)/../share/swig/${PKG_VERSION})
+            exec \$(dirname \$0)/swig_real \$@
+            EOF
+            chmod a+x usr/bin/swig
+        provideTools:
+            swig: "usr/bin"
+
+provideDeps: ['*-tgt']

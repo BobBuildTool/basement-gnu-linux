@@ -1,0 +1,44 @@
+From a45c89f6f6bafb84943734d18bf09ee9f1c878fa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20P=C3=B6tzsch?=
+ <christian.poetzsch@kernkonzept.com>
+Date: Fri, 23 May 2025 11:53:22 +0200
+Subject: [PATCH 2/5] Make the nm/ar tools configurable
+
+---
+ Make.rules | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Make.rules b/Make.rules
+index 903a5a4..5797cea 100644
+--- a/Make.rules
++++ b/Make.rules
+@@ -28,6 +28,8 @@ LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L /usr/lib -L /usr/lib6
+ LOADLIBES	= -lefi -lgnuefi $(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
+ FORMAT		= --target=efi-app-$(ARCH)
+ OBJCOPY		= objcopy
++AR        = AR
++NM        = NM
+ MYGUID		= 11111111-2222-3333-4444-123456789abc
+ INSTALL		= install
+ BINDIR		= $(DESTDIR)/usr/bin
+@@ -63,7 +65,7 @@ endif
+ %.so: %.o
+ 	$(LD) $(LDFLAGS) $^ -o $@ $(LOADLIBES)
+ 	# check we have no undefined symbols
+-	nm -D $@ | grep ' U ' && exit 1 || exit 0
++	$(NM) -D $@ | grep ' U ' && exit 1 || exit 0
+ 
+ %.h: %.auth
+ 	./xxdi.pl $< > $@
+@@ -129,7 +131,7 @@ getvar = $(shell if [ "$(1)" = "PK" -o "$(1)" = "KEK" ]; then echo $(1); else ec
+ #	sbsign --key KEK.key --cert KEK.crt --output $@ $<
+ 
+ %.a:
+-	ar rcv $@ $^
++	$(AR) rcv $@ $^
+ 
+ doc/%.1: doc/%.1.in %
+ 	$(HELP2MAN) --no-info -i $< -o $@ ./$*
+-- 
+2.39.5
+
