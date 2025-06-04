@@ -1,0 +1,17 @@
+metaEnvironment:
+    PKG_VERSION: "1.20250430"
+    PKG_LICENSE: "BSD-3-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/raspberrypi/firmware/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 716cf8d994e7c3794489e9c33de8c77c466d2a46
+    stripComponents: 1
+
+multiPackage:
+    rpi4:
+        buildScript: |
+            cp $1/boot/{bcm2711-rpi-4-b.dtb,fixup4cd.dat,start4cd.elf,COPYING.linux,LICENCE.broadcom} .
+
+packageScript: |
+    cp -r $1/* .
