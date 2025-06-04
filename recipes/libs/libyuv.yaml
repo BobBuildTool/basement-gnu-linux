@@ -1,0 +1,20 @@
+inherit: [cmake-3]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause"
+    PKG_VERSION: "main-30809ff"
+
+checkoutSCM:
+    scm: git
+    url: https://chromium.googlesource.com/libyuv/libyuv
+    branch: main
+    commit: 30809ff64a9ca5e45f86439c0d474c2d3eef3d05
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+    tgt:
+        packageScript: cmakePackageTgt

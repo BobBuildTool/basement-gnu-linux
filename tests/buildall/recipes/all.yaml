@@ -78,6 +78,7 @@ depends:
     - libs::libxml2-tgt
     - libs::libxslt-tgt
     - libs::libyaml-tgt
+    - libs::libyuv-tgt
     - libs::lvm2
     - libs::lzo-tgt
     - libs::mesa3d-tgt
