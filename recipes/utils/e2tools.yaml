@@ -1,0 +1,26 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.1.2"
+    PKG_LICENSE: "GPL-2.0"
+
+depends:
+    - utils::e2fsprogs-dev
+
+    - use: []
+      depends:
+          - utils::e2fsprogs-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/e2tools/e2tools/releases/download/v${PKG_VERSION}/e2tools-${PKG_VERSION}.tar.gz
+    digestSHA1: d994862abdb280c9b19e7cbc339f59f8163f9a79
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: autotoolsPackageTgt
+provideDeps: [ "*-tgt" ]
+provideTools:
+    e2tools: "usr/bin"
