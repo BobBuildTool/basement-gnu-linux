@@ -17,8 +17,18 @@ buildTools: [host-toolchain]
 buildScript: |
     autotoolsBuild $1
 
-packageScript: |
-    autotoolsPackageTgt
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
 
-provideTools:
-    e2fsprogs: "usr/sbin"
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    "":
+        depends:
+            - name: utils::e2fsprogs-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]
+        provideTools:
+            e2fsprogs: "usr/sbin"
