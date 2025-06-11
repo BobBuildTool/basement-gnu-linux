@@ -9,6 +9,14 @@ checkoutSCM:
     stripComponents: 1
 
 multiPackage:
+    "":
+        buildScript: |
+            cp -r $1/boot .
+
+    overlays:
+        buildScript: |
+            cp -r $1/boot/overlays .
+
     rpi4:
         buildScript: |
             cp $1/boot/{bcm2711-rpi-4-b.dtb,fixup4cd.dat,start4cd.elf,COPYING.linux,LICENCE.broadcom} .
