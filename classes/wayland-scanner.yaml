@@ -8,8 +8,14 @@ depends:
       depends:
           - name: graphics::wayland::wayland-scanner
             use: [tools]
+      if: "${BASEMENT_HAS_WAYLAND:-true}"
 
-buildToolsWeak: [wayland-scanner]
+buildToolsWeak:
+    - name: wayland-scanner
+      if: ${BASEMENT_HAS_WAYLAND:-true}
+buildVars: [BASEMENT_HAS_WAYLAND]
 buildSetup: |
-    # add wayland-scanner to the pkg-config lib path, so it could be found by others
-    export PKG_CONFIG_LIBDIR+=":${BOB_TOOL_PATHS[wayland-scanner]}/../lib/pkgconfig"
+    if ${BASEMENT_HAS_WAYLAND:-true} ; then
+        # add wayland-scanner to the pkg-config lib path, so it could be found by others
+        export PKG_CONFIG_LIBDIR+=":${BOB_TOOL_PATHS[wayland-scanner]}/../lib/pkgconfig"
+    fi

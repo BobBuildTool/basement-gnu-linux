@@ -18,7 +18,7 @@ depends:
     - graphics::kmscube
 
     - graphics::wayland::wayland
-    - graphics::xorg::proto::xproto
+    - graphics::xorg::proto::xorgproto
 
     - kernel::kmod
     - kernel::linux-image
