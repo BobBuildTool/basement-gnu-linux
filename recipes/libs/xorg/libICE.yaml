@@ -1,0 +1,30 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.1.2"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+    - libs::xorg::libXtrans-dev
+    - use: []
+      depends:
+          - libs::xorg::libXtrans-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libICE-${PKG_VERSION}.tar.xz
+    digestSHA256: 974e4ed414225eb3c716985df9709f4da8d22a67a2890066bc6dfc89ad298625
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

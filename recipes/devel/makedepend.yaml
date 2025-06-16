@@ -4,7 +4,7 @@ metaEnvironment:
     PKG_VERSION: "1.0.5"
 
 depends:
-    - graphics::xorg::proto::xproto
+    - graphics::xorg::proto::xorgproto
 
 checkoutSCM:
     scm: url

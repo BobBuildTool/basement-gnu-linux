@@ -1,0 +1,16 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2024.1"
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/proto/xorgproto-${PKG_VERSION}.tar.xz
+    digestSHA1: "49a078b1150463d0b633c6c75becf291b318a8c8"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageDev

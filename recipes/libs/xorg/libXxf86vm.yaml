@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.1.6"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXext-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXext-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXxf86vm-${PKG_VERSION}.tar.xz
+    digestSHA256: 96af414c73ce1d5449ad04be7f9f27fa8330f844b6dda843ef22e3e1befb3ee3
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

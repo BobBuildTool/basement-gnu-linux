@@ -1,0 +1,43 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11 + MIT"
+    PKG_VERSION: "1.8.12"
+
+depends:
+    - name: libs::libxslt-bin
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::libXtrans-dev
+    - libs::xcb::libxcb-dev
+    - use: []
+      depends:
+          - libs::xorg::libXtrans-tgt
+          - libs::xcb::libxcb-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libX11-1.8.12.tar.xz
+    digestSHA256: fa026f9bb0124f4d6c808f9aef4057aad65e7b35d8ff43951cef0abe06bb9a9a
+    stripComponents: 1
+
+buildTools: [host-toolchain, libxslt-tools]
+buildScript: |
+    autotoolsBuild $1 --disable-xf86bigfont \
+       --with-keysymdefdir=${BOB_DEP_PATHS['graphics::xorg::proto::xorgproto']}/usr/include/X11 \
+       --disable-malloc0returnsnull
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            autotoolsPackageTgt

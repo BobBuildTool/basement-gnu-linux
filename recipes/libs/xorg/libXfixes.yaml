@@ -1,0 +1,29 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "6.0.1"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libX11-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXfixes-${PKG_VERSION}.tar.xz
+    digestSHA256: b695f93cd2499421ab02d22744458e650ccc88c1d4c8130d60200213abc02d58
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

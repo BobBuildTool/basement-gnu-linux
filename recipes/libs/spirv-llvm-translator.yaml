@@ -1,0 +1,38 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "20.1.2"
+    PKG_LICENSE_FILE: "LICENSE.TXT"
+
+depends:
+    - devel::llvm-libs-dev
+    - libs::spirv-headers-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - devel::llvm-libs-tgt
+          - libs::spirv-headers-tgt
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: d1b4a55dc457edbd9cc50d23583d4bedda9479176efcd34b3e20166bc7a4a562
+    stripComponents: 1
+
+buildTools: [python3, llvm]
+buildScript: |
+    cmakeBuild $1 \
+        -D CMAKE_SKIP_INSTALL_RPATH=ON \
+        -D SPIRV_WERROR=OFF \
+        -D LLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${BOB_DEP_PATHS[libs::spirv-headers-dev]}/usr/
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript:
+            cmakePackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript:
+            cmakePackageTgt
