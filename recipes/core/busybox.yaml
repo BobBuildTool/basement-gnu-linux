@@ -2,7 +2,7 @@ inherit: [make, install, kconfig, patch]
 
 depends:
     - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
-      name: core::busybox-custom-config
+      name: "${BUSYBOX_CUSTOM_CONFIG_PKG:-core::busybox-custom-config}"
 
 metaEnvironment:
     PKG_VERSION: "1.37.0"
@@ -19,7 +19,8 @@ checkoutScript: |
     patchApplySeries $<@busybox/*.patch@>
 
 buildTools: [host-toolchain, target-toolchain]
-buildVars: [ARCH, BUSYBOX_CUSTOM_CONFIG, CFLAGS, CROSS_COMPILE, LDFLAGS]
+buildVars: [BUSYBOX_CONFIG, BUSYBOX_CUSTOM_CONFIG, BUSYBOX_CUSTOM_CONFIG_PKG, BASEMENT_DEBUG,
+            ARCH, CFLAGS, CROSS_COMPILE, LDFLAGS]
 buildScript: |
     # prevent timestamps in configuration
     export KCONFIG_NOTIMESTAMP=1
@@ -27,16 +28,34 @@ buildScript: |
     mkdir -p build install
     pushd build
 
+    # where does the config come from?
     if [[ ${BUSYBOX_CUSTOM_CONFIG:+true} ]] ; then
-        cp -u "${BOB_DEP_PATHS[core::busybox-custom-config]}/${BUSYBOX_CUSTOM_CONFIG}" .config
-        make -C $1 O=$PWD oldconfig
+        PKG="${BUSYBOX_CUSTOM_CONFIG_PKG:-core::busybox-custom-config}"
+        CFG="${BOB_DEP_PATHS[$PKG]}/$BUSYBOX_CUSTOM_CONFIG"
+    elif [[ ${BUSYBOX_CONFIG:+true} ]] ; then
+        CFG="$1/configs/${BUSYBOX_CONFIG}"
     else
-        make -C $1 O=$PWD defconfig
-        kconfigEnable CONFIG_DEBUG
-        make -C $1 O=$PWD oldconfig
+        CFG="defconfig"
     fi
-    makeParallel
-    make CONFIG_PREFIX=${BOB_CWD}/install install
+
+    # check if the defconfig exists
+    if [[ ! -f "$CFG" ]]; then
+        >&2 echo "Don't know how to use '$CFG' as busybox config!"
+        false
+    fi
+
+    # check if the source defconfig changed
+    if [[ ! -f .config || .config -ot $CFG ]]; then
+        cp -u $CFG .config
+        # enable debug symbols if requested
+        [[ ${BASEMENT_DEBUG:-0} != "0" ]] && kconfigEnable CONFIG_DEBUG
+        make -C $1 O=$PWD \
+            oldconfig
+    fi
+
+    makeParallel CONFIG_PREFIX=${BOB_CWD}/install \
+        install
+
     popd #build
 
     if [[ -f build/busybox_unstripped ]] ; then
