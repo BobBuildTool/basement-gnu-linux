@@ -136,14 +136,20 @@ buildSetup: |
     # $2+: source directories to search for bob files
     rootfsPrepare()
     {
-        # set hostname; defaults to "demo"
-        rootfsSetHostname "$1" "${CONFIG_HOSTNAME:-demo}"
+        # set hostname
+        if [[ ${CONFIG_HOSTNAME:+set} ]]; then
+            rootfsSetHostname "$1" "${CONFIG_HOSTNAME}"
+        fi
 
-        # set timezone; defaults to "Europe/Berlin"
-        rootfsSetTimezone "$1" "${CONFIG_TZ:-Europe/Berlin}"
+        # set timezone
+        if [[ ${CONFIG_TZ:+set} ]]; then
+            rootfsSetTimezone "$1" "${CONFIG_TZ}"
+        fi
 
-        # set root pw; defaults to "root"
-        rootfsSetRootPw "$1" "${CONFIG_ROOT_PW:-root}" "${CONFIG_ROOT_PW_SALT:-}"
+        # set root pw
+        if [[ ${CONFIG_ROOT_PW:+set} ]]; then
+            rootfsSetRootPw "$1" "${CONFIG_ROOT_PW}" "${CONFIG_ROOT_PW_SALT:-}"
+        fi
 
         # Search for all user-table files and cat them into one file
         rootfsMergeUserTables $USER_TABLE_FILE "${@:2}"
