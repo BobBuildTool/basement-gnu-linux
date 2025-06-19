@@ -67,15 +67,18 @@ buildScript: |
     mkdir -p install/.bob
 
     # busybox must be setuid if configured
-    grep -qE '^CONFIG_FEATURE_SUID=y$' build/.config && \
-       (printf '/usr/bin/busybox f 4755 0  0 - - - - -\n' > install/.bob/busybox.device-table) ||:
+    if kconfigIsSet CONFIG_FEATURE_SUID build/.config; then
+        printf '/usr/bin/busybox f 4755 0  0 - - - - -\n' > install/.bob/busybox.device-table
+    fi
 
     # add configured shells
-    (
-        printf '/bin/sh\n/usr/bin/sh\n'
-        grep -qE '^CONFIG_SHELL_ASH=y$' build/.config && printf '/bin/ash\n/usr/bin/ash\n' ||:
-        grep -qE '^CONFIG_SHELL_HUSH=y$' build/.config && printf '/bin/hush\n/usr/bin/hush\n' ||:
-    ) > install/.bob/busybox.shell-table
+    printf '/bin/sh\n/usr/bin/sh\n' > install/.bob/busybox.shell-table
+    if kconfigIsSet CONFIG_SHELL_ASH build/.config; then
+        printf '/bin/ash\n/usr/bin/ash\n' >> install/.bob/busybox.shell-table
+    fi
+    if kconfigIsSet CONFIG_SHELL_HUSH build/.config; then
+        printf '/bin/hush\n/usr/bin/hush\n' >> install/.bob/busybox.shell-table
+    fi
 
 packageScript: |
     installCopy "$1/install/"
