@@ -80,5 +80,10 @@ buildScript: |
         printf '/bin/hush\n/usr/bin/hush\n' >> install/.bob/busybox.shell-table
     fi
 
+    # install udhcpc script if enabled
+    if kconfigIsSet CONFIG_UDHCPC build/.config; then
+        install -D -m 0755 $<@busybox/udhcpc.script@> install/usr/share/udhcpc/default.script
+    fi
+
 packageScript: |
     installCopy "$1/install/"
