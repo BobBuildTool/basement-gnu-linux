@@ -1,17 +1,22 @@
-inherit: [make, install, kconfig]
+inherit: [make, install, kconfig, patch]
 
 depends:
     - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
       name: core::busybox-custom-config
 
 metaEnvironment:
-    PKG_VERSION: "1.35.0"
+    PKG_VERSION: "1.37.0"
+    PKG_LICENSE: "GPL-2.0, bzip2-1.0.4"
 
 checkoutSCM:
     scm: url
     url: https://busybox.net/downloads/busybox-${PKG_VERSION}.tar.bz2
-    digestSHA1: "36a1766206c8148bc06aca4e1f134016d40912d0"
+    digestSHA1: "50efee4e4438b8aea90ea6895dac818d23125549"
     stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@busybox/*.patch@>
 
 buildTools: [host-toolchain, target-toolchain]
 buildVars: [ARCH, BUSYBOX_CUSTOM_CONFIG, CFLAGS, CROSS_COMPILE, LDFLAGS]
