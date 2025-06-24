@@ -1,0 +1,43 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "3.26.0"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+checkoutSCM:
+    scm: url
+    url: https://sourceware.org/pub/valgrind/valgrind-${PKG_VERSION}.tar.bz2
+    digestSHA256: 8d54c717029106f1644aadaf802ab9692e53d93dd015cbd19e74190eba616bd7
+    stripComponents: 1
+
+buildVars: [AR]
+buildTools: [perl]
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageLib
+    "":
+        depends:
+            - use: []
+              name: utils::valgrind-tgt
+        packageScript: |
+            autotoolsPackageBin
+
+            mv usr/bin/valgrind usr/bin/valgrind_real
+            cat > usr/bin/valgrind << EOF
+            #!/bin/bash
+
+            BASE_DIR="\$(dirname \${BASH_SOURCE[0]})/../.."
+
+            VALGRIND_LIB=\$BASE_DIR/usr/libexec/valgrind \\
+                exec \$BASE_DIR/usr/bin/valgrind_real "\$@"
+            EOF
+            chmod a+x usr/bin/valgrind
+
+        provideDeps: ['*-tgt']
+        provideTools:
+            valgrind: "usr/bin"

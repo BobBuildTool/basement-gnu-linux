@@ -218,6 +218,7 @@ depends:
     - utils::ttysnoop
     - utils::usbutils
     - utils::qpdf
+    - utils::valgrind
     - utils::xorriso
     - utils::xxd
 
