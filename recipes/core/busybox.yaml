@@ -20,7 +20,7 @@ checkoutScript: |
 
 buildTools: [host-toolchain, target-toolchain]
 buildVars: [BUSYBOX_CONFIG, BUSYBOX_CUSTOM_CONFIG, BUSYBOX_CUSTOM_CONFIG_PKG, BASEMENT_DEBUG,
-            ARCH, CFLAGS, CROSS_COMPILE, LDFLAGS]
+            CONFIG_INIT, ARCH, CFLAGS, CROSS_COMPILE, LDFLAGS]
 buildScript: |
     # prevent timestamps in configuration
     export KCONFIG_NOTIMESTAMP=1
@@ -94,6 +94,12 @@ buildScript: |
     # install udhcpc script if enabled
     if kconfigIsSet CONFIG_UDHCPC build/.config; then
         install -D -m 0755 $<@busybox/udhcpc.script@> install/usr/share/udhcpc/default.script
+    fi
+
+    if [[ ${CONFIG_INIT:-} == "sysvinit" ]]; then
+        if kconfigIsSet CONFIG_HWCLOCK build/.config; then
+            install -D -m 0755 $<@busybox/S09hwclock.sh@> install/etc/init.d/S09hwclock.sh
+        fi
     fi
 
 packageScript: |
