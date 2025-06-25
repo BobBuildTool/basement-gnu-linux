@@ -1,8 +1,4 @@
-exclude: |
-    (?x)^(
-      .*.patch|
-      .*.diff
-    )$
+files: .*\.yaml$
 
 repos:
     - repo: https://github.com/pre-commit/pre-commit-hooks
