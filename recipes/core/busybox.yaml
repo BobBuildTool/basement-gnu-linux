@@ -1,4 +1,4 @@
-inherit: [make, install, kconfig, patch]
+inherit: [make, install, kconfig, patch, init]
 
 depends:
     - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
@@ -94,6 +94,12 @@ buildScript: |
     # install udhcpc script if enabled
     if kconfigIsSet CONFIG_UDHCPC build/.config; then
         install -D -m 0755 $<@busybox/udhcpc.script@> install/usr/share/udhcpc/default.script
+    fi
+
+    if initIsAnySysvinit; then
+        if kconfigIsSet CONFIG_HWCLOCK build/.config; then
+            install -D -m 0755 $<@busybox/S09hwclock.sh@> install/etc/init.d/S09hwclock.sh
+        fi
     fi
 
 packageScript: |
