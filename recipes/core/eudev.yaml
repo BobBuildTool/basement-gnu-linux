@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, init]
 
 metaEnvironment:
     PKG_VERSION: "3.2.14"
@@ -51,6 +51,11 @@ multiPackage:
 
             # and remove the source files, as they are not needed anymore
             rm -rf $PWD/install/etc/udev/hwdb.d
+
+            # add init script
+            if initIsAnySysvinit; then
+                install -D -m 0755 $<@eudev/S10udev.sh@> install/etc/init.d/S10udev.sh
+            fi
 
         multiPackage:
             "":
