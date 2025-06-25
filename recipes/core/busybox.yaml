@@ -85,6 +85,12 @@ buildScript: |
         install -D -m 0644 $<@busybox/inittab@> install/etc/inittab
     fi
 
+    # install basic rc scripts if enabled
+    if kconfigIsSet CONFIG_INIT build/.config; then
+        install -D -m 0777 $<@busybox/rcS@> install/etc/init.d/rcS
+        install -D -m 0777 $<@busybox/rcK@> install/etc/init.d/rcK
+    fi
+
     # install udhcpc script if enabled
     if kconfigIsSet CONFIG_UDHCPC build/.config; then
         install -D -m 0755 $<@busybox/udhcpc.script@> install/usr/share/udhcpc/default.script
