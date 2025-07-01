@@ -20,7 +20,14 @@ packageSetup: |
             SCRIPT=$_SCRIPT_DIR/install-extmod-build
         fi
         pushd $1
-        MAKE=make HOSTCC=gcc SRCARCH=$LINUX_ARCH srctree=$1/source KCONFIG_CONFIG=$1/.config \
+        # Newer scripts check for CC != HOSTCC to detect cross compilation. If
+        # detected they rebuild the host tools for the target, because the
+        # result of install-extmod-build is likely to be executed on the target
+        # (e.g. they create .deb packages). This is of course not the case for
+        # us, so fake it by unsetting them. This is not a problem because
+        # normally nothing for the target gets compiled.
+        MAKE=make CC= HOSTCC= SRCARCH=$LINUX_ARCH srctree=$1/source \
+            KCONFIG_CONFIG=$1/.config \
             sh "$SCRIPT" "$OUT"
         popd
     }
