@@ -1,0 +1,36 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.2"
+    PKG_LICENSE: "LGPL-2.1"
+
+depends:
+    - libs::alsa-lib-dev
+    - multimedia::flac-dev
+    - multimedia::vorbis-dev
+    - multimedia::opus-dev
+    - use: []
+      depends:
+          - libs::alsa-lib-tgt
+          - multimedia::flac-tgt
+          - multimedia::vorbis-tgt
+          - multimedia::opus-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libsndfile/libsndfile/releases/download/${PKG_VERSION}/libsndfile-${PKG_VERSION}.tar.xz
+    digestSHA256: 3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e
+    stripComponents: 1
+
+buildToolsWeak: [python3]
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+        provideDeps: ['*-dev']
+
+    tgt:
+        packageScript: cmakePackageTgt
+        provideDeps: ['*-tgt']
