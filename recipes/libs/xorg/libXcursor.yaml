@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.3"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::libXfixes-dev
+    - libs::xorg::libXrender-dev
+    - use: []
+      depends:
+          - libs::xorg::libXfixes-tgt
+          - libs::xorg::libXrender-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/archive/individual/lib/libXcursor-${PKG_VERSION}.tar.xz
+    digestSHA256: fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2c0
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
