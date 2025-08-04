@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.4.6"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::xorg::libXfixes-dev
+    - libs::xorg::libX11-dev
+    - use: []
+      depends:
+          - libs::xorg::libXfixes-tgt
+          - libs::xorg::libX11-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/pub/individual/lib/libXcomposite-${PKG_VERSION}.tar.xz
+    digestSHA256: fe40bcf0ae1a09070eba24088a5eb9810efe57453779ec1e20a55080c6dc2c87
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
