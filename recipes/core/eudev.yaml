@@ -35,6 +35,7 @@ multiPackage:
                   - kernel::kmod-lib-tgt
 
         buildTools: [udevadm]
+        buildVars: [CONFIG_INIT]
         buildScript: |
             autotoolsBuild $1 \
                 --sbindir=/usr/sbin \
@@ -51,6 +52,11 @@ multiPackage:
 
             # and remove the source files, as they are not needed anymore
             rm -rf $PWD/install/etc/udev/hwdb.d
+
+            # add init script
+            if [[ ${CONFIG_INIT:-} == "sysvinit" ]]; then
+                install -D -m 0755 $<@eudev/S10udev.sh@> install/etc/init.d/S10udev.sh
+            fi
 
         multiPackage:
             "":

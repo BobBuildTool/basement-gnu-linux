@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.2.1"
+    PKG_LICENSE: "LGPL-2.1+"
+
+checkoutSCM:
+    scm: url
+    url: ${KERNEL_MIRROR}/software/libs/libgpiod/libgpiod-${PKG_VERSION}.tar.xz
+    digestSHA256: 0e948049c309b87c220fb24ee0d605d7cd5b72f22376e608470903fffa2d4b18
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-bindings-python \
+        --disable-examples \
+        --disable-tests \
+        --enable-tools
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+
+    tgt:
+        packageScript: autotoolsPackageLib
+
+    "":
+        depends:
+            - name: libs::libgpiod-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: [ "*-tgt" ]

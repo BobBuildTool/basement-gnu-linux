@@ -1,0 +1,23 @@
+# Startup the system
+
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mount -o remount,rw /
+# The linux kernel does not mount /dev in case of an ramdisk. So check if it is
+# already mounted and if not mount it before creating any subdirs in it.
+::sysinit:/bin/sh -c '/bin/grep -q /dev /proc/mounts || mount /dev'
+::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+::sysinit:/bin/mount -a
+::sysinit:/bin/mkdir -p /run/lock/subsys
+::sysinit:/sbin/swapon -a
+::sysinit:/bin/hostname -F /etc/hostname
+
+# now run any rc scripts
+::sysinit:/etc/init.d/rcS
+
+# Put a getty on the serial port
+console::respawn:/sbin/getty -L console 0 vt100 # GENERIC_SERIAL
+
+# Stuff to do before rebooting
+::shutdown:/etc/init.d/rcK
+::shutdown:/sbin/swapoff -a
+::shutdown:/bin/umount -a -r
