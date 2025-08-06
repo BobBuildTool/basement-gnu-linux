@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.54.0"
+    PKG_VERSION: "1.57.0"
     PKG_LICENSE: "LGPL-2.1-or-later"
 
 depends:
@@ -29,8 +29,8 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://download.gnome.org/sources/pango/1.54/pango-${PKG_VERSION}.tar.xz
-    digestSHA256: 8a9eed75021ee734d7fc0fdf3a65c3bba51dfefe4ae51a9b414a60c70b2d1ed8
+    url: https://download.gnome.org/sources/pango/1.57/pango-${PKG_VERSION}.tar.xz
+    digestSHA256: 890640c841dae77d3ae3d8fe8953784b930fa241b17423e6120c7bfdf8b891e7
     stripComponents: 1
 
 buildTools: [glib]
