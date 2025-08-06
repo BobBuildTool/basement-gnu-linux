@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.18.0"
+    PKG_VERSION: "1.18.4"
     PKG_LICENSE: "LGPL-2.1-only OR MPL-1.1"
 
 depends:
@@ -23,7 +23,7 @@ depends:
 checkoutSCM:
     scm: url
     url:  https://www.cairographics.org/releases/cairo-${PKG_VERSION}.tar.xz
-    digestSHA256: 243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64
+    digestSHA256: 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
     stripComponents: 1
 
 buildTools: [host-toolchain]
