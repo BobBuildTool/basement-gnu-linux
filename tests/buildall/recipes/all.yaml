@@ -30,6 +30,7 @@ depends:
     - kernel::linux-image
 
     - libs::alsa-lib-tgt
+    - libs::appstream-tgt
     - libs::libassuan-tgt
     - libs::libksba-tgt
     - libs::botan-tgt
