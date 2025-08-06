@@ -115,7 +115,7 @@ multiPackage:
                   - graphics::wayland::wayland-protocols
                   - graphics::wayland::wayland-dev
 
-            - if: "$(eq,$MESA3D_PLATFORM,x11)"
+            - if: "$(eq,$MESA3D_PLATFORM,wayland)"
               depends:
                   - graphics::xorg::proto::xorgproto
                   - libs::xcb::libxcb-dev
@@ -148,7 +148,7 @@ multiPackage:
                   - if: "$(eq,$MESA3D_PLATFORM,wayland)"
                     name: graphics::wayland::wayland-tgt
 
-                  - if: "$(eq,$MESA3D_PLATFORM,x11)"
+                  - if: "$(eq,$MESA3D_PLATFORM,wayland)"
                     depends:
                         - libs::xcb::libxcb-tgt
                         - libs::xorg::libX11-tgt
