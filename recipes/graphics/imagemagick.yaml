@@ -10,13 +10,13 @@ depends:
           - virtual::libs::libjpeg-tgt
 
 metaEnvironment:
-    PKG_VERSION: "7.1.1-38"
+    PKG_VERSION: "7.1.2-15"
     PKG_LICENSE: "Apache-2.0"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/ImageMagick/ImageMagick/archive/refs/tags/${PKG_VERSION}.tar.gz
-    digestSHA1: 041bd8e67e984e61fca8443078b37a7851371de7
+    digestSHA256: bf646e7fffdf50b7d886eec6bbe51c3ced1c4d68fbabfcc534e014575359fe7f
     stripComponents: 1
 
 buildScript: |
