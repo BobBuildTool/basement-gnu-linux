@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.6.47"
+    PKG_VERSION: "1.6.55"
     PKG_LICENSE: "LicenseRef-libpng"
     PKG_LICENSE_PATH: |
         libpng:LICENSE
@@ -16,7 +16,7 @@ depends:
 checkoutSCM:
     scm: url
     url: ${SOURCEFORGE_MIRROR}/libpng/libpng-${PKG_VERSION}.tar.xz
-    digestSHA256: b213cb381fbb1175327bd708a77aab708a05adde7b471bc267bd15ac99893631
+    digestSHA256: d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d
     stripComponents: 1
 
 buildScript: |
