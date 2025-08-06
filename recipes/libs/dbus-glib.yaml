@@ -3,7 +3,7 @@ inherit: [autotools]
 metaEnvironment:
     PKG_DESCRIPTION: "D-Bus client library (binding) for C using GLib"
     PKG_LICENSE: "AFL-2.1 OR GPL-2.0-or-later"
-    PKG_VERSION: "0.112"
+    PKG_VERSION: "0.114"
 
 depends:
     - core::dbus-dev
@@ -18,7 +18,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${PKG_VERSION}.tar.gz
-    digestSHA1: 9eb81f50e36e349f57297d1a2a61b48707a551cc
+    digestSHA256: c09c5c085b2a0e391b8ee7d783a1d63fe444e96717cc1814d61b5e8fc2827a7c
     stripComponents: 1
 
 multiPackage:
