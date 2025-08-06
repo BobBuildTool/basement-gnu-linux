@@ -1,13 +1,13 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.0.26"
+    PKG_VERSION: "1.0.29"
     PKG_LICENSE: "LGPL-2.1-or-later"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/libusb/libusb/releases/download/v${PKG_VERSION}/libusb-${PKG_VERSION}.tar.bz2
-    digestSHA256: "12ce7a61fc9854d1d2a1ffe095f7b5fac19ddba095c259e6067a46500381b5a5"
+    digestSHA256: "5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85"
     stripComponents: 1
 
 buildScript: autotoolsBuild "${1}" --disable-udev
