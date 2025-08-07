@@ -13,6 +13,9 @@ depends:
           - devel::rpcsvc-proto
           - devel::squashfs-tools
 
+    - name: libs::protobuf
+      use: [tools]
+      forward: true
     - name: libs::glib-tools
       use: [tools]
       forward: true
