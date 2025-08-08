@@ -1,0 +1,31 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Utility libraries for XC Binding - Convenience functions for the Render extension"
+    PKG_VERSION: "0.3.10"
+    PKG_LICENSE: "HPND-sell-variant, X11-distribute-modifications-variant"
+
+depends:
+    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto
+    - libs::xcb::libxcb-dev
+    - use: []
+      depends:
+          - libs::xcb::libxcb-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-util-renderutil-${PKG_VERSION}.tar.gz
+    digestSHA256: e04143c48e1644c5e074243fa293d88f99005b3c50d1d54358954404e635128a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev

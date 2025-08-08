@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11-distribute-modifications-variant"
+    PKG_VERSION: "0.4.1"
+    PKG_DESCRIPTION: "Utility libraries for XC Binding - Standard X key constants and conversion to/from keycodes"
+
+depends:
+    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xcb::libxcb-dev
+    - use: []
+      depends:
+          - libs::xcb::libxcb-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-util-keysyms-${PKG_VERSION}.tar.gz
+    digestSHA256: 1fa21c0cea3060caee7612b6577c1730da470b88cbdf846fa4e3e0ff78948e54
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev

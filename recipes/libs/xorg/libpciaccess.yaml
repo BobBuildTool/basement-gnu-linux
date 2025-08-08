@@ -1,0 +1,32 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "0.18.1"
+    PKG_DESCRIPTION: "X11 PCI access library"
+    PKG_LICENSE_FILE: "COPYING"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros
+
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/libpciaccess-${PKG_VERSION}.tar.xz
+    digestSHA256: 4af43444b38adb5545d0ed1c2ce46d9608cc47b31c2387fc5181656765a6fa76
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 -Dzlib=enabled
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: mesonPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: mesonPackageTgt

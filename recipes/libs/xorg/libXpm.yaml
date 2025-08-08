@@ -1,0 +1,38 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT, X11-distribute-modifications-variant"
+    PKG_VERSION: "3.5.17"
+    PKG_DESCRIPTION: "X11 Pixmap library"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXext-dev
+    - libs::xorg::libXt-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXext-tgt
+          - libs::xorg::libXt-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/lib/libXpm-${PKG_VERSION}.tar.xz
+    digestSHA256: "64b31f81019e7d388c822b0b28af8d51c4622b83f1f0cb6fa3fc95e271226e43"
+    stripComponents: 1
+
+buildTools: [gettext]
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-open-zfile \
+        --disable-stat-zfile
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt

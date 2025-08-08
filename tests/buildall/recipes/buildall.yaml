@@ -44,6 +44,14 @@ multiPackage:
                   MESA3D_INTEL: "true"
                   MESA3D_GALLIUM_DRIVERS: "iris"
 
+            - name: graphics::xorg::xserver
+              environment:
+                  MESA3D_PLATFORM: "x11"
+                  MESA3D_INTEL: "true"
+                  MESA3D_GALLIUM_DRIVERS: "iris"
+                  MESA3D_DRI3: "enabled"
+                  MESA3D_GLX: "auto"
+
 buildScript: |
   /bin/true
 

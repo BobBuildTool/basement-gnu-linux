@@ -1,0 +1,33 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11-distribute-modifications-variant"
+    PKG_VERSION: "0.4.2"
+    PKG_DESCRIPTION: "Utility libraries for XC Binding - client and window-manager helpers for ICCCM"
+
+depends:
+    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xcb::libxcb-dev
+    - libs::xcb::util-dev
+    - use: []
+      depends:
+          - libs::xcb::libxcb-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-util-wm-${PKG_VERSION}.tar.gz
+    digestSHA256: dcecaaa535802fd57c84cceeff50c64efe7f2326bf752e16d2b77945649c8cd7
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev

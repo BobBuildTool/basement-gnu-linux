@@ -1,0 +1,31 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "X11-distribute-modifications-variant"
+    PKG_VERSION: "0.4.1"
+    PKG_DESCRIPTION: "XCB util modules"
+
+depends:
+    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto
+    - libs::xcb::libxcb-dev
+    - use: []
+      depends:
+          - libs::xcb::libxcb-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xcb.freedesktop.org/dist/xcb-util-${PKG_VERSION}.tar.gz
+    digestSHA256: 21c6e720162858f15fe686cef833cf96a3e2a79875f84007d76f6d00417f593a
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev

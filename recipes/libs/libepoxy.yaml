@@ -1,0 +1,33 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT"
+    PKG_VERSION: "1.5.10"
+    PKG_DESCRIPTION: "library for handling OpenGL function pointer management"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+    - libs::xorg::libX11-dev
+    - libs::mesa3d-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+          - libs::mesa3d-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://download.gnome.org/sources/libepoxy/1.5/libepoxy-${PKG_VERSION}.tar.xz
+    digestSHA256: 072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dtests=false
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: mesonPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: mesonPackageTgt
