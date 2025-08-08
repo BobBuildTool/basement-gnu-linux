@@ -1,0 +1,45 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Google Protocol Buffers"
+    PKG_LICENSE: "BSD-3-Clause"
+    PKG_VERSION: "31.1"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/protocolbuffers/protobuf/releases/download/v${PKG_VERSION}/protobuf-${PKG_VERSION}.tar.gz
+    digestSHA256: 12bfd76d27b9ac3d65c00966901609e020481b9474ef75c7ff4601ac06fa0b82
+    stripComponents: 1
+
+depends:
+    - libs::abseil-dev
+    - libs::googletest-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::abseil-tgt
+          - libs::googletest-tgt
+          - libs::zlib-tgt
+
+buildScript: |
+    CONFIG_OPTS=("-Dprotobuf_LOCAL_DEPENDENCIES_ONLY=ON")
+    CONFIG_OPTS+=("-Dprotobuf_BUILD_TESTS=OFF")
+    if [ ${BOB_TOOL_PATHS[protoc]+abc} ]; then
+       CONFIG_OPTS+=("-DWITH_PROTOC=${BOB_TOOL_PATHS[protoc]}/protoc")
+    fi
+    cmakeBuild $1 ${CONFIG_OPTS[@]}
+
+multiPackage:
+    dev:
+        buildTools: [protoc]
+        provideDeps: ['*-dev']
+        packageScript: cmakePackageDev
+    tgt:
+        buildTools: [protoc]
+        provideDeps: ['*-tgt']
+        packageScript: cmakePackageTgt
+    "":
+        packageScript: |
+            cmakePackageTgt
+        provideTools:
+            protoc: "usr/bin"

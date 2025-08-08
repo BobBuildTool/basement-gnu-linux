@@ -76,6 +76,7 @@ depends:
     - libs::pcre2-tgt
     - libs::pixman-tgt
     - libs::popt-tgt
+    - libs::protobuf-tgt
     - libs::qt6-base-tgt
     - libs::qt6-declarative-tgt
     - libs::qt6-remoteobjects-tgt

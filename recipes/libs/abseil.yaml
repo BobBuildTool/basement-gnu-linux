@@ -1,0 +1,35 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Abseil - C++ Common Libraries"
+    PKG_LICENSE: "Apache-2.0"
+    PKG_VERSION: "20250512.1"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/abseil/abseil-cpp/releases/download/${PKG_VERSION}/abseil-cpp-${PKG_VERSION}.tar.gz
+    digestSHA256: 9b7a064305e9fd94d124ffa6cc358592eb42b5da588fb4e07d09254aa40086db
+    stripComponents: 1
+
+depends:
+    - libs::googletest-dev
+    - use: []
+      depends:
+          - libs::googletest-tgt
+
+buildScript: |
+    cmakeBuild $1 \
+       -DABSL_BUILD_TESTING=ON \
+       -DABSL_USE_EXTERNAL_GOOGLETEST=ON \
+       -DABSL_PROPAGATE_CXX_STD=ON \
+       -DCMAKE_CXX_STANDARD=17
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+           cmakePackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            cmakePackageTgt
