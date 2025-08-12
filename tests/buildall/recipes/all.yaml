@@ -168,6 +168,7 @@ depends:
     - python::typing_extensions
     - python::uvicorn
     - python::virtualenv
+    - python::wrapt
 
     - utils::acpica
     - utils::brtools
