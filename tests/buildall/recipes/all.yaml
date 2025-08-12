@@ -136,6 +136,7 @@ depends:
     - python::deprecated
     - python::distlib
     - python::docutils
+    - python::ecpy
     - python::filelock
     - python::funcy
     - python::h11
