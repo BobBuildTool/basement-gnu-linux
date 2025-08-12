@@ -132,6 +132,7 @@ depends:
     - python::colorama
     - python::construct
     - python::construct-dataclasses
+    - python::cryptography
     - python::cython
     - python::deprecated
     - python::distlib
