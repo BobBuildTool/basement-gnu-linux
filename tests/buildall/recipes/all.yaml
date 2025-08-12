@@ -127,6 +127,7 @@ depends:
     - python::cachetools
     - python::calver
     - python::chardet
+    - python::cffi
     - python::click
     - python::colorama
     - python::construct
