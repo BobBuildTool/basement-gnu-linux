@@ -1,0 +1,19 @@
+buildVars: [CONFIG_INIT]
+buildSetup: |
+    # Checks if the init system is the sysv sysvinit variant.
+    initIsSysvinitSysv()
+    {
+        [[ ${CONFIG_INIT:-} == "sysvinit/sysv" ]]
+    }
+
+    # Checks if the init system is the busybox sysvinit variant.
+    initIsSysvinitBusybox()
+    {
+        [[ ${CONFIG_INIT:-} == "sysvinit/busybox" ]]
+    }
+
+    # Checks if the init system is any of the supported sysvinit variants.
+    initIsAnySysvinit()
+    {
+        [[ ${CONFIG_INIT:-} == "sysvinit" ]] || initIsSysvinitSysv || initIsSysvinitBusybox
+    }

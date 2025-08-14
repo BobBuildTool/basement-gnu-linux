@@ -1,0 +1,20 @@
+# Creates basic structure for a Linux system. This uses the merged /usr approach.
+
+privateEnvironment:
+    TARCH: '$(get-tool-env,"target-toolchain","AUTOCONF_HOST","$AUTOCONF_BUILD")'
+
+packageVars: [TARCH]
+packageScript: |
+    tar -Jxf $<@rootfs-skel/rootfs-skel.tar.xz@>
+
+    # Add proper symlinks based on 32/64 bit archs
+    case $TARCH in
+        (*64*) # default lib is 64bit
+            ln -snf lib usr/lib64
+            ln -snf usr/lib64 lib64
+            mkdir -p usr/lib32 # extra lib32
+            ln -snf usr/lib32 lib32;;
+        (*)   # default lib is 32bit
+            ln -snf lib usr/lib32
+            ln -snf usr/lib32 lib32;;
+    esac

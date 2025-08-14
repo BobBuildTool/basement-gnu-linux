@@ -1,4 +1,4 @@
-inherit: [cpackage, make, install]
+inherit: [cpackage, make, install, init]
 
 metaEnvironment:
     PKG_VERSION: "0.8.43"
@@ -32,6 +32,14 @@ buildScript: |
         install
 
     mkdir -p install/etc/network/if-{pre-up.d,up.d,post-down.d,down.d}
+
+    # add minimal interfaces file
+    printf "auto lo\niface lo inet loopback\n" > install/etc/network/interfaces
+
+    # add init script
+    if isAnySysvinit; then
+        install -D -m 0755 $<@ifupdown/S40network.sh@> install/etc/init.d/S40network.sh
+    fi
 
 packageScript: |
     installPackageBin "$1/install/"
