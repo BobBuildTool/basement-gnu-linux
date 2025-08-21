@@ -10,6 +10,13 @@ checkoutSCM:
     digestSHA1: c0349aca443ec0807528d088a3f2e2e0d5d1b17b
     stripComponents: 1
 
+depends:
+    - name: devel::gperf
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
+buildTools: [gperf]
 buildScript: |
     autotoolsBuild $1
 
