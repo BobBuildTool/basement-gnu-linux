@@ -92,28 +92,32 @@ buildSetup: |
     #
     # $1: linux kernel source directory
     # $2: defconfig (optional)
+    #     - if omitted, use the kernel defconfig
     #     - if this is an actual file, use it as the config
-    #     - if this is not a file, check if a defconfig for the target arch by
-    #       that name exists and if yes, use that one
+    #     - if this is not a file, treat it as a defconfig of the target arch
     linuxConfig()
     {
-        DEF_CFG=${2:-$1/arch/${LINUX_ARCH}/configs/defconfig}
-        if [[ -f "$1/arch/${LINUX_ARCH}/configs/${DEF_CFG}" ]] ; then
-            DEF_CFG=$1/arch/${LINUX_ARCH}/configs/${DEF_CFG}
+        if [[ ${2+set} ]] ; then
+            local DEF_CFG
+            if [[ -f "$2" ]] ; then
+                DEF_CFG="$2"
+            else
+                DEF_CFG="$1/arch/${LINUX_ARCH}/configs/$2"
+            fi
+
+            if [[ ! -f "$DEF_CFG" ]]; then
+                >&2 echo "Specified kernel defconfig '$DEF_CFG' does not exist!"
+                false
+            fi
+
+            # check if the source file is newer than .config
+            if [[ ! -f .config || .config -ot $DEF_CFG ]]; then
+                cp -u "$DEF_CFG" .config
+                makeSequential -C "$1" O="$PWD" olddefconfig
+            fi
+        elif [[ ! -f .config ]] ; then
+            makeSequential -C "$1" O="$PWD" defconfig
         fi
-        # check if the defconfig file exists
-        if [[ ! -f "$DEF_CFG" ]]; then
-            >&2 echo "Don't know how to use '$DEF_CFG' as linux kernel config!"
-            false
-        fi
-        # check if the source file is newer than .config
-        if [[ -f .config && .config -nt $DEF_CFG ]]; then
-            return 0
-        fi
-        # redo the .config file
-        cp -u "$DEF_CFG" .config
-        makeSequential -C $1 O=$PWD \
-            olddefconfig
     }
 
     # Build the actual target linux image and all configured modules
