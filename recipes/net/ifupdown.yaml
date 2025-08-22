@@ -11,9 +11,11 @@ checkoutSCM:
     stripComponents: 1
 
 buildVars: [CC]
+buildTools: [perl]
 buildScript: |
     mkdir -p build
     cp -a $1/* build/
+    sed -i 's#/usr/bin/perl#/usr/bin/env -S perl#' build/defn2*.pl
 
     # fake this
     mkdir -p bin

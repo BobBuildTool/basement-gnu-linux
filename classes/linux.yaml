@@ -83,7 +83,7 @@ checkoutSCM:
     dir: kmod-script
 
 buildVars: [LINUX_ARCH, ARCH, CROSS_COMPILE, CC]
-buildTools: [m4, bison, flex, target-toolchain, host-toolchain]
+buildTools: [m4, bison, flex, target-toolchain, host-toolchain, perl]
 buildSetup: |
     # make sure we find our kmod-dist script in the package step
     ln -sf $1/kmod-script .
