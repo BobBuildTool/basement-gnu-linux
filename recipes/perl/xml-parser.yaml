@@ -1,0 +1,39 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "A perl module for parsing XML documents"
+    PKG_VERSION: "2.47"
+    PKG_LICENSE: "GPL"
+
+depends:
+    - libs::libxcrypt-dev
+    - libs::expat-dev
+    - libs::libxml2-dev
+    - use: []
+      depends:
+          - libs::libxcrypt-tgt
+          - libs::libxml2-tgt
+          - libs::expat-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-${PKG_VERSION}.tar.gz
+    digestSHA1: caa4cc51930cc6bd14c1d5bb1dbf5aeae4ab952b
+    stripComponents: 1
+
+buildTools: [target-toolchain, perl]
+buildVars: [AR, CC, LD]
+buildScript: |
+    mkdir -p build && pushd build
+    rsync -a --delete $1/ .
+    perl Makefile.PL \
+       EXPATLIBPATH=${BOB_DEP_PATHS['libs::expat-dev']}/usr/lib \
+       EXPATINCPATH=${BOB_DEP_PATHS['libs::expat-dev']}/usr/include \
+       static
+
+    makeParallel
+    makeSequential install DESTDIR=$(pwd)/../install
+    popd # build
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageTgt $1 "/usr/lib/***"

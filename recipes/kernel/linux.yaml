@@ -34,7 +34,10 @@ buildScript: |
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
         LCFG="${LINUX_CONFIG}"
     else
-        LCFG="defconfig"
+        if [ ! -e .config ]; then
+          make -C $1/linux O=$PWD savedefconfig
+        fi
+        LCFG="$PWD/defconfig"
     fi
 
     linuxConfig $1/linux $LCFG

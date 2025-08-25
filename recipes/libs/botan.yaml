@@ -13,10 +13,11 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://botan.randombit.net/releases/Botan-${PKG_VERSION}.tar.xz
-    digestSHA256: fc0620463461caaea8e60f06711d7e437a3ad1eebd6de4ac29c14bbd901ccd1b
+    url: ${GITHUB_MIRROR}/randombit/botan/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 8d2a072c7cdca6cadd16f89bb966fce1b3ec77cb4614bf1d87dec1337a3d2330
     stripComponents: 1
 
+checkoutDeterministic: True
 checkoutScript: |
     patchApplySeries $<@botan/*@>
 

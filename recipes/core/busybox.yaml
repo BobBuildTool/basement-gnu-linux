@@ -35,7 +35,10 @@ buildScript: |
     elif [[ ${BUSYBOX_CONFIG:+true} ]] ; then
         CFG="$1/configs/${BUSYBOX_CONFIG}"
     else
-        CFG="defconfig"
+        if [ ! -e .config ]; then
+          make -C $1 O=$PWD defconfig
+        fi
+        CFG=".config"
     fi
 
     # check if the defconfig exists

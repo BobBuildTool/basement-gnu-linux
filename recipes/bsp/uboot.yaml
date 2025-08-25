@@ -16,6 +16,7 @@ multiPackage:
             - if: "${UBOOT_CUSTOM_CONFIG:-}"
               name: "${UBOOT_CUSTOM_CONFIG_PKG:-uboot-custom-cfg}"
 
+        buildToolsWeak: [perl]
         buildVars: [UBOOT_CONFIG, UBOOT_TARGETS, UBOOT_CUSTOM_CONFIG, UBOOT_CUSTOM_CONFIG_PKG]
         buildScript: |
             # Use plain "defconfig" if we have no specific target. Otherwise check if

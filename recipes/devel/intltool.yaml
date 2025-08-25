@@ -1,7 +1,12 @@
-inherit: [autotools]
+inherit: [autotools, perl5]
 
 metaEnvironment:
     PKG_VERSION: "0.50.2"
+
+depends:
+    - name: perl::xml-parser
+      tools:
+          target-toolchain: host-compat-toolchain
 
 checkoutSCM:
     scm: url
