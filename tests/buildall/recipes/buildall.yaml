@@ -6,7 +6,7 @@ depends:
           # devel stuff (usually) not deployed to targets -> host compat toolchain
           - devel::byacc
           - devel::dtc
-          # - devel::intltool # FIXME: configure: error: XML::Parser perl module is required for intltool
+          - devel::intltool
           - devel::lua-bin
           - devel::makedepend
           - devel::nasm
