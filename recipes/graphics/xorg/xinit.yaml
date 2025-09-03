@@ -1,0 +1,27 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.4.4"
+    PKG_DESCRIPTION: "X Window System initializer"
+    PKG_LICENSE: "MIT-open-group, X11-distribute-modifications-variant"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::xorg::libX11-dev
+    - use: []
+      depends:
+          - libs::xorg::libX11-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/app/xinit-${PKG_VERSION}.tar.xz
+    digestSHA256: 40a47c7a164c7f981ce3787b4b37f7e411fb43231dcde543d70094075dacfef9
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+        --disable-malloc0returnsnull
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageBin

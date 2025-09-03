@@ -30,6 +30,13 @@ multiPackage:
             - all
 
     x86_64:
+        environment:
+            MESA3D_PLATFORM: "x11"
+            MESA3D_INTEL: "true"
+            MESA3D_GALLIUM_DRIVERS: "iris"
+            MESA3D_DRI3: "enabled"
+            MESA3D_GLX: "auto"
+
         depends:
             - name: devel::cross-toolchain-x86_64-linux-gnu
               use: [tools]
@@ -42,18 +49,17 @@ multiPackage:
 
             - name: libs::mesa3d-tgt
               alias: libs::mesa3d-intel-tgt
-              environment:
-                  MESA3D_PLATFORM: "x11"
-                  MESA3D_INTEL: "true"
-                  MESA3D_GALLIUM_DRIVERS: "iris"
 
-            - name: graphics::xorg::xserver
-              environment:
-                  MESA3D_PLATFORM: "x11"
-                  MESA3D_INTEL: "true"
-                  MESA3D_GALLIUM_DRIVERS: "iris"
-                  MESA3D_DRI3: "enabled"
-                  MESA3D_GLX: "auto"
+            - graphics::xorg::setxkbmap
+            - graphics::xorg::xauth
+            - graphics::xorg::xf86-input-evdev
+            - graphics::xorg::xf86-video-fbdev
+            - graphics::xorg::xinit
+            - graphics::xorg::xrdb
+            - graphics::xorg::xserver
+            - graphics::xorg::xset
+            - graphics::xorg::xsetroot
+            - graphics::xorg::xterm
 
 buildScript: |
   /bin/true

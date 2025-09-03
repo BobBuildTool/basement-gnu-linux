@@ -1,0 +1,38 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "MIT AND X11 AND HPND AND CC-BY-4.0"
+    PKG_VERSION: "401"
+    PKG_DESCRIPTION: "X terminal emulator"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - libs::freetype-dev
+    - libs::ncurses-dev
+    - libs::xorg::libX11-dev
+    - libs::xorg::libXaw-dev
+    - libs::xorg::libXt-dev
+    - libs::xorg::libXft-dev
+    - use: []
+      depends:
+          - libs::freetype-tgt
+          - libs::ncurses-tgt
+          - libs::xorg::libX11-tgt
+          - libs::xorg::libXaw-tgt
+          - libs::xorg::libXt-tgt
+          - libs::xorg::libXft-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://invisible-island.net/archives/xterm/xterm-401.tgz
+    digestSHA256: 3da2b5e64cb49b03aa13057d85e62e1f2e64f7c744719c00d338d11cd3e6ca1a
+    stripComponents: 1
+
+buildScript: |
+    LDFLAGS="-ltinfo $LDFLAGS " autotoolsBuild $1 \
+       --enable-freetype \
+       --disable-malloc0returnsnull
+
+provideDeps: ['*-tgt']
+packageScript: autotoolsPackageBin

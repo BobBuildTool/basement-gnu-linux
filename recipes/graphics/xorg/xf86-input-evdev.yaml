@@ -1,0 +1,34 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "HPND-sell-variant AND MIT"
+    PKG_VERSION: "2.11.0"
+    PKG_DESCRIPTION: "X.Org evdev input driver"
+    PKG_LICENSE_FILE: "COPYING"
+
+depends:
+    - graphics::xorg::proto::xorgproto
+
+    - graphics::xorg::xserver-dev
+    - libs::mtdev-dev
+    - libs::libevdev-dev
+    - use: []
+      depends:
+          - libs::mtdev-tgt
+          - libs::libevdev-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/driver/xf86-input-evdev-${PKG_VERSION}.tar.xz
+    digestSHA256: 730022de934cc366bb12439daf202a7bfff52a028cf4573e457642e25a071315
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1 \
+       --with-xorg-conf-dir=/usr/share/X11/xorg.conf.d \
+       --with-sdkdir=/usr/share/sdk
+
+provideDeps: ['*-tgt']
+packageScript: |
+    autotoolsPackageTgt $1 /usr/share/X11/xorg.conf.d/10-evdev.conf \
+        "!/usr/share/sdk"
