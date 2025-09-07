@@ -1,0 +1,28 @@
+inherit: ["perl5::build", make, install]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Perl string CRC32 module"
+    PKG_VERSION: "2.100"
+    PKG_LICENSE: "Public Domain"
+
+checkoutSCM:
+    scm: url
+    url: https://cpan.metacpan.org/authors/id/L/LE/LEEJO/String-CRC32-${PKG_VERSION}.tar.gz
+    digestSHA1: "09a0dafc1bc49f7cc04122a6859eb007e86ec22c"
+    stripComponents: 1
+
+buildTools: [target-toolchain]
+buildScript: |
+    mkdir -p build && pushd build
+    rsync -a --delete $1/ .
+    perl Makefile.PL static
+
+    makeParallel
+    make install DESTDIR=$(pwd)/../install
+    popd
+
+multiPackage:
+    dev:
+        packageScript: installPackageDev $1/install/ "/usr/lib/***"
+    tgt:
+        packageScript: installPackageTgt $1/install/ "/usr/lib/***"
