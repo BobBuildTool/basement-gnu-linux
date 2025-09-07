@@ -1,0 +1,36 @@
+inherit: [install, make, "perl5::build"]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Perl memcached module"
+    PKG_VERSION: "1.30"
+    PKG_LICENSE: "GPL"
+
+depends:
+    - perl::string-crc32-dev
+    - use: []
+      depends:
+          - perl::string-crc32-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://cpan.metacpan.org/authors/id/D/DO/DORMANDO/Cache-Memcached-${PKG_VERSION}.tar.gz
+    digestSHA1: "e439c698a9ff17bba0eae06db39b6bb36fc6fa75"
+    stripComponents: 1
+
+buildTools: [target-toolchain]
+buildScript: |
+    mkdir -p build && pushd build
+    rsync -a --delete $1/ .
+    perl Makefile.PL static
+
+    makeParallel
+    makeSequential install DESTDIR=$(pwd)/../install
+    popd
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: installPackageDev $1/install/ "/usr/lib/***"
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: installPackageTgt $1/install/ "/usr/lib/***"

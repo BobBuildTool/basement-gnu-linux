@@ -111,6 +111,7 @@ depends:
     - net::tcpdump
     - net::wget
 
+    - perl::cache-memcached-tgt
     - perl::string-crc32-tgt
     - perl::xml-parser-tgt
 
