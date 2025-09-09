@@ -1,6 +1,6 @@
-diff -urN a/src/build-data/os/l4re.txt b/src/build-data/os/l4re.txt
+diff -Nurp a/src/build-data/os/l4re.txt b/src/build-data/os/l4re.txt
 --- a/src/build-data/os/l4re.txt	1970-01-01 01:00:00.000000000 +0100
-+++ b/src/build-data/os/l4re.txt	2024-06-19 15:06:43.729887023 +0200
++++ b/src/build-data/os/l4re.txt	2025-09-08 11:27:01.136720060 +0200
 @@ -0,0 +1,18 @@
 +soname_suffix "so"
 +
@@ -20,3 +20,14 @@ diff -urN a/src/build-data/os/l4re.txt b/src/build-data/os/l4re.txt
 +
 +<feature_macros>
 +</feature_macros>
+diff -Nurp a/src/lib/utils/dyn_load/info.txt b/src/lib/utils/dyn_load/info.txt
+--- a/src/lib/utils/dyn_load/info.txt	2025-02-05 08:30:54.000000000 +0100
++++ b/src/lib/utils/dyn_load/info.txt	2025-09-08 13:44:24.673414738 +0200
+@@ -16,6 +16,7 @@ win32
+ 
+ <libs>
+ android -> dl
++l4re -> dl
+ linux -> dl
+ solaris -> dl
+ macos -> dl
