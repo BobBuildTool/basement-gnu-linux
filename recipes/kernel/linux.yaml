@@ -26,18 +26,18 @@ buildScript: |
     export KCONFIG_NOTIMESTAMP=1
     export KBUILD_BUILD_TIMESTAMP='Mon Dec 28 22:49:40 CET 2015'
 
-    # Use plain "defconfig" if we have no specific target. Otherwise check if
-    # defconfig has changed.
+    LCFG=( "$1/linux" )
+
+    # Use plain "defconfig" if we have no specific target. Otherwise, pick up
+    # the requested config.
     if [[ ${LINUX_CUSTOM_CONFIG:+true} ]] ; then
         PKG="${LINUX_CUSTOM_CONFIG_PKG:-kernel::linux-custom-config}"
-        LCFG="${BOB_DEP_PATHS[$PKG]}/$LINUX_CUSTOM_CONFIG"
+        LCFG+=( "${BOB_DEP_PATHS[$PKG]}/$LINUX_CUSTOM_CONFIG" )
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
-        LCFG="${LINUX_CONFIG}"
-    else
-        LCFG="defconfig"
+        LCFG+=( "${LINUX_CONFIG}" )
     fi
 
-    linuxConfig $1/linux $LCFG
+    linuxConfig "${LCFG[@]}"
 
 multiPackage:
     "":
