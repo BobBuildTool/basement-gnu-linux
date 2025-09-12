@@ -1,0 +1,84 @@
+inherit: [meson, wayland-scanner, init]
+
+metaEnvironment:
+    PKG_VERSION: "14.0.2"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - libs::libpng-dev
+    - virtual::libs::libjpeg-dev
+    - virtual::libs::libegl-dev
+    - virtual::libs::libgles-dev
+    - virtual::libs::libdrm-dev
+    - libs::libxkbcommon-dev
+    - libs::libinput-dev
+    - libs::pixman-dev
+    - libs::cairo-dev
+    - libs::pango-dev
+    - libs::libdisplay-info-dev
+    - core::seatd-libseat-dev
+    - graphics::wayland::wayland-dev
+    - graphics::wayland::wayland-protocols
+
+    - use: []
+      depends:
+          - libs::libpng-tgt
+          - virtual::libs::libjpeg-tgt
+          - virtual::libs::libegl-tgt
+          - virtual::libs::libgles-tgt
+          - virtual::libs::libdrm-tgt
+          - libs::libxkbcommon-tgt
+          - libs::libinput-tgt
+          - libs::pixman-tgt
+          - libs::cairo-tgt
+          - libs::pango-tgt
+          - libs::libdisplay-info-tgt
+          - core::seatd-libseat-tgt
+          - graphics::wayland::wayland-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/wayland/weston/-/releases/${PKG_VERSION}/downloads/weston-${PKG_VERSION}.tar.xz
+    digestSHA1: f744163d71d046fa898bc4aa0df25a57c3ff470b
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Ddoc=false \
+        -Dtest-junit-xml=false \
+        -Dremoting=false \
+        -Dbackend-drm-screencast-vaapi=false \
+        -Dbackend-x11=false \
+        -Dbackend-vnc=false \
+        -Dbackend-rdp=false \
+        -Dbackend-pipewire=false \
+        -Dbackend-headless=false \
+        -Dscreenshare=false \
+        -Dxwayland=false \
+        -Dsystemd=false \
+        -Dpipewire=false \
+        -Dimage-webp=false \
+        -Dwcap-decode=false \
+        -Dcolor-management-lcms=false \
+        -Dtools=calibrator,debug,info,terminal,touch-calibrator \
+        -Dsimple-clients=all \
+        -Ddemo-clients=true \
+        -Dshell-desktop=true \
+        -Dshell-ivi=true \
+        -Dbackend-drm=true \
+        -Drenderer-gl=true
+
+        # install profile file
+        install -D -m 0644 $<@weston/weston.sh@> \
+            install/etc/profile.d/weston.sh
+
+        # add init script
+        if initIsAnySysvinit; then
+            install -D -m 0755 $<@weston/S80weston.sh@> \
+                install/etc/init.d/S80weston.sh
+        fi
+
+packageScript: |
+    mesonPackageTgt
+
+provideDeps: [ "*-tgt" ]
