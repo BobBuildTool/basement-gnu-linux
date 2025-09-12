@@ -1,0 +1,20 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "2.45"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-${PKG_VERSION}.tar.xz
+    digestSHA1: 1166b85b82ffb13ee1010563249a2edef718a3df
+    stripComponents: 1
+
+buildTools: [bison, m4, perl]
+buildScript: |
+    mesonBuild $1
+
+    ln -sf ../xkeyboard-config-2 install/usr/share/X11/xkb
+
+packageScript: |
+    mesonPackageTgt

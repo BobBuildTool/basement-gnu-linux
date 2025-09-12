@@ -10,6 +10,7 @@ depends:
     - use: []
       depends:
           - libs::libxml2-tgt
+          - graphics::xorg::xkeyboard-config
 
 checkoutSCM:
     scm: url
@@ -24,12 +25,11 @@ buildScript: |
         -Denable-tools=false \
         -Denable-wayland=true
 
-    # this will not work without this dir; even when X11 is disabled
-    mkdir -p install/usr/share/X11/xkb
-
 multiPackage:
     dev:
         packageScript: mesonPackageDev
 
     tgt:
         packageScript: mesonPackageTgt
+
+provideDeps: [ "*-tgt", "*xkeyboard-config" ]
