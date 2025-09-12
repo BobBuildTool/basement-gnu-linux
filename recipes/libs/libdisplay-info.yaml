@@ -1,0 +1,34 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "0.2.0"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - core::hwdata
+
+checkoutSCM:
+    scm: url
+    url: "https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/${PKG_VERSION}/downloads/\
+          libdisplay-info-${PKG_VERSION}.tar.xz"
+    digestSHA1: 87c1c2e9ece3c012e69633c778f7be5265187302
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1
+
+multiPackage:
+    "":
+        depends:
+            - name: libs::libdisplay-info-tgt
+              use: []
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt" ]
+
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*hwdata" ]
+
+    tgt:
+        packageScript: mesonPackageLib
+        provideDeps: [ "*hwdata" ]
