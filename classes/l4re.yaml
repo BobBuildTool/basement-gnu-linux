@@ -52,7 +52,7 @@ depends:
           - name: bsp::uboot-tools
             use: [tools]
 
-buildTools: [host-toolchain, target-toolchain, m4, flex, bison, dtc, uboot-tools]
+buildTools: [host-toolchain, target-toolchain, m4, flex, bison, perl, dtc, uboot-tools]
 buildVars: [CROSS_COMPILE]
 buildSetup: |
     # Add all dependencies to the l4re module search path
