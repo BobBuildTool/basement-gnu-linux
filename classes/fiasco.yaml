@@ -24,7 +24,7 @@
 
 inherit: [pkg-config, make]
 
-buildTools: [host-toolchain, target-toolchain, m4, flex, bison]
+buildTools: [host-toolchain, target-toolchain, m4, flex, bison, perl]
 buildVars: [CC, CXX, LD, CROSS_COMPILE]
 buildSetup: |
     # $1: source dir
