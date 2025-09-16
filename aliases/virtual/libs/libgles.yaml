@@ -1,0 +1,4 @@
+multiPackage:
+    "":  ${CONFIG_SELECT_LIBGLES:-libs::mesa3d}
+    dev: ${CONFIG_SELECT_LIBGLES:-libs::mesa3d}-dev
+    tgt: ${CONFIG_SELECT_LIBGLES:-libs::mesa3d}-tgt

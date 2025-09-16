@@ -1,0 +1,3 @@
+multiPackage:
+    dev: ${CONFIG_SELECT_LIBDRM:-libs::libdrm}-dev
+    tgt: ${CONFIG_SELECT_LIBDRM:-libs::libdrm}-tgt
