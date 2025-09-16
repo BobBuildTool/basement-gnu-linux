@@ -39,8 +39,9 @@ buildScript: |
     printf "auto lo\niface lo inet loopback\n" > install/etc/network/interfaces
 
     # add init script
-    if isAnySysvinit; then
-        install -D -m 0755 $<@ifupdown/S40network.sh@> install/etc/init.d/S40network.sh
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@ifupdown/S40network.sh@> \
+            install/etc/init.d/S40network.sh
     fi
 
 packageScript: |
