@@ -1,4 +1,4 @@
-inherit: [cpackage, make, install]
+inherit: [cpackage, make, install, init]
 
 metaEnvironment:
     PKG_VERSION: "2.90"
@@ -30,5 +30,11 @@ buildScript: |
 
     # required at runtime:
     mkdir -p install/var/lib/misc
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@dnsmasq/S80dnsmasq.sh@> \
+            install/etc/init.d/S80dnsmasq.sh
+    fi
 
 packageScript: installPackageTgt "$1/install/"
