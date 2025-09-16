@@ -1,0 +1,38 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "1.26.1"
+    PKG_LICENSE: "MIT"
+
+depends:
+    - libs::mtdev-dev
+    - libs::libevdev-dev
+    - virtual::core::udev-dev
+
+    - use: []
+      depends:
+          - libs::mtdev-tgt
+          - libs::libevdev-tgt
+          - virtual::core::udev-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab.freedesktop.org/libinput/libinput/-/archive/${PKG_VERSION}/libinput-${PKG_VERSION}.tar.bz2
+    digestSHA1: 1fe73b4e30d01e1d6b18b8815cc93316d1a51de3
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dtests=false \
+        -Ddocumentation=false \
+        -Ddebug-gui=false \
+        -Dlibwacom=false
+
+multiPackage:
+    dev:
+        packageScript: mesonPackageDev
+        provideDeps: [ "*-dev" ]
+
+    tgt:
+        packageScript: mesonPackageTgt
+        provideDeps: [ "*-tgt" ]

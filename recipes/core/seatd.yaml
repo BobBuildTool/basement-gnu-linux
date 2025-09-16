@@ -1,0 +1,40 @@
+inherit: [meson, init]
+
+metaEnvironment:
+    PKG_VERSION: "0.8.0"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: https://git.sr.ht/~kennylevinsen/seatd/archive/${PKG_VERSION}.tar.gz
+    digestSHA1: e33c99d9b0dce48f82618de2849ef3128305d28a
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dman-pages=disabled \
+        -Dexamples=disabled \
+        -Dwerror=false \
+        -Dlibseat-logind=disabled \
+        -Dlibseat-builtin=enabled
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@seatd/S70seatd.sh@> \
+            install/etc/init.d/S70seatd.sh
+    fi
+
+multiPackage:
+    "":
+        packageScript: mesonPackageBin
+
+    libseat:
+        multiPackage:
+            dev:
+                packageScript: mesonPackageDev
+            tgt:
+                depends:
+                    - name: core::seatd
+                      use: []
+                packageScript: mesonPackageLib
+                provideDeps: [ "core::seatd" ]

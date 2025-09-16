@@ -1,0 +1,38 @@
+inherit: [meson, cmake, wayland-scanner]
+
+metaEnvironment:
+    PKG_VERSION: "2023.01"
+    PKG_LICENSE: "GPL-3.0+, SGIv1"
+
+depends:
+    - libs::libpng-dev
+    - virtual::libs::libjpeg-dev
+    - virtual::libs::libegl-dev
+    - virtual::libs::libgles-dev
+    - virtual::libs::libdrm-dev
+    - graphics::wayland::wayland-protocols
+    - graphics::wayland::wayland-dev
+
+    - use: []
+      depends:
+          - libs::libpng-tgt
+          - virtual::libs::libjpeg-tgt
+          - virtual::libs::libegl-tgt
+          - virtual::libs::libgles-tgt
+          - virtual::libs::libdrm-tgt
+          - graphics::wayland::wayland-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/glmark2/glmark2/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 0493f28122fd01dd7398eb4b6726dd3236ef30d0
+    stripComponents: 1
+
+buildScript: |
+    mesonBuild $1 \
+        -Dflavors=drm-glesv2,wayland-glesv2
+
+packageScript: |
+    mesonPackageTgt
+
+provideDeps: [ "*-tgt" ]
