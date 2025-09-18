@@ -13,11 +13,11 @@ depends:
     - graphics::xorg::proto::xorgproto
     - graphics::xorg::utils::util-macros
 
-    - libs::xorg::libXtrans-dev
+    - libs::xorg::xtrans-dev
     - libs::xcb::libxcb-dev
     - use: []
       depends:
-          - libs::xorg::libXtrans-tgt
+          - libs::xorg::xtrans-tgt
           - libs::xcb::libxcb-tgt
 
 checkoutSCM:

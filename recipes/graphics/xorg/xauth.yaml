@@ -28,7 +28,6 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-    # export ACLOCAL_PATH="${ACLOCAL_PATH}:${BOB_DEP_PATHS['libs::xorg::xtrans-dev']}/usr/share/aclocal"
     autotoolsBuild $1 \
        --disable-malloc0returnsnull
 

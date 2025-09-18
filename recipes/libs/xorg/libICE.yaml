@@ -7,10 +7,10 @@ metaEnvironment:
 depends:
     - graphics::xorg::proto::xorgproto
     - graphics::xorg::utils::util-macros
-    - libs::xorg::libXtrans-dev
+    - libs::xorg::xrans-dev
     - use: []
       depends:
-          - libs::xorg::libXtrans-tgt
+          - libs::xorg::xtrans-tgt
 
 checkoutSCM:
     scm: url
