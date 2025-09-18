@@ -1,7 +1,7 @@
-inherit: [autotools]
+inherit: [cmake, python3]
 
 metaEnvironment:
-    PKG_VERSION: "2.44.1"
+    PKG_VERSION: "13.1.2"
 
 depends:
     - libs::cairo-dev
@@ -18,17 +18,20 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://www2.graphviz.org/Packages/stable/portable_source/graphviz-${PKG_VERSION}.tar.gz
-    digestSHA256: 8e1b34763254935243ccdb83c6ce108f531876d7a5dfd443f255e6418b8ea313
+    url: https://gitlab.com/graphviz/graphviz/-/archive/${PKG_VERSION}/graphviz-${PKG_VERSION}.tar.bz2
+    digestSHA256: c062e7ef870b2b2d0196076b601839316ede3a5a10efad2e9d9f2d3fbd9d57ca
     stripComponents: 1
 
+buildTools: [bison, flex]
 buildScript: |
-    export ac_cv_prog_PS2PDF="true"
-    export ac_cv_prog_GROFF="true"
-    autotoolsBuild $1
+    cmakeBuild $1 \
+      -DWITH_GVEDIT=OFF \
+      -DCMAKE_SKIP_INSTALL_RPATH=ON \
+      -DCMAKE_BUILD_RPATH_USE_ORIGIN=ON \
+      -Dwith_sfdp=OFF
 
 packageScript: |
-    autotoolsPackageTgt
+    cmakePackageTgt
 
 provideDeps: ["*-tgt"]
 

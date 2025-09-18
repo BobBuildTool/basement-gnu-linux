@@ -10,8 +10,7 @@ depends:
     - core::tz-data
     - core::tz-zic
 
-    #  FIXME: See https://github.com/BobBuildTool/basement-gnu-linux/issues/5
-    # - graphics::graphviz
+    - graphics::graphviz
     - graphics::fonts::dejavu
     - graphics::fonts::unicode
     - graphics::imagemagick
