@@ -7,7 +7,7 @@ metaEnvironment:
 depends:
     - graphics::xorg::proto::xorgproto
     - graphics::xorg::utils::util-macros
-    - libs::xorg::xrans-dev
+    - libs::xorg::xtrans-dev
     - use: []
       depends:
           - libs::xorg::xtrans-tgt
