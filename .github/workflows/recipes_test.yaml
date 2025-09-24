@@ -1,0 +1,18 @@
+name: recipes-test
+description: Run bob ls on test recipes
+"on": [push, pull_request]
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Bob
+              run: python -m pip install BobBuildTool
+
+            - name: Fetch layers
+              run: bob -C tests/buildall layers update
+
+            - name: Run bob ls
+              run: bob -C tests/buildall ls
