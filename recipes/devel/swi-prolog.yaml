@@ -1,0 +1,54 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "SWI Prolog"
+    PKG_LICENSE: "BSD-2-Clause"
+    PKG_VERSION: "9.2.9"
+
+depends:
+    - libs::gmp-dev
+    - libs::pcre2-dev
+    - libs::openssl-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::gmp-tgt
+          - libs::pcre2-tgt
+          - libs::openssl-tgt
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.swi-prolog.org/download/stable/src/swipl-${PKG_VERSION}.tar.gz
+    digestSHA256: "53f428e2d9bbdf30e53b06c9c42def9a13ff82fc36a111d410fc8b0bc889ee2d"
+    stripComponents: 1
+
+buildTools: [host-toolchain]
+buildVars: [CC, CXX]
+buildScript: |
+    cmakeBuild $1 \
+        -DOPENSSL_OS_LIBS="-lz" \
+        -DINSTALL_DOCUMENTATION=OFF \
+        -DSKIP_SSL_TESTS=ON \
+        -DINSTALL_TESTS=OFF \
+        -DSWIPL_INSTALL_IN_LIB=ON \
+        -DSWIPL_SHARED_LIB=OFF \
+        -DSWIPL_STATIC_LIB=ON \
+        -DSWIPL_PACKAGES=OFF \
+        -DSWIPL_PACKAGE_LIST='clib;http;pcre;plunit;sgml' \
+        -DSWIPL_CC="${CC}" \
+        -DSWIPL_CXX="${CXX}" \
+        -DCMAKE_HOST_CC="gcc" \
+        -DCMAKE_HOST_CXX="g++" \
+        -DRUN_RESULT=0 \
+        -DRUN_RESULT__TRYRUN_OUTPUT="" \
+        -DHAVE_WEAK_ATTRIBUTE_EXITCODE=0 \
+        -DHAVE_WEAK_ATTRIBUTE_EXITCODE__TRYRUN_OUTPUT=""
+
+packageScript: |
+    cmakePackageBin
+
+provideTools:
+    swiProlog:
+        path: "usr/bin"
+        libs: [ "usr/lib/swipl/lib/x86_64-linux" ]

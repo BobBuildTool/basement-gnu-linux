@@ -12,6 +12,7 @@ depends:
           - devel::nasm
           - devel::rpcsvc-proto
           - devel::squashfs-tools
+          - devel::swi-prolog
 
     - name: libs::protobuf
       use: [tools]
