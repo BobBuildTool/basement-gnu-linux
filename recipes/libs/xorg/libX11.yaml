@@ -10,8 +10,8 @@ depends:
       tools:
           target-toolchain: host-compat-toolchain
 
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto-dev
+    - graphics::xorg::utils::util-macros-dev
 
     - libs::xorg::xtrans-dev
     - libs::xcb::libxcb-dev
@@ -29,7 +29,7 @@ checkoutSCM:
 buildTools: [host-toolchain, libxslt-tools]
 buildScript: |
     autotoolsBuild $1 --disable-xf86bigfont \
-       --with-keysymdefdir=${BOB_DEP_PATHS['graphics::xorg::proto::xorgproto']}/usr/include/X11 \
+       --with-keysymdefdir=${BOB_DEP_PATHS['graphics::xorg::proto::xorgproto-dev']}/usr/include/X11 \
        --disable-malloc0returnsnull
 
 multiPackage:

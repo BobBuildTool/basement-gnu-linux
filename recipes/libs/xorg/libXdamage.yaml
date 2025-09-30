@@ -8,7 +8,6 @@ metaEnvironment:
                 Copyright © 2007 Eric Anholt"
 
 depends:
-    - graphics::xorg::proto::xorgproto
     - libs::xorg::libXfixes-dev
     - use: []
       depends:

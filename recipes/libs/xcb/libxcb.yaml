@@ -6,8 +6,8 @@ metaEnvironment:
 
 depends:
     - graphics::xcb::xcb-proto
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto-dev
+    - graphics::xorg::utils::util-macros-dev
 
     - libs::xcb::pthread-stubs-dev
     - libs::xorg::libXau-dev

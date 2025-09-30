@@ -7,8 +7,6 @@ metaEnvironment:
 
 depends:
     - graphics::xorg::xserver-dev
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
 
 checkoutSCM:
     scm: url

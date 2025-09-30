@@ -7,8 +7,6 @@ metaEnvironment:
     LICENCE_FILE: "COPYING"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - core::util-linux-dev
     - libs::xcb::libxcb-dev
     - libs::xorg::libICE-dev

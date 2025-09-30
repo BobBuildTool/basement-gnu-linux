@@ -12,5 +12,7 @@ checkoutSCM:
 buildScript: |
     autotoolsBuild $1
 
-packageScript: |
-    autotoolsPackageDev
+multiPackage:
+    dev:
+        packageScript: |
+            autotoolsPackageDev

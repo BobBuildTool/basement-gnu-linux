@@ -12,9 +12,6 @@ checkoutSCM:
     stripComponents: 1
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - graphics::xorg::xkbcomp-dev
     - graphics::fonts::font-util-dev
     - libs::libepoxy-dev

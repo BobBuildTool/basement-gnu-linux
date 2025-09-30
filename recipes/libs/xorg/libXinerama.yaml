@@ -4,9 +4,6 @@ metaEnvironment:
     PKG_VERSION: "1.1.5"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - libs::xorg::libX11-dev
     - libs::xorg::libXext-dev
     - use: []
