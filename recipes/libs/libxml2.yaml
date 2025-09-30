@@ -1,13 +1,13 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "2.13.3"
+    PKG_VERSION: "2.15.1"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
-    url: https://download.gnome.org/sources/libxml2/2.13/libxml2-${PKG_VERSION}.tar.xz
-    digestSHA1: 170889cc11c53a96b18e6957f07ec6f823cad2c6
+    url: https://download.gnome.org/sources/libxml2/2.15/libxml2-${PKG_VERSION}.tar.xz
+    digestSHA256: c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c
     stripComponents: 1
 
 depends:
