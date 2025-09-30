@@ -11,7 +11,8 @@ checkoutSCM:
     stripComponents: 1
 
 depends:
-    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::proto::xorgproto-dev
+    - graphics::xorg::utils::util-macros-dev
 
 buildScript: |
     autotoolsBuild $1 \
@@ -19,6 +20,7 @@ buildScript: |
 
 multiPackage:
     dev:
+        provideDeps: ['*-dev']
         packageScript: autotoolsPackageDev
     tgt:
         packageScript: autotoolsPackageTgt

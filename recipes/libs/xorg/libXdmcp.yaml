@@ -11,13 +11,14 @@ checkoutSCM:
     stripComponents: 1
 
 depends:
-    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::proto::xorgproto-dev
 
 buildScript: |
     autotoolsBuild $1
 
 multiPackage:
     dev:
+        provideDeps: ['*-dev']
         packageScript: autotoolsPackageDev
     tgt:
         packageScript: autotoolsPackageTgt

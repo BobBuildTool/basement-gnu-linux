@@ -6,8 +6,6 @@ metaEnvironment:
     PKG_LICENSE_FILE: "COPYING"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - libs::xorg::libX11-dev
     - libs::xorg::libXmu-dev
     - use: []
