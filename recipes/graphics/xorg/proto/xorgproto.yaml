@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
     PKG_VERSION: "2024.1"
@@ -10,9 +10,9 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-    autotoolsBuild $1
+    mesonBuild $1
 
 multiPackage:
     dev:
         packageScript: |
-            autotoolsPackageDev
+            mesonPackageDev
