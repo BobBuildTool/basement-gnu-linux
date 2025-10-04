@@ -30,8 +30,10 @@ depends:
           target-toolchain: host-compat-toolchain
       use: [tools]
       depends:
-          - kernel::kmod
-          - utils::brtools
+          - name: kernel::kmod
+            alias: kernel::kmod+host
+          - name: utils::brtools
+            alias: utils::brtools+host
 
 buildToolsWeak: [kmod, brtools]
 buildVars: [CONFIG_HOSTNAME, CONFIG_TZ, CONFIG_ROOT_PW, CONFIG_ROOT_PW_SALT]
