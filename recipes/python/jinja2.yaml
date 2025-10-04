@@ -1,0 +1,22 @@
+inherit: ["python3::flit"]
+
+metaEnvironment:
+    PKG_VERSION: "3.1.6"
+
+checkoutSCM:
+    scm: url
+    url: https://files.pythonhosted.org/packages/source/j/jinja2/jinja2-${PKG_VERSION}.tar.gz
+    digestSHA256: 0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d
+    stripComponents: 1
+
+depends: &deps
+    - python::markupsafe
+
+buildScript: |
+    python3BuildFlit $1
+
+packageScript: |
+    python3PackageTgt
+
+# Beware: the python3::flit class adds build time dependencies!
+provideDeps: *deps
