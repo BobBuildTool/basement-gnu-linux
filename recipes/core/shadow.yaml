@@ -1,0 +1,39 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "4.15.1"
+    PKG_LICENSE: BSD-3-Clause
+
+depends:
+    - libs::libxcrypt-dev
+
+    - use: []
+      depends:
+          - libs::libxcrypt-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/shadow-maint/shadow/releases/download/${PKG_VERSION}/shadow-${PKG_VERSION}.tar.xz
+    digestSHA256: bb5f70639a0581f9d626f227ce45b31ac137daa7c451c0f672ce14f2731a96ee
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild "$1" \
+        --disable-man \
+        --without-btrfs \
+        --without-nscd \
+        --without-skey \
+        --without-sssd \
+        --without-su \
+        --without-tcb \
+        --with-sha-crypt --without-libbsd
+
+packageScript: |
+    autotoolsPackageTgt "$1"
+    mv bin/* usr/bin/
+    mv bin/.debug/* usr/bin/.debug/
+    mv sbin/* usr/sbin/
+    mv sbin/.debug/* usr/sbin/.debug/
+    rm -rf bin sbin
+
+provideDeps: ["*-tgt"]
