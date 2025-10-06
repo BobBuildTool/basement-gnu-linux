@@ -1,0 +1,31 @@
+inherit: [cpackage, install, make]
+
+metaEnvironment:
+    PKG_VERSION: "3.41"
+    PKG_LICENSE: "COPYING MORAL-LICENSE"
+
+depends:
+    - libs::zlib-dev
+
+    - use: []
+      depends:
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/axboe/fio/archive/refs/tags/fio-${PKG_VERSION}.tar.gz
+    digestSHA1: 4806a6f377d1007ae378839dcff0a1f911172445
+    stripComponents: 1
+
+buildVars: [CC]
+buildScript: |
+    mkdir -p build
+    cd build
+    $1/configure --disable-native --cc="$CC" --extra-cflags="$CFLAGS" \
+        --prefix=$BOB_CWD/install/usr
+
+    makeParallel SRCDIR=$1 \
+       install
+
+packageScript: installPackageBin "$1/install/"
+provideDeps: [ "*-tgt" ]
