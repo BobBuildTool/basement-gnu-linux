@@ -1,4 +1,4 @@
 multiPackage:
-    "":  ${CONFIG_SELECT_UDEV:-core::eudev}
-    dev: ${CONFIG_SELECT_UDEV:-core::eudev}-dev
-    tgt: ${CONFIG_SELECT_UDEV:-core::eudev}-tgt
+    "":  ${CONFIG_SELECT_UDEV:-$(if-then-else,$(eq,${CONFIG_INIT:-},systemd),core::systemd,core::eudev)}
+    dev: ${CONFIG_SELECT_UDEV:-$(if-then-else,$(eq,${CONFIG_INIT:-},systemd),core::systemd-libudev,core::eudev)}-dev
+    tgt: ${CONFIG_SELECT_UDEV:-$(if-then-else,$(eq,${CONFIG_INIT:-},systemd),core::systemd-libudev,core::eudev)}-tgt
