@@ -78,7 +78,24 @@ buildScript: |
                 install/etc/init.d/S80weston.sh
         fi
 
-packageScript: |
-    mesonPackageTgt
+multiPackage:
+    "":
+        depends:
+            - name: graphics::wayland::weston-libweston-tgt
+              use: []
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt" ]
 
-provideDeps: [ "*-tgt" ]
+    libweston:
+        multiPackage:
+            dev:
+                packageScript: |
+                    mesonPackageDev "$1" \
+                        "/usr/" "/usr/share/" \
+                        "/usr/share/libweston-14/" \
+                        "/usr/share/libweston-14/protocols/"
+                provideDeps: [ "*-dev" ]
+
+            tgt:
+                packageScript: mesonPackageLib
+                provideDeps: [ "*-tgt" ]
