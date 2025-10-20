@@ -1,0 +1,20 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_VERSION: "4.25.9.0"
+    PKG_LICENSE: "GPL-2.0+"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/inotify-tools/inotify-tools/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: "d33a4fd24c72c2d08893f129d724adf725b93dae96c359e4f4e9f32573cc853b"
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    autoconfReconfigure
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: autotoolsPackageTgt
