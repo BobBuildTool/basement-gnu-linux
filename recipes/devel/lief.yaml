@@ -1,0 +1,37 @@
+inherit: [cmake, python3]
+
+metaEnvironment:
+    PKG_VERSION: "0.17.1"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/lief-project/LIEF/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 9dea0f09c7b98e8d0c9a47f8629fbd1646ddc9bf1cae7c2f4ce42fe8934dc315
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild -m pyLIEF $1 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DLIEF_PYTHON_API=on \
+        -DLIEF_USE_CCACHE=off \
+        -DLIEF_EXAMPLES=off \
+        -DCMAKE_FIND_ROOT_PATH="/"
+
+    mkdir -p install/${PYTHON3_DESTLIB}/site-packages/lief
+    cp build/api/python/_lief.so install/${PYTHON3_DESTLIB}/site-packages/lief/
+    echo "from ._lief import *" > install/${PYTHON3_DESTLIB}/site-packages/lief/__init__.py
+
+multiPackage:
+    libLIEF:
+        multiPackage:
+            dev:
+                packageScript: cmakePackageDev
+            tgt:
+                packageScript: cmakePackageLib
+    python:
+        depends:
+            - name: devel::lief-libLIEF-tgt
+              use: []
+        packageScript: |
+            mkdir -p usr/lib
+            rsync -a --delete $1/install/usr/lib/python* usr/lib/
