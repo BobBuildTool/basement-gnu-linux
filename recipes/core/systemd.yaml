@@ -1,0 +1,184 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_VERSION: "v257.7"
+    PKG_LICENSE: "LGPL-2.1+"
+
+Config:
+    SYSTEMD_ANALYZE:
+        type: bool
+        default: false
+    SYSTEMD_COREDUMP:
+        type: bool
+        default: false
+    SYSTEMD_HWDB:
+        type: bool
+        default: false
+    SYSTEMD_LOGIND:
+        type: bool
+        default: false
+    SYSTEMD_NETWORKD:
+        type: bool
+        default: false
+    SYSTEMD_RESOLVD:
+        type: bool
+        default: false
+    SYSTEMD_UTMP:
+        type: bool
+        default: false
+    SYSTEMD_VCONSOLE:
+        type: bool
+        default: true
+
+depends:
+    - name: devel::gperf
+      use: [tools]
+      tools:
+          target-toolchain: host-compat-toolchain
+
+    - libs::libcap-dev
+    - core::util-linux-dev
+    - kernel::kmod-lib-dev
+    - libs::libxcrypt-dev
+    - python::jinja2
+    - use: []
+      depends:
+          - libs::libcap-tgt
+          - core::util-linux-tgt
+          - kernel::kmod-lib-tgt
+          - libs::libxcrypt-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/systemd/systemd/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA1: 508c4cae4a78fb84d2daf0fe31412cc5c6177460
+    stripComponents: 1
+
+buildTools: [gperf]
+buildVars:
+    - SYSTEMD_ANALYZE
+    - SYSTEMD_COREDUMP
+    - SYSTEMD_HWDB
+    - SYSTEMD_LOGIND
+    - SYSTEMD_NETWORKD
+    - SYSTEMD_RESOLVD
+    - SYSTEMD_UTMP
+    - SYSTEMD_VCONSOLE
+buildScript: |
+    BOOL=( false true )
+    FEATURE=( disabled enabled )
+
+    OPTS=(
+        # Make sure that no (new) features are enabled automatically...
+        -Dauto_features=disabled
+        -Dmode=release
+
+        # Fix paths. Otherwise $PATH is searched! m(
+        -Dquotaon-path=/usr/sbin/quotaon
+        -Dquotacheck-path=/usr/sbin/quotacheck
+        -Dkmod-path=/usr/bin/kmod
+        -Dkexec-path=/usr/sbin/kexec
+        -Dsulogin-path=/usr/sbin/sulogin
+        -Dmount-path=/usr/bin/mount
+        -Dumount-path=/usr/bin/umount
+        -Dloadkeys-path=/usr/bin/loadkeys
+        -Dsetfont-path=/usr/bin/setfont
+        -Dnologin-path=/usr/sbin/nologin
+
+        # Feature switches
+        -Danalyze=${BOOL[$SYSTEMD_ANALYZE]}
+        -Dcoredump=${BOOL[$SYSTEMD_COREDUMP]}
+        -Dhwdb=${BOOL[$SYSTEMD_HWDB]}
+        -Dlogind=${BOOL[$SYSTEMD_LOGIND]}
+        -Dnetworkd=${BOOL[$SYSTEMD_NETWORKD]}
+        -Dresolve=${BOOL[$SYSTEMD_RESOLVD]}
+        -Dutmp=${BOOL[$SYSTEMD_UTMP]}
+        -Dvconsole=${BOOL[$SYSTEMD_VCONSOLE]}
+
+        # Static feature switches.
+        -Dkmod=enabled
+
+        # Static boolean switches.
+        -Dnss-systemd=true
+        -Dtmpfiles=true
+
+        -Dadm-group=false
+        -Dbacklight=false
+        -Dbinfmt=false
+        -Defi=false
+        -Denvironment-d=false
+        -Dfirstboot=false
+        -Dgshadow=false
+        -Dhibernate=false
+        -Dhostnamed=false
+        -Didn=false
+        -Dima=false
+        -Dinitrd=false
+        -Dipe=false
+        -Dkernel-install=false
+        -Dldconfig=false
+        -Dlocaled=false
+        -Dmachined=false
+        -Dmountfsd=false
+        -Dnsresourced=false
+        -Dnss-myhostname=false
+        -Doomd=false
+        -Dportabled=false
+        -Dpstore=false
+        -Dquotacheck=false
+        -Drandomseed=false
+        -Drfkill=false
+        -Dsmack=false
+        -Dstoragetm=false
+        -Dsysext=false
+        -Dsysusers=false
+        -Dtests=false
+        -Dtimedated=false
+        -Dtimesyncd=false
+        -Dtpm=false
+        -Duserdb=false
+        -Dwheel-group=false
+        -Dxdg-autostart=false
+
+        -Dsystem-gid-max=999
+        -Dsystem-uid-max=999
+    )
+
+    mkdir -p systemd
+    pushd systemd
+    mesonBuild "$1" "${OPTS[@]}"
+    popd
+
+    rm -rf libudev libsystemd
+
+    # libudev
+    mkdir -p libudev/install/usr/{include,lib/pkgconfig}
+    mv systemd/install/usr/include/libudev.h libudev/install/usr/include/
+    mv systemd/install/usr/lib/pkgconfig/libudev.pc libudev/install/usr/lib/pkgconfig/
+    mv systemd/install/usr/lib/libudev.* libudev/install/usr/lib/
+
+    # libsystemd
+    mkdir -p libsystemd/install/usr/{include,lib/pkgconfig}
+    mv systemd/install/usr/include/systemd/ libsystemd/install/usr/include/
+    mv systemd/install/usr/lib/pkgconfig/libsystemd.pc libsystemd/install/usr/lib/pkgconfig/
+    mv systemd/install/usr/lib/libsystemd.* libsystemd/install/usr/lib/
+
+multiPackage:
+    "":
+        packageScript: |
+            mesonPackageTgt "$1/systemd"
+        provideDeps: [ "*-tgt" ]
+
+    libudev:
+        multiPackage:
+            dev:
+                packageScript: mesonPackageDev "$1/libudev"
+            tgt:
+                packageScript: mesonPackageLib "$1/libudev"
+
+    libsystemd:
+        multiPackage:
+            dev:
+                packageScript: mesonPackageDev "$1/libsystemd"
+            tgt:
+                packageScript: mesonPackageLib "$1/libsystemd"
