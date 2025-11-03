@@ -6,7 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "library for handling OpenGL function pointer management"
 
 depends:
-    - graphics::xorg::proto::xorgproto
     - libs::xorg::libX11-dev
     - libs::mesa3d-dev
     - use: []

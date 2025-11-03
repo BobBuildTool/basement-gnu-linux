@@ -6,8 +6,7 @@ metaEnvironment:
     PKG_DESCRIPTION: "XCB util modules"
 
 depends:
-    - graphics::xorg::utils::util-macros
-    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::utils::util-macros-dev
     - libs::xcb::libxcb-dev
     - use: []
       depends:

@@ -5,6 +5,9 @@ metaEnvironment:
     PKG_VERSION: "1.6.0"
     PKG_DESCRIPTION: "X transport library"
 
+depends:
+    - graphics::xorg::utils::util-macros-dev
+
 checkoutSCM:
     scm: url
     url: https://xorg.freedesktop.org/releases/individual/lib/xtrans-${PKG_VERSION}.tar.xz

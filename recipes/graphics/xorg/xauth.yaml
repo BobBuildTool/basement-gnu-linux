@@ -6,8 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X.Org authorization settings program"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - libs::xorg::xtrans-dev
     - libs::xorg::libX11-dev
     - libs::xorg::libXext-dev

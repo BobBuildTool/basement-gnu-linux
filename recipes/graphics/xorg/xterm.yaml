@@ -6,8 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X terminal emulator"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - libs::freetype-dev
     - libs::ncurses-dev
     - libs::xorg::libX11-dev

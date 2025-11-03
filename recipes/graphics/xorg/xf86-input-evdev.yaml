@@ -7,8 +7,6 @@ metaEnvironment:
     PKG_LICENSE_FILE: "COPYING"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - graphics::xorg::xserver-dev
     - libs::mtdev-dev
     - libs::libevdev-dev

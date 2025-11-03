@@ -6,8 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X11 Pixmap library"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - libs::xorg::libX11-dev
     - libs::xorg::libXext-dev
     - libs::xorg::libXt-dev

@@ -5,8 +5,8 @@ metaEnvironment:
     PKG_VERSION: "1.1.2"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
+    - graphics::xorg::proto::xorgproto-dev
+    - graphics::xorg::utils::util-macros-dev
     - libs::xorg::xtrans-dev
     - use: []
       depends:

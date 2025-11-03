@@ -5,6 +5,9 @@ metaEnvironment:
     PKG_DESCRIPTION: "X.Org font utilities"
     PKG_LICENCE_FILE: "COPYING"
 
+depends:
+    - graphics::xorg::utils::util-macros-dev
+
 checkoutSCM:
     scm: url
     url: https://xorg.freedesktop.org/releases/individual/font/font-util-${PKG_VERSION}.tar.xz
@@ -16,6 +19,7 @@ buildScript: |
 
 multiPackage:
     dev:
+        provideDeps: ['*-dev']
         packageScript: autotoolsPackageDev $1 "/usr/share/***"
 
     tgt:
