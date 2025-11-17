@@ -15,11 +15,9 @@ checkoutSCM:
 checkoutDeterministic: True
 checkoutScript: |
     patchApplySeries $<<python/*>>
-    autoconfReconfigure
 
 buildScript: |
-    mkdir -p src
-    rsync -aH --delete $1/ src/
+    autoconfSyncReconfigure $1 src
 
 multiPackage:
     "":
