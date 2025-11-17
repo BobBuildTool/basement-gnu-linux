@@ -3,7 +3,8 @@ inherit: [autotools]
 metaEnvironment:
     PKG_VERSION: "1.4.7"
     PKG_DESCRIPTION: "X Keyboard description compiler"
-    PKG_LICENSE_FILE: "COPYING"
+    PKG_LICENSE: "LicenseRef-xkbcomp"
+    PKG_LICENSE_PATH: "xkbcomp:COPYING"
 
 depends:
     - graphics::xorg::proto::xorgproto

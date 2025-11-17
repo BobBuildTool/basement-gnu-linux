@@ -1,10 +1,10 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_LICENSE: "HPND-sell-variant AND MIT"
+    PKG_LICENSE: "HPND-sell-variant AND MIT AND LicenseRef-xf86-input-evdev"
+    PKG_LICENSE_PATH: "xf86-input-evdev:COPYING"
     PKG_VERSION: "2.11.0"
     PKG_DESCRIPTION: "X.Org evdev input driver"
-    PKG_LICENSE_FILE: "COPYING"
 
 depends:
     - graphics::xorg::proto::xorgproto

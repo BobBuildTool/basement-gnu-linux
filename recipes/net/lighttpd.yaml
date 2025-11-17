@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "1.4.54"
+    PKG_LICENSE: "BSD-3-Clause"
 
 depends:
     - libs::openssl-dev

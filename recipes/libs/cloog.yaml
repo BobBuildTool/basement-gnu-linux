@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "0.21.1"
+    PKG_LICENSE: "LGPL-2.1-or-later"
 
 depends:
     - libs::gmp-dev

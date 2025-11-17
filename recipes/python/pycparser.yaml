@@ -1,5 +1,8 @@
 inherit: [ "python3::pip" ]
 
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause"
+
 buildNetAccess: True
 buildScript: |
     python3InstallPip \

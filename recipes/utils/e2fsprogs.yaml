@@ -2,6 +2,7 @@ inherit: [autotools, patch]
 
 metaEnvironment:
     PKG_VERSION: "1.47.1"
+    PKG_LICENSE: "MIT AND GPL-2.0-only AND LPG-2.0-only AND BSD-3-Clause"
 
 checkoutSCM:
     scm: url

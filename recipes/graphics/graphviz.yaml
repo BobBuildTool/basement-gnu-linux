@@ -2,6 +2,7 @@ inherit: [cmake, python3]
 
 metaEnvironment:
     PKG_VERSION: "13.1.2"
+    PKG_LICENSE: "EPL-1.0"
 
 depends:
     - libs::cairo-dev

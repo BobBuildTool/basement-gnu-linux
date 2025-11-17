@@ -1,6 +1,9 @@
+inherit: [licenses]
+
 metaEnvironment:
     PKG_DESCRIPTION: "Intel Processor Microcode Package for Linux"
-    PKG_LICENSE_FILE: "license"
+    PKG_LICENSE: "LicenseRef-intel-microcode"
+    PKG_LICENSE_PATH: "intel-microcode:license"
     PKG_VERSION: "20250211"
 
 checkoutSCM:

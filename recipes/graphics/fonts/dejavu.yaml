@@ -2,6 +2,9 @@ inherit: [install]
 
 metaEnvironment:
     PKG_VERSION: "2.37"
+    PKG_LICENSE: "LicenseRef-fontDejavu"
+    PKG_LICENSE_PATH:
+        fontDejavu:LICENSE
 
 checkoutSCM:
     scm: url

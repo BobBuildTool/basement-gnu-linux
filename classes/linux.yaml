@@ -57,7 +57,7 @@
 #          buildScript: linuxBuildHeaders
 #          packageScript: linuxInstallHeaders $1
 #
-inherit: [cpackage, make, pkg-config]
+inherit: [cpackage, make, pkg-config, licenses]
 
 depends:
     - tools:

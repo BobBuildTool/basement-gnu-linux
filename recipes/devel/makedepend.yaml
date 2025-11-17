@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "1.0.5"
+    PKG_LICENSE: "MIT-open-group AND HPND"
 
 depends:
     - graphics::xorg::proto::xorgproto

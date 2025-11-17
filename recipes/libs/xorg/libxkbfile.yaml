@@ -3,7 +3,8 @@ inherit: [autotools]
 metaEnvironment:
     PKG_VERSION: "1.1.3"
     PKG_DESCRIPTION: "X11 keyboard file manipulation library"
-    PKG_LICENSE_FILE: "COPYING"
+    PKG_LICENSE: "LicenseRef-libxkbfile"
+    PKG_LICENSE_PATH: "libxkbfile:COPYING"
 
 depends:
     - graphics::xorg::proto::xorgproto

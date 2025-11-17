@@ -2,6 +2,7 @@ inherit: ["python3::build"]
 
 metaEnvironment:
     PKG_VERSION: "2022.06.26"
+    PKG_LICENSE: "Apache-2.0"
 
 checkoutSCM:
     scm: url
