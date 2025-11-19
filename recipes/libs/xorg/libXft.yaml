@@ -6,7 +6,7 @@ metaEnvironment:
     PKG_DESCRIPTION: "FreeType-based font drawing library for X"
 
 depends:
-    - graphics::xorg::proto::xorgproto
+    - graphics::xorg::proto::xorgproto-dev
 
     - libs::freetype-dev
     - libs::fontconfig-dev

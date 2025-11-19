@@ -6,9 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X11 font rasterisation library"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - libs::xorg::xtrans-dev
     - libs::xorg::libfontenc-dev
     - libs::freetype-dev

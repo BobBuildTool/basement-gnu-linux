@@ -5,9 +5,6 @@ metaEnvironment:
     PKG_VERSION: "1.2.6"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - libs::xorg::libICE-dev
     - use: []
       depends:

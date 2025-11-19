@@ -13,5 +13,7 @@ checkoutSCM:
 buildScript: |
     autotoolsBuild $1
 
-packageScript: |
-    autotoolsPackageDev $1 "usr/share/***"
+multiPackage:
+    dev:
+        packageScript: |
+            autotoolsPackageDev $1 "usr/share/***"

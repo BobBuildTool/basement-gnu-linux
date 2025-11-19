@@ -6,9 +6,7 @@ metaEnvironment:
     PKG_DESCRIPTION: "Utility libraries for XC Binding - client and window-manager helpers for ICCCM"
 
 depends:
-    - graphics::xorg::utils::util-macros
-    - graphics::xorg::proto::xorgproto
-
+    - graphics::xorg::utils::util-macros-dev
     - libs::xcb::libxcb-dev
     - libs::xcb::util-dev
     - use: []

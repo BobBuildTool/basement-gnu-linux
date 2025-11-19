@@ -6,9 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "Utility libraries for XC Binding - Standard X key constants and conversion to/from keycodes"
 
 depends:
-    - graphics::xorg::utils::util-macros
-    - graphics::xorg::proto::xorgproto
-
     - libs::xcb::libxcb-dev
     - use: []
       depends:

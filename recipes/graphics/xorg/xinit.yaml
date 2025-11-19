@@ -6,8 +6,6 @@ metaEnvironment:
     PKG_LICENSE: "MIT-open-group, X11-distribute-modifications-variant"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-
     - libs::xorg::libX11-dev
     - use: []
       depends:

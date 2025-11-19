@@ -6,9 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X11 Input Extension Library"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - libs::xorg::libX11-dev
     - libs::xorg::libXext-dev
     - libs::xorg::libXfixes-dev

@@ -6,9 +6,6 @@ metaEnvironment:
     PKG_DESCRIPTION: "X11 video extension library"
 
 depends:
-    - graphics::xorg::proto::xorgproto
-    - graphics::xorg::utils::util-macros
-
     - libs::xorg::libX11-dev
     - libs::xorg::libXext-dev
     - use: []
