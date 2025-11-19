@@ -7,8 +7,8 @@ metaEnvironment:
 
 checkoutSCM:
     scm: url
-    url: https://pagure.io/libaio/archive/libaio-${PKG_VERSION}/libaio-${PKG_VERSION}.tar.gz
-    digestSHA256: 1c561c20670c5c09cc8437a622008c0693c6a7816c1f30332da3796953b2f454
+    url: https://releases.pagure.org/libaio/libaio-${PKG_VERSION}.tar.gz
+    digestSHA256: 2c44d1c5fd0d43752287c9ae1eb9c023f04ef848ea8d4aafa46e9aedb678200b
     stripComponents: 1
 
 buildVars: [CC, AR, RANLIB]
