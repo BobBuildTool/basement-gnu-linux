@@ -2,7 +2,8 @@ inherit: [cmake]
 
 metaEnvironment:
     PKG_VERSION: "20.1.2"
-    PKG_LICENSE_FILE: "LICENSE.TXT"
+    PKG_LICENSE: "LicenseRef-spirv-llvm-trans"
+    PKG_LICENSE_PATH: "spirv-llvm-trans:LICENSE.TXT"
 
 depends:
     - devel::llvm-libs-dev

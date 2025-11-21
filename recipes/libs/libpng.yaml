@@ -2,6 +2,9 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "1.6.47"
+    PKG_LICENSE: "LicenseRef-libpng"
+    PKG_LICENSE_PATH: |
+        libpng:LICENSE
 
 depends:
     - libs::zlib-dev

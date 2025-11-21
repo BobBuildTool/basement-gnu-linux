@@ -2,6 +2,9 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "2.0.13"
+    PKG_LICENSE: "LicenseRef-iperf"
+    PKG_LICENSE_PATH:
+        iperf:COPYING
 
 depends:
     - use: []

@@ -2,6 +2,7 @@ inherit: [meson]
 
 metaEnvironment:
     PKG_VERSION: "1.18.0"
+    PKG_LICENSE: "LGPL-2.1-only OR MPL-1.1"
 
 depends:
     - libs::glib-dev

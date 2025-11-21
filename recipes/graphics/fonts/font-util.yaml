@@ -3,7 +3,9 @@ inherit: [autotools]
 metaEnvironment:
     PKG_VERSION: "1.4.1"
     PKG_DESCRIPTION: "X.Org font utilities"
-    PKG_LICENCE_FILE: "COPYING"
+    PKG_LICENSE: "LicenseRef-fontutil"
+    PKG_LICENSE_PATH: |
+        fontutil:COPYING
 
 checkoutSCM:
     scm: url

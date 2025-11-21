@@ -12,6 +12,7 @@ depends:
 
 metaEnvironment:
     PKG_VERSION: "6.15.2"
+    PKG_LICENSE: "GPL-2.0-only"
 
 checkoutSCM:
     scm: url

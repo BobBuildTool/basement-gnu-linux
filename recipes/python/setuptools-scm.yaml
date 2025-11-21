@@ -2,6 +2,7 @@ inherit: ["python3::build"]
 
 metaEnvironment:
     PKG_VERSION: "8.1.0"
+    PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url

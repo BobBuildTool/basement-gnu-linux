@@ -2,6 +2,7 @@ inherit: [make, cpackage, install]
 
 metaEnvironment:
     PKG_VERSION: "1.6.1"
+    PKG_LICENSE: "GPL-2.0-or-later"
 
 checkoutSCM:
     scm: url

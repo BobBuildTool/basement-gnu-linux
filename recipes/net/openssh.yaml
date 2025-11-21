@@ -2,6 +2,9 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "9.9p1"
+    PKG_LICENSE: >-
+        0BSD AND BSD-2-Clause AND BSD-3-Clause AND
+        ISC AND LicenseRef-Public-Domain AND MIT
 
 depends:
     - libs::libxcrypt-dev

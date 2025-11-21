@@ -2,6 +2,7 @@ inherit: ["python3::setuptools", "python3::cext"]
 
 metaEnvironment:
     PKG_VERSION: "1.7.2.post1"
+    PKG_LICENSE: "BSD-2-Clause AND GPL-2.0-or-later"
 
 checkoutSCM:
     scm: url

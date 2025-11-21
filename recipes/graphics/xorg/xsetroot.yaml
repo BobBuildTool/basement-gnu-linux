@@ -3,7 +3,8 @@ inherit: [autotools]
 metaEnvironment:
     PKG_VERSION: "1.1.3"
     PKG_DESCRIPTION: "X utility to set your root window background to a given pattern or color"
-    PKG_LICENSE_FILE: "COPYING"
+    PKG_LICENSE: "LicenseRef-xsetroot"
+    PKG_LICENSE_PATH: "xsetroot:COPYING"
 
 depends:
     - graphics::xorg::xbitmaps

@@ -2,15 +2,19 @@ inherit: ["python3::setuptools"]
 
 metaEnvironment:
     PKG_VERSION: "0.20.1"
+    PKG_LICENSE: "LicenseRef-python-docutils"
+    PKG_LICENSE_PATH:
+        python-docutils:COPYING.txt
 
 checkoutSCM:
     scm: url
     url: https://files.pythonhosted.org/packages/source/d/docutils/docutils-${PKG_VERSION}.tar.gz
     digestSHA256: "f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b"
+    stripComponents: 1
 
 buildVars: [PKG_VERSION]
 buildScript: |
-    python3BuildSetuptools $1/docutils-${PKG_VERSION}/
+    python3BuildSetuptools $1
 
 packageScript: |
     python3PackageTgt

@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "4.9.3"
+    PKG_LICENSE: "BSD-3-CLAUSE"
 
 depends:
     - libs::libpcap-dev

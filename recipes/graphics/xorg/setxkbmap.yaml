@@ -3,7 +3,8 @@ inherit: [autotools]
 metaEnvironment:
     PKG_VERSION: "1.3.4"
     PKG_DESCRIPTION: "Utility to set the keyboard using the X Keyboard Extension"
-    PKG_LICENSE_FILE: "COPYING"
+    PKG_LICENSE: "LicenseRef-setxkbmap"
+    PKG_LICENSE_PATH: "setxkbmap:COPYING"
 
 depends:
     - libs::xorg::libX11-dev

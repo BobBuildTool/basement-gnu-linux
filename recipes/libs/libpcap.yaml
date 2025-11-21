@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "1.9.1"
+    PKG_LICENSE: "BSD-3-Clause"
 
 checkoutSCM:
     scm: url

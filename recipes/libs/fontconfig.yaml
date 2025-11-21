@@ -2,6 +2,7 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "2.13.92"
+    PKG_LICENSE: "HPND AND Unicode-DFS-2016"
 
 depends:
     - name: devel::gettext

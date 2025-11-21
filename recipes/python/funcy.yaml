@@ -2,6 +2,7 @@ inherit: ["python3::setuptools"]
 
 metaEnvironment:
     PKG_VERSION: "2.0"
+    PKG_LICENSE: "BSD"
 
 checkoutSCM:
     scm: url

@@ -2,6 +2,7 @@ inherit: [autotools, perl5]
 
 metaEnvironment:
     PKG_VERSION: "0.50.2"
+    PKG_LICENSE: "GPL-2.0-only"
 
 depends:
     - perl::xml-parser-dev
