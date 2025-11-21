@@ -10,15 +10,11 @@ checkoutSCM:
     digestSHA1: 07266dff2bf31a24fc912314b6764251ce645a39
     stripComponents: 1
 
-checkoutDeterministic: True
-checkoutScript: |
-    autoconfReconfigure
-
 buildVars: [AR]
 buildScript: |
     # this doesn't support out of tree builds; symlink the sources
     mkdir -p build
     cp -as $1/* build/
-    autotoolsBuild -o AR=$AR $1
+    autotoolsBuild -s -o AR=$AR $1
 
 packageScript: autotoolsPackageTgt

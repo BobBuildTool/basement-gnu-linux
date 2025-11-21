@@ -10,11 +10,7 @@ checkoutSCM:
     digestSHA256: "d33a4fd24c72c2d08893f129d724adf725b93dae96c359e4f4e9f32573cc853b"
     stripComponents: 1
 
-checkoutDeterministic: True
-checkoutScript: |
-    autoconfReconfigure
-
 buildScript: |
-    autotoolsBuild $1
+    autotoolsBuild -s $1
 
 packageScript: autotoolsPackageTgt

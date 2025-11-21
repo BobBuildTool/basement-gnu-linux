@@ -21,12 +21,10 @@ depends:
 checkoutDeterministic: True
 checkoutScript: |
   patchApplySeries -p0 $<@sysbench/*.patch@>
-  autoconfReconfigure
 
 buildVars: [CC]
 buildScript: |
-  # rsync -a --delete $1/ build
-  autotoolsBuild -o V=1 -o VERBOSE=1 $1 --without-mysql \
+  autotoolsBuild -s -o V=1 -o VERBOSE=1 $1 --without-mysql \
       --with-system-ck \
       --with-system-luajit
 
