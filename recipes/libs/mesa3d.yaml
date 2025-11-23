@@ -194,6 +194,10 @@ multiPackage:
                     # Workaround so that 'dridriverdir' is not affected by
                     # pc-file relocation.
                     sed -i -e '/^prefix=/c prefix=/dummy' usr/lib/pkgconfig/dri.pc
+
+                    # Workaround so that 'gbmbackendspath' is not affected by
+                    # pc-file relocation.
+                    sed -i -e '/^prefix=/c prefix=/dummy' usr/lib/pkgconfig/gbm.pc
                 provideDeps: [ "*-dev" ]
 
             tgt:
