@@ -187,17 +187,10 @@ multiPackage:
                 -Dosmesa=false
 
         multiPackage:
-            "":
-                depends:
-                    - name: libs::mesa3d-tgt
-                      use: []
-                packageScript: mesonPackageBin
-                provideDeps: [ "*-tgt" ]
-
             dev:
                 packageScript: mesonPackageDev
                 provideDeps: [ "*-dev" ]
 
             tgt:
-                packageScript: mesonPackageLib
+                packageScript: mesonPackageTgt
                 provideDeps: [ "*-tgt" ]
