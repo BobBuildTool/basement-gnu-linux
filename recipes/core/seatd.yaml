@@ -1,13 +1,13 @@
 inherit: [meson, init]
 
 metaEnvironment:
-    PKG_VERSION: "0.8.0"
+    PKG_VERSION: "0.9.1"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
     url: https://git.sr.ht/~kennylevinsen/seatd/archive/${PKG_VERSION}.tar.gz
-    digestSHA1: e33c99d9b0dce48f82618de2849ef3128305d28a
+    digestSHA1: cde15ad79adf2de055c717ea31b1e1e8ba230b6b
     stripComponents: 1
 
 buildScript: |
