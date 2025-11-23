@@ -88,13 +88,17 @@ depends:
           - virtual::core::udev-tgt
           - virtual::libs::libdrm-tgt
 
+          - graphics::xorg::xkeyboard-config
+
 buildScript: |
     mesonBuild $1 \
       -Dsecure-rpc=false
 
 multiPackage:
     "":
-        provideDeps: ['*-tgt']
+        provideDeps:
+            - '*-tgt'
+            - graphics::xorg::xkeyboard-config
         packageScript: mesonPackageTgt
     dev:
         provideDeps: ['*-dev']
