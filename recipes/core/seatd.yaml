@@ -4,18 +4,29 @@ metaEnvironment:
     PKG_VERSION: "0.9.1"
     PKG_LICENSE: "MIT"
 
+depends:
+    - if: "$(eq,${CONFIG_INIT:-}-${SYSTEMD_LOGIND:-},systemd-1)"
+      depends:
+          - core::systemd-libsystemd-dev
+          - use: []
+            name: core::systemd-libsystemd-tgt
+
+privateEnvironment:
+    ENABLE_LOGIND: "$(if-then-else,$(eq,${CONFIG_INIT:-}-${SYSTEMD_LOGIND:-},systemd-1),systemd,disabled)"
+
 checkoutSCM:
     scm: url
     url: https://git.sr.ht/~kennylevinsen/seatd/archive/${PKG_VERSION}.tar.gz
     digestSHA1: cde15ad79adf2de055c717ea31b1e1e8ba230b6b
     stripComponents: 1
 
+buildVars: [ENABLE_LOGIND]
 buildScript: |
     mesonBuild $1 \
         -Dman-pages=disabled \
         -Dexamples=disabled \
         -Dwerror=false \
-        -Dlibseat-logind=disabled \
+        -Dlibseat-logind=$ENABLE_LOGIND \
         -Dlibseat-builtin=enabled
 
     # add init script
@@ -32,9 +43,10 @@ multiPackage:
         multiPackage:
             dev:
                 packageScript: mesonPackageDev
+                provideDeps: [ "core::systemd-libsystemd-dev" ]
             tgt:
                 depends:
                     - name: core::seatd
                       use: []
                 packageScript: mesonPackageLib
-                provideDeps: [ "core::seatd" ]
+                provideDeps: [ "core::seatd", "core::systemd-libsystemd-tgt" ]
