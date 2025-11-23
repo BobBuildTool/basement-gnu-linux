@@ -18,7 +18,16 @@ buildScript: |
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev $1 "/usr/share/***"
+        packageScript: |
+            autotoolsPackageDev $1 "/usr/share/***"
+
+            # Workaround so that 'fontrootdir' is not affected by pc-file
+            # relocation.
+            sed -i -e '/^prefix=/c prefix=/dummy' \
+                   -e '/^libdir=/c libdir=${prefix}/lib' \
+                   -e '/^datarootdir=/c datarootdir=/usr/share' \
+                   -e '/^mapdir=/c mapdir=/dummy/share/fonts/X11/util' \
+                usr/lib/pkgconfig/fontutil.pc
 
     tgt:
         packageScript: autotoolsPackageTgt $1 "/usr/share/***"
