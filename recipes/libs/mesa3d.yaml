@@ -13,14 +13,14 @@ Config:
         # this is the maximum we support right now:
         default: "crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl"
     MESA3D_GLX:
-        help: "Build support for GLX platform. Default: disabled"
+        help: "Build support for GLX platform. Ignored if building for wayland. Default: auto."
         type: choice
         choice:
             auto:
             disabled:
             dri:
             xlib:
-        default: "disabled"
+        default: "auto"
     MESA3D_GLX_READ_ONLY_TEXT:
         help: "Disable writable .text section on x86"
         type: bool
