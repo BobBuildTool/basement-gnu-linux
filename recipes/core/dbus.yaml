@@ -27,8 +27,6 @@ Config:
 buildVars: [DBUS_DEBUG]
 buildScript: |
     CONFIG_OPTS=(\
-        "-Ddatadir=/etc"        \
-        "-Dsysconfdir=/legacy" \
         "-Dinotify=enabled"        \
         "-Dxml_docs=disabled"      \
         "-Ddoxygen_docs=disabled"  \
