@@ -17,3 +17,9 @@ buildSetup: |
     {
         [[ ${CONFIG_INIT:-} == "sysvinit" ]] || initIsSysvinitSysv || initIsSysvinitBusybox
     }
+
+    # Check if the init system is systemd
+    initIsSystemd()
+    {
+        [[ ${CONFIG_INIT:-} == systemd ]]
+    }
