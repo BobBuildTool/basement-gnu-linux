@@ -44,9 +44,15 @@ buildScript: |
     mesonBuild $1 ${CONFIG_OPTS[@]}
 
 multiPackage:
+    "":
+        depends:
+            - use: []
+              name: core::dbus-tgt
+        packageScript: mesonPackageBin
+        provideDeps: [ "*-tgt" ]
     dev:
         provideDeps: ['*-dev']
         packageScript: mesonPackageDev $1 "/usr/lib/dbus-1.0/***"
     tgt:
         provideDeps: ['*-tgt']
-        packageScript: mesonPackageTgt
+        packageScript: mesonPackageLib
