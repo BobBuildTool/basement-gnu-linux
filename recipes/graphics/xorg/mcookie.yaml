@@ -1,0 +1,11 @@
+inherit: [install]
+
+buildTools: [target-toolchain]
+buildVars: [CC, CPPFLAGS, CFLAGS, LDFLAGS]
+buildScript: |
+    mkdir -p usr/bin
+    $CC ${CPPFLAGS:-} ${CFLAGS:-} ${LDFLAGS:-} -o usr/bin/mcookie -xc $<<mcookie/mcookie.c>>
+    chmod 755 usr/bin/mcookie
+
+packageScript: |
+    installPackageBin "$1/"
