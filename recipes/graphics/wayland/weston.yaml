@@ -68,12 +68,11 @@ buildScript: |
         -Dbackend-drm=true \
         -Drenderer-gl=true
 
-        # install profile file
-        install -D -m 0644 $<@weston/weston.sh@> \
-            install/etc/profile.d/weston.sh
-
         # add init script
         if initIsAnySysvinit; then
+            # install profile file
+            install -D -m 0644 $<@weston/weston.sh@> \
+                install/etc/profile.d/weston.sh
             install -D -m 0755 $<@weston/S80weston.sh@> \
                 install/etc/init.d/S80weston.sh
         fi
