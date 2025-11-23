@@ -28,8 +28,8 @@ buildScript: |
 multiPackage:
     dev:
         packageScript: mesonPackageDev
+        provideDeps: ['*-dev']
 
     tgt:
         packageScript: mesonPackageTgt
-
-provideDeps: [ "*-tgt", "*xkeyboard-config" ]
+        provideDeps: ['*-tgt', "graphics::xorg::xkeyboard-config"]
