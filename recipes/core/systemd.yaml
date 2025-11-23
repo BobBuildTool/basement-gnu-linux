@@ -50,7 +50,7 @@ depends:
 
 checkoutSCM:
     scm: url
-    url: https://github.com/systemd/systemd/archive/refs/tags/${PKG_VERSION}.tar.gz
+    url: ${GITHUB_MIRROR}/systemd/systemd/archive/refs/tags/${PKG_VERSION}.tar.gz
     digestSHA1: 508c4cae4a78fb84d2daf0fe31412cc5c6177460
     stripComponents: 1
 
