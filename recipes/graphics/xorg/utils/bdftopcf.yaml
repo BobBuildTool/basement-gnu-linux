@@ -1,0 +1,23 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.2"
+    PKG_LICENSE: MIT
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/util/bdftopcf-${PKG_VERSION}.tar.xz
+    digestSHA256: bc60be5904330faaa3ddd2aed7874bee2f29e4387c245d6787552f067eb0523a
+    stripComponents: 1
+
+depends:
+    - graphics::xorg::proto::xorgproto-dev
+    - graphics::xorg::utils::util-macros-dev
+
+buildScript: |
+    autotoolsBuild "$1"
+
+packageScript: |
+    autotoolsPackageTgt
+provideTools:
+    bdftopcf: usr/bin
