@@ -1,0 +1,32 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.3"
+    PKG_LICENSE: MIT
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/app/mkfontscale-${PKG_VERSION}.tar.xz
+    digestSHA256: 2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e
+    stripComponents: 1
+
+depends:
+    - libs::freetype-dev
+    - libs::xorg::libfontenc-dev
+
+    - use: []
+      depends:
+          - libs::freetype-tgt
+          - libs::xorg::libfontenc-tgt
+
+buildScript: |
+    autotoolsBuild "$1"
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideDeps: [ "*-tgt" ]
+
+provideTools:
+    mkfontscale: usr/bin
+    mkfontdir: usr/bin
