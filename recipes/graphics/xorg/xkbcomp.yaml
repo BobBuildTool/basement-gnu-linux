@@ -30,4 +30,11 @@ multiPackage:
         packageScript: autotoolsPackageTgt
     dev:
         provideDeps: ['*-dev']
-        packageScript: autotoolsPackageDev
+        packageScript: |
+            autotoolsPackageDev
+
+            # Workaround so that 'xkbconfigdir' is not affected by pc-file
+            # relocation.
+            sed -i -e '/^prefix=/c prefix=/dummy' \
+                   -e 's|${prefix}|/usr|' \
+                usr/lib/pkgconfig/xkbcomp.pc
