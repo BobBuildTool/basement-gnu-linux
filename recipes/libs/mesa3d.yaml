@@ -167,7 +167,7 @@ multiPackage:
                     MESA3D_GLX_READ_ONLY_TEXT]
         buildScript: |
             mesonBuild $1 \
-                -Dglx=${MESA3D_GLX} \
+                -Dglx=$([[ $MESA3D_PLATFORM == x11 ]] && echo ${MESA3D_GLX} || echo disabled) \
                 -Dgallium-xa=disabled \
                 -Dglvnd=disabled \
                 -Dgallium-opencl=disabled \
