@@ -35,7 +35,7 @@ buildScript: |
         PKG="${LINUX_CUSTOM_CONFIG_PKG:-kernel::linux-custom-config}"
         LCFG+=( "${BOB_DEP_PATHS[$PKG]}/$LINUX_CUSTOM_CONFIG" )
     elif [[ ${LINUX_CONFIG:+true} ]] ; then
-        LCFG+=( "${LINUX_CONFIG}" )
+        LCFG+=( "${LINUX_CONFIG}_defconfig" )
     fi
 
     linuxConfig "${LCFG[@]}"
