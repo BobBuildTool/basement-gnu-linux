@@ -1,13 +1,13 @@
 inherit: [autoconf, autotools]
 
 metaEnvironment:
-    PKG_VERSION: "6.10"
+    PKG_VERSION: "6.15"
     PKG_LICENSE: "GPL-2.0-only"
 
 checkoutSCM:
     scm: url
-    url: https://ftp.ntu.edu.tw/pub/software/network/ethtool/ethtool-${PKG_VERSION}.tar.xz
-    digestSHA256: cc613fe8a2bcddee17a1e6e0d763c0f3ea33c7e930658d2d7f601aa65e426a1f
+    url: https://www.kernel.org/pub/software/network/ethtool/ethtool-${PKG_VERSION}.tar.xz
+    digestSHA256: 9477c365114d910120aaec5336a1d16196c833d8486f7c6da67bedef57880ade
     stripComponents: 1
 
 depends:

@@ -39,6 +39,8 @@ depends:
           target-toolchain: host-compat-toolchain
 
 checkoutTools:
+    - name: autotools
+      if: "$(eq,${GRUB2_BOOTSTRAP:-0},1)"
     - name: gettext
       if: "$(eq,${GRUB2_BOOTSTRAP:-0},1)"
     - name: python3
