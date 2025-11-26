@@ -1,0 +1,29 @@
+inherit: [autotools, "xorg::font-util"]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.4"
+    PKG_LICENSE: LicenseRef-xorg-font-cursor-misc
+    PKG_LICENSE_PATH: |
+        xorg-font-cursor-misc:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-cursor-misc-${PKG_VERSION}.tar.xz
+    digestSHA256: 25d9c9595013cb8ca08420509993a6434c917e53ca1fec3f63acd45a19d4f982
+    stripComponents: 1
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - graphics::xorg::utils::bdftopcf
+
+    - graphics::xorg::utils::util-macros-dev
+
+buildTools: [bdftopcf]
+buildScript: |
+    autotoolsBuild "$1"
+
+packageScript: |
+    autotoolsPackageTgt

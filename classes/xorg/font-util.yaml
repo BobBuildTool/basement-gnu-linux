@@ -1,0 +1,10 @@
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - graphics::fonts::font-util
+
+buildTools: [fontUtil]
+buildScript: |
+    PKG_CONFIG_LIBDIR+=":${BOB_TOOL_PATHS[fontUtil]}/../lib/pkgconfig"

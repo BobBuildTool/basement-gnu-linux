@@ -1,0 +1,29 @@
+inherit: [autotools, "xorg::font-util"]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.5"
+    PKG_LICENSE: LicenseRef-xorg-font-alias
+    PKG_LICENSE_PATH: |
+        xorg-font-alias:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-alias-${PKG_VERSION}.tar.xz
+    digestSHA256: 9f89e217bb73e0e3636a0a493fbf8b7c995156e0c53d9a0476d201b67c2d6b6e
+    stripComponents: 1
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - graphics::xorg::utils::bdftopcf
+
+    - graphics::xorg::utils::util-macros-dev
+
+buildTools: [bdftopcf]
+buildScript: |
+    autotoolsBuild "$1"
+
+packageScript: |
+    autotoolsPackageTgt

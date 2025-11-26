@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.26.1"
+    PKG_VERSION: "1.29.1"
     PKG_LICENSE: "MIT"
 
 depends:
@@ -18,7 +18,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://gitlab.freedesktop.org/libinput/libinput/-/archive/${PKG_VERSION}/libinput-${PKG_VERSION}.tar.bz2
-    digestSHA1: 1fe73b4e30d01e1d6b18b8815cc93316d1a51de3
+    digestSHA1: f62c126edacac59444dd4ccf5f9df0c38bd4576e
     stripComponents: 1
 
 buildScript: |

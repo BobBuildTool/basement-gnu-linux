@@ -1,0 +1,29 @@
+inherit: [autotools, "xorg::font-util"]
+
+metaEnvironment:
+    PKG_VERSION: "1.1.3"
+    PKG_LICENSE: LicenseRef-xorg-font-misc-misc
+    PKG_LICENSE_PATH: |
+        xorg-font-misc-misc:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-misc-misc-${PKG_VERSION}.tar.xz
+    digestSHA256: 79abe361f58bb21ade9f565898e486300ce1cc621d5285bec26e14b6a8618fed
+    stripComponents: 1
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - graphics::xorg::utils::bdftopcf
+
+    - graphics::xorg::utils::util-macros-dev
+
+buildTools: [bdftopcf]
+buildScript: |
+    autotoolsBuild "$1"
+
+packageScript: |
+    autotoolsPackageTgt

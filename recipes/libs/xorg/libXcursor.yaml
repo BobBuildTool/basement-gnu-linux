@@ -24,7 +24,12 @@ buildScript: |
 multiPackage:
     dev:
         provideDeps: ['*-dev']
-        packageScript: autotoolsPackageDev
+        packageScript: |
+            autotoolsPackageDev
+            sed -e '/^prefix=/c prefix=/dummy' \
+                -e '/^libdir=/c libdir=${prefix}/lib' \
+                -e '/^datarootdir=/c datarootdir=/usr/share' \
+                -i usr/lib/pkgconfig/xcursor.pc
     tgt:
         provideDeps: ['*-tgt']
         packageScript: autotoolsPackageTgt

@@ -1,3 +1,11 @@
+Config:
+    CONFIG_INIT:
+        type: choice
+        choice:
+            systemd:
+            sysvinit/sysv:
+            sysvinit/busybox:
+
 buildVars: [CONFIG_INIT]
 buildSetup: |
     # Checks if the init system is the sysv sysvinit variant.
@@ -16,4 +24,10 @@ buildSetup: |
     initIsAnySysvinit()
     {
         [[ ${CONFIG_INIT:-} == "sysvinit" ]] || initIsSysvinitSysv || initIsSysvinitBusybox
+    }
+
+    # Check if the init system is systemd
+    initIsSystemd()
+    {
+        [[ ${CONFIG_INIT:-} == systemd ]]
     }

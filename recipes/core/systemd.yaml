@@ -48,9 +48,15 @@ depends:
           - kernel::kmod-lib-tgt
           - libs::libxcrypt-tgt
 
+    - if: "$SYSTEMD_LOGIND"
+      depends:
+          - core::linux-pam-dev
+          - use: []
+            name: core::linux-pam-tgt
+
 checkoutSCM:
     scm: url
-    url: https://github.com/systemd/systemd/archive/refs/tags/${PKG_VERSION}.tar.gz
+    url: ${GITHUB_MIRROR}/systemd/systemd/archive/refs/tags/${PKG_VERSION}.tar.gz
     digestSHA1: 508c4cae4a78fb84d2daf0fe31412cc5c6177460
     stripComponents: 1
 
@@ -86,6 +92,7 @@ buildScript: |
         -Dnologin-path=/usr/sbin/nologin
 
         # Feature switches
+        -Dpam=${BOOL[$SYSTEMD_LOGIND]}
         -Danalyze=${BOOL[$SYSTEMD_ANALYZE]}
         -Dcoredump=${BOOL[$SYSTEMD_COREDUMP]}
         -Dhwdb=${BOOL[$SYSTEMD_HWDB]}

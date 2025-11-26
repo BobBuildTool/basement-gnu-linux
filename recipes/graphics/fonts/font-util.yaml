@@ -16,17 +16,18 @@ checkoutSCM:
 buildScript: |
     autotoolsBuild $1
 
-multiPackage:
-    dev:
-        packageScript: autotoolsPackageDev $1 "/usr/share/***"
+packageScript: |
+    # The tools need to be accompanied by the .pc-file and other data...
+    autotoolsPackageDev
+    autotoolsPackageTgt
 
-    tgt:
-        packageScript: autotoolsPackageTgt $1 "/usr/share/***"
-    "":
-        depends:
-            - name: graphics::fonts::font-util-tgt
-              use: []
-        provideDeps: ['*-tgt']
-        packageScript: autotoolsPackageBin $1
-        provideTools:
-            fontUtil: "usr/bin"
+    # Workaround so that 'fontrootdir' is not affected by pc-file
+    # relocation.
+    sed -i -e '/^prefix=/c prefix=/dummy' \
+           -e '/^libdir=/c libdir=${prefix}/lib' \
+           -e '/^datarootdir=/c datarootdir=/usr/share' \
+           -e '/^mapdir=/c mapdir=/dummy/share/fonts/X11/util' \
+        usr/lib/pkgconfig/fontutil.pc
+
+provideTools:
+    fontUtil: "usr/bin"

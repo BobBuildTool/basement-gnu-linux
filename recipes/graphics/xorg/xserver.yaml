@@ -1,4 +1,4 @@
-inherit: [meson]
+inherit: [meson, "xorg::font-util"]
 
 metaEnvironment:
     PKG_VERSION: "21.1.18"
@@ -14,7 +14,6 @@ checkoutSCM:
 
 depends:
     - graphics::xorg::xkbcomp-dev
-    - graphics::fonts::font-util-dev
     - libs::libepoxy-dev
 
     - libs::xcb::util-image-dev
@@ -53,7 +52,6 @@ depends:
     - use: []
       depends:
           - graphics::xorg::xkbcomp-tgt
-          - graphics::fonts::font-util-tgt
           - libs::libepoxy-tgt
 
           - libs::xcb::util-image-tgt
@@ -90,13 +88,17 @@ depends:
           - virtual::core::udev-tgt
           - virtual::libs::libdrm-tgt
 
+          - graphics::xorg::xkeyboard-config
+
 buildScript: |
     mesonBuild $1 \
       -Dsecure-rpc=false
 
 multiPackage:
     "":
-        provideDeps: ['*-tgt']
+        provideDeps:
+            - '*-tgt'
+            - graphics::xorg::xkeyboard-config
         packageScript: mesonPackageTgt
     dev:
         provideDeps: ['*-dev']

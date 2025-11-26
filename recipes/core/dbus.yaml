@@ -1,4 +1,4 @@
-inherit: [meson]
+inherit: [meson, init]
 
 metaEnvironment:
     PKG_DESCRIPTION: "D-Bus is a simple system for interprocess communication and coordination."
@@ -12,6 +12,12 @@ depends:
       depends:
           - libs::expat-tgt
           - libs::glib-tgt
+
+    - if: "$(eq,${CONFIG_INIT:-},systemd)"
+      depends:
+          - core::systemd-libsystemd-dev
+          - use: []
+            name: core::systemd-libsystemd-tgt
 
 checkoutSCM:
     scm: url
@@ -27,8 +33,6 @@ Config:
 buildVars: [DBUS_DEBUG]
 buildScript: |
     CONFIG_OPTS=(\
-        "-Ddatadir=/etc"        \
-        "-Dsysconfdir=/legacy" \
         "-Dinotify=enabled"        \
         "-Dxml_docs=disabled"      \
         "-Ddoxygen_docs=disabled"  \
@@ -43,12 +47,34 @@ buildScript: |
     else
         CONFIG_OPTS+=("-Dstats=false")
     fi
+
+    if initIsSystemd ; then
+        CONFIG_OPTS+=(
+            -Dsystemd=enabled
+            -Dsystemd_system_unitdir=/usr/lib/systemd/system
+            -Dsystemd_user_unitdir=/usr/lib/systemd/user
+        )
+    else
+        CONFIG_OPTS+=( -Dsystemd=disabled )
+    fi
+
     mesonBuild $1 ${CONFIG_OPTS[@]}
 
 multiPackage:
+    "":
+        depends:
+            - use: []
+              name: core::dbus-tgt
+        packageScript: |
+            mesonPackageBin
+            mkdir -p .bob
+            cat >.bob/dbus.user-table <<EOF
+            messagebus -1 messagebus -1 * /run/dbus - dbus DBus messagebus user
+            EOF
+        provideDeps: [ "*-tgt" ]
     dev:
         provideDeps: ['*-dev']
         packageScript: mesonPackageDev $1 "/usr/lib/dbus-1.0/***"
     tgt:
         provideDeps: ['*-tgt']
-        packageScript: mesonPackageTgt
+        packageScript: mesonPackageLib

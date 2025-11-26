@@ -1,0 +1,27 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.7"
+    PKG_LICENSE: MIT
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - graphics::xorg::xcursorgen
+
+    - libs::xorg::libXcursor-dev
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/data/xcursor-themes-${PKG_VERSION}.tar.xz
+    digestSHA256: 95bae8f48823d894a05bf42dfbf453674ab7dbdeb11e2bc079e8525ad47378c8
+    stripComponents: 1
+
+buildTools: [xcursorgen]
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    installCopy $1/install/

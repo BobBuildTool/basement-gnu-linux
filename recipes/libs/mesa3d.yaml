@@ -13,14 +13,14 @@ Config:
         # this is the maximum we support right now:
         default: "crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl"
     MESA3D_GLX:
-        help: "Build support for GLX platform. Default: disabled"
+        help: "Build support for GLX platform. Ignored if building for wayland. Default: auto."
         type: choice
         choice:
             auto:
             disabled:
             dri:
             xlib:
-        default: "disabled"
+        default: "auto"
     MESA3D_GLX_READ_ONLY_TEXT:
         help: "Disable writable .text section on x86"
         type: bool
@@ -167,7 +167,7 @@ multiPackage:
                     MESA3D_GLX_READ_ONLY_TEXT]
         buildScript: |
             mesonBuild $1 \
-                -Dglx=${MESA3D_GLX} \
+                -Dglx=$([[ $MESA3D_PLATFORM == x11 ]] && echo ${MESA3D_GLX} || echo disabled) \
                 -Dgallium-xa=disabled \
                 -Dglvnd=disabled \
                 -Dgallium-opencl=disabled \
@@ -187,17 +187,19 @@ multiPackage:
                 -Dosmesa=false
 
         multiPackage:
-            "":
-                depends:
-                    - name: libs::mesa3d-tgt
-                      use: []
-                packageScript: mesonPackageBin
-                provideDeps: [ "*-tgt" ]
-
             dev:
-                packageScript: mesonPackageDev
+                packageScript: |
+                    mesonPackageDev
+
+                    # Workaround so that 'dridriverdir' is not affected by
+                    # pc-file relocation.
+                    sed -i -e '/^prefix=/c prefix=/dummy' usr/lib/pkgconfig/dri.pc
+
+                    # Workaround so that 'gbmbackendspath' is not affected by
+                    # pc-file relocation.
+                    sed -i -e '/^prefix=/c prefix=/dummy' usr/lib/pkgconfig/gbm.pc
                 provideDeps: [ "*-dev" ]
 
             tgt:
-                packageScript: mesonPackageLib
+                packageScript: mesonPackageTgt
                 provideDeps: [ "*-tgt" ]
