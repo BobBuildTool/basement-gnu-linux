@@ -1,6 +1,8 @@
 # Standard Linux kernel recipe that builds the kernel, modules and device
-# trees. By default the defconfig of the architecture is built. Set the
-# LINUX_CONFIG environment variable to use another ${LINUX_CONFIG}_defconfig.
+# trees. By default, the defconfig of the architecture is built. Set the
+# LINUX_CONFIG environment variable to use another defconfig file from the
+# architecture (e.g. imx_v6_v7_defconfig for ARCH=arm).
+#
 # To use a custom defconfig create a package kernel::linux-custom-config and
 # set LINUX_CUSTOM_CONFIG to the name of your custom defconfig file.
 
