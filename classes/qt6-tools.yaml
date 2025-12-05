@@ -1,16 +1,27 @@
 inherit: [qt6-base]
 
+environment:
+    # for the tools always use the host Qt6 configuration
+    QT6_BASE_HOST_BUILD: '1'
+
 depends:
+    # all tools need at least qt6 core + the core tools
+    - libs::qt6-base-dev
+
+    - use: []
+      depends:
+          - libs::qt6-base-tgt
+
     # depend on the host tools build
     - name: libs::qt6-base-tools
-      tools:
-          target-toolchain: host-native-toolchain
       use: [tools]
 
 buildTools: [qt6-base-tools]
 
 packageScript: |
-    # We have to package everything for the tools, including cmake
-    # configs, ... files.
-    cmakePackageDev
-    cmakePackageBin
+    qt6PackageBin
+    # We have to supply more than just the bins:
+    # 1. The tools itself are found by Qt with the corresponding cmake
+    #    files.
+    # 2. Some tools provide libs other tools may want to link against.
+    installCopy "${_CMAKE_BUILD_PATH}/install/" "/usr/" "/usr/lib/***" "!*"
