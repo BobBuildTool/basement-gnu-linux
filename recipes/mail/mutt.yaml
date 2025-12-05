@@ -1,0 +1,27 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.2.16"
+    PKG_LICENSE: "GPL-2.0-or-later"
+
+depends:
+    - libs::ncurses-dev
+    - libs::openssl-dev
+
+    - use: []
+      depends:
+          - libs::ncurses-tgt
+          - libs::openssl-tgt
+
+checkoutSCM:
+    scm: url
+    url: http://ftp.mutt.org/pub/mutt/mutt-${PKG_VERSION}.tar.gz
+    digestSHA256: "1d3109a743ad8b25eef97109b2bdb465db7837d0a8d211cd388be1b6faac3f32"
+    stripComponents: 1
+
+buildTools: [host-toolchain, perl]
+buildScript: |
+    autotoolsBuild $1 --with-mailpath=/var/mail
+
+packageScript: |
+    autotoolsPackageTgt
