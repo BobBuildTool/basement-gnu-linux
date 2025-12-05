@@ -1,0 +1,39 @@
+diff -ur a/bfd/config.bfd b/bfd/config.bfd
+--- a/bfd/config.bfd	2024-05-26 17:55:51.000000000 +0200
++++ b/bfd/config.bfd	2024-07-08 11:35:56.753432683 +0200
+@@ -243,7 +243,7 @@
+     targ_archs="$targ_archs bfd_i386_arch bfd_powerpc_arch bfd_rs6000_arch"
+     want64=true
+     ;;
+-  aarch64-*-elf | aarch64-*-rtems* | aarch64-*-genode*)
++  aarch64-*-elf | aarch64-*-rtems* | aarch64-*-genode* | aarch64-*-l4re*)
+     targ_defvec=aarch64_elf64_le_vec
+     targ_selvecs="aarch64_elf64_be_vec aarch64_elf32_le_vec aarch64_elf32_be_vec arm_elf32_le_vec arm_elf32_be_vec aarch64_pei_le_vec aarch64_pe_le_vec"
+     want64=true
+@@ -372,7 +372,7 @@
+     targ_defvec=arm_elf32_le_vec
+     targ_selvecs="arm_elf32_be_vec"
+     ;;
+-  arm*-*-haiku*)
++  arm*-*-haiku* | arm-*-l4re*)
+     targ_defvec=arm_elf32_le_vec
+     targ_selvecs="arm_elf32_fdpic_le_vec arm_elf32_be_vec arm_elf32_fdpic_be_vec arm_pe_le_vec arm_pe_be_vec arm_pei_le_vec arm_pei_be_vec"
+     ;;
+@@ -587,7 +587,7 @@
+     targ_selvecs=hppa_elf32_vec
+     ;;
+ 
+-  i[3-7]86-*-elf* | i[3-7]86-*-rtems* | i[3-7]86-*-genode*)
++  i[3-7]86-*-elf* | i[3-7]86-*-rtems* | i[3-7]86-*-genode* | i[3-7]86-*-l4re*)
+     targ_defvec=i386_elf32_vec
+     targ_selvecs="iamcu_elf32_vec i386_coff_vec"
+     ;;
+@@ -681,7 +681,7 @@
+     targ_selvecs="i386_elf32_vec iamcu_elf32_vec"
+     want64=true
+     ;;
+-  x86_64-*-elf* | x86_64-*-rtems* | x86_64-*-fuchsia | x86_64-*-genode*)
++  x86_64-*-elf* | x86_64-*-rtems* | x86_64-*-fuchsia | x86_64-*-genode* | x86_64-*-l4re*)
+     targ_defvec=x86_64_elf64_vec
+     targ_selvecs="i386_elf32_vec iamcu_elf32_vec x86_64_elf32_vec"
+     case "${targ}" in
