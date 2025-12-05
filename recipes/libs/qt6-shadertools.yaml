@@ -37,9 +37,7 @@ multiPackage:
         inherit: [qt6-tools]
         buildScript: |
             # tools only version usually used for building
-            qt6Build $1 \
-                -DFEATURE_wayland_client=OFF \
-                -DFEATURE_wayland_server=OFF
+            qt6Build $1
 
         provideTools:
             qt6-shadertools-tools: "usr/bin"
