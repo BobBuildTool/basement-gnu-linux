@@ -1,0 +1,17 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.12.1"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+checkoutSCM:
+    scm: url
+    url: ${GNU_MIRROR}/hello/hello-${PKG_VERSION}.tar.gz
+    digestSHA256: "8d99142afd92576f30b0cd7cb42a8dc6809998bc5d607d88761f512e26c7db20"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
