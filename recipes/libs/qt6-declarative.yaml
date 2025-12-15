@@ -21,10 +21,12 @@ multiPackage:
         inherit: [qt6]
         depends:
             - libs::qt6-shadertools-dev
+            - libs::qt6-svg-dev
 
             - use: []
               depends:
                   - libs::qt6-shadertools-tgt
+                  - libs::qt6-svg-tgt
 
             # depend on our self for the host tools build
             - tools:
@@ -35,21 +37,11 @@ multiPackage:
                   - libs::qt6-declarative-tools
 
         buildToolsWeak: [python3]
-        buildTools: [qt6-declarative-tools, qt6-shadertools-tools]
+        buildTools: [qt6-shadertools-tools, qt6-declarative-tools]
         buildScript: |
             qt6Build $1
 
         multiPackage:
-            # We are not supporting building Qt6 apps on the target right now.
-            # The Qt6 tools build here seem to refer build paths which do not
-            # exist on the target. Needs investigation if required later.
-            # "":
-            #    depends:
-            #        - name: libs::qt6-declarative-tgt
-            #          use: []
-            #    packageScript: qt6PackageBin
-            #    provideDeps: [ "*-tgt" ]
-
             dev:
                 packageScript: qt6PackageDev
                 provideDeps: [ "*-dev" ]
@@ -61,6 +53,12 @@ multiPackage:
     tools:
         inherit: [qt6-tools]
         depends:
+            - libs::qt6-svg-dev
+
+            - use: []
+              depends:
+                  - libs::qt6-svg-tgt
+
             - name: libs::qt6-shadertools-tools
               use: [tools]
 

@@ -46,20 +46,21 @@ buildSetup: |
 packageSetup: |
     qt6PackageDev()
     {
-        cmakePackageDev "${1:-}" "/usr/plugins/***" "/usr/qml/***" \
-                                 "/usr/mkspecs/***" "/usr/metatypes/***"
+        cmakePackageDev "${1:-}" "${@:2}" "/usr/plugins/***" "/usr/qml/***" \
+                                          "/usr/mkspecs/***" "/usr/metatypes/***" \
+                                          "/usr/lib/objects-Bob/***"
     }
 
     qt6PackageLib()
     {
-        cmakePackageLib "${1:-}" "/usr/plugins/***" "/usr/qml/***"
+        cmakePackageLib "${1:-}" "${@:2}" "/usr/plugins/***" "/usr/qml/***"
     }
 
     qt6PackageBin()
     {
-        cmakePackageBin "${1:-}" "!/usr/doc" "!/usr/mkspecs" \
-                                 "!/usr/metatypes" "!/usr/modules" \
-                                 "!*objects-Bob*" "!*.prl"
+        cmakePackageBin "${1:-}" "${@:2}" "!/usr/doc" "!/usr/mkspecs" \
+                                          "!/usr/metatypes" "!/usr/modules" \
+                                          "!*objects-Bob*" "!*.prl"
     }
 
     qt6PackageTgt()
