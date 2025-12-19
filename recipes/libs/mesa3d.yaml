@@ -11,7 +11,7 @@ Config:
         type: str
         # crocus,etnaviv,freedreno,i915,iris,lima,nouveau,panfrost,r300,r600,radeonsi,svga,softpipe,llvmpipe,tegra,v3d,vc4,virgl
         # this is the maximum we support right now:
-        default: "crocus,lima,panfrost,svga,nouveau,tegra,v3d,vc4,virgl"
+        default: "crocus,lima,panfrost,svga,nouveau,llvmpipe,tegra,v3d,vc4,virgl"
     MESA3D_GLX:
         help: "Build support for GLX platform. Ignored if building for wayland. Default: auto."
         type: choice
@@ -109,6 +109,9 @@ multiPackage:
                     mesa_clc: "usr/bin"
 
     "":
+        environment:
+            LLVM_OCAML_BINDINGS: "0"
+
         depends:
             - libs::libunwind-dev
             - libs::zlib-dev
@@ -118,7 +121,6 @@ multiPackage:
                   - libs::libunwind-tgt
                   - libs::zlib-tgt
                   - virtual::libs::libdrm-tgt
-
 
             - if: "$(eq,$MESA3D_PLATFORM,wayland)"
               depends:
@@ -153,6 +155,13 @@ multiPackage:
                         - libs::xorg::libXxf86vm-tgt
                         - virtual::core::udev-tgt
 
+            - if: "$(match,$MESA3D_GALLIUM_DRIVERS,llvmpipe)"
+              depends:
+                  - devel::llvm-libs-dev
+                  - use: []
+                    depends:
+                        - devel::llvm-libs-tgt
+
             - if: "$(match,$MESA3D_GALLIUM_DRIVERS,iris)"
               tools:
                   target-toolchain: host-compat-toolchain
@@ -160,6 +169,13 @@ multiPackage:
                   - name: libs::mesa3d-clc
                     use: [tools]
 
+        buildSetup: |
+            if [[ ${BOB_DEP_PATHS['devel::llvm-libs-dev']:+set} && -e cross_file.txt ]] &&
+                  ! grep -q llvm-config cross_file.txt ; then
+                sed -i \
+                    "/\[binaries\]/a llvm-config = '${BOB_DEP_PATHS['devel::llvm-libs-dev']}\/usr\/bin\/llvm-config'" \
+                    cross_file.txt
+            fi
         buildTools:
             - if: "$(match,$MESA3D_GALLIUM_DRIVERS,iris)"
               name: mesa_clc
@@ -181,7 +197,7 @@ multiPackage:
                 -Dgles2=enabled \
                 -Dglx-read-only-text=$([[ $MESA3D_GLX_READ_ONLY_TEXT -ne 0 ]] && echo true || echo false) \
                 -Dvalgrind=disabled \
-                -Dllvm=disabled \
+                -Dllvm=$([[ "$MESA3D_GALLIUM_DRIVERS" =~ "llvmpipe" ]] && echo 'enabled' || echo 'disabled') \
                 -Dintel-clc=system \
                 ${BOB_TOOL_PATHS[mesa_clc]+-Dmesa-clc=system} \
                 -Dosmesa=false
