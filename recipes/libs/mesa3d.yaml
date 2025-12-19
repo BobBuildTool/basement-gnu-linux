@@ -66,6 +66,7 @@ multiPackage:
                   - devel::llvm-libclc-tgt
                   - libs::spirv-tools-tgt
                   - libs::spirv-llvm-translator-tgt
+
         buildTools: [llvm]
         buildSetup: |
             if [ -e cross_file.txt ] && ! grep -q llvm-config cross_file.txt ; then
@@ -109,11 +110,23 @@ multiPackage:
 
     "":
         depends:
+            - libs::libunwind-dev
+            - libs::zlib-dev
+            - virtual::libs::libdrm-dev
+            - use: []
+              depends:
+                  - libs::libunwind-tgt
+                  - libs::zlib-tgt
+                  - virtual::libs::libdrm-tgt
+
 
             - if: "$(eq,$MESA3D_PLATFORM,wayland)"
               depends:
                   - graphics::wayland::wayland-protocols
                   - graphics::wayland::wayland-dev
+                  - use: []
+                    depends:
+                        - graphics::wayland::wayland-tgt
 
             - if: "$(eq,$MESA3D_PLATFORM,x11)"
               depends:
@@ -127,27 +140,7 @@ multiPackage:
                   - libs::xorg::libXt-dev
                   - libs::xorg::libXxf86vm-dev
                   - virtual::core::udev-dev
-
-            - if: "$(match,$MESA3D_GALLIUM_DRIVERS,iris)"
-              tools:
-                  target-toolchain: host-compat-toolchain
-              depends:
-                  - name: libs::mesa3d-clc
-                    use: [tools]
-
-            - libs::libunwind-dev
-            - libs::zlib-dev
-            - virtual::libs::libdrm-dev
-            - use: []
-              depends:
-                  - libs::libunwind-tgt
-                  - libs::zlib-tgt
-                  - virtual::libs::libdrm-tgt
-
-                  - if: "$(eq,$MESA3D_PLATFORM,wayland)"
-                    name: graphics::wayland::wayland-tgt
-
-                  - if: "$(eq,$MESA3D_PLATFORM,x11)"
+                  - use: []
                     depends:
                         - libs::xcb::libxcb-tgt
                         - libs::xorg::libX11-tgt
@@ -159,6 +152,13 @@ multiPackage:
                         - libs::xorg::libXt-tgt
                         - libs::xorg::libXxf86vm-tgt
                         - virtual::core::udev-tgt
+
+            - if: "$(match,$MESA3D_GALLIUM_DRIVERS,iris)"
+              tools:
+                  target-toolchain: host-compat-toolchain
+              depends:
+                  - name: libs::mesa3d-clc
+                    use: [tools]
 
         buildTools:
             - if: "$(match,$MESA3D_GALLIUM_DRIVERS,iris)"
