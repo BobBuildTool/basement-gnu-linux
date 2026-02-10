@@ -2,7 +2,7 @@ inherit: [meson, wayland-scanner]
 
 metaEnvironment:
     PKG_DESCRIPTION: "Mesa OpenGL library"
-    PKG_VERSION: "25.0.5"
+    PKG_VERSION: "25.3.1"
     PKG_LICENSE: "MIT, SGI, Khronos"
 
 Config:
@@ -50,7 +50,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://archive.mesa3d.org/mesa-${PKG_VERSION}.tar.xz
-    digestSHA1: d6427cb320fcbd8bbe223ad69b16619391812fee
+    digestSHA256: 059d0d985622f49588f01aa29152804f4da8ffe6add046e00a52923379c2d8da
     stripComponents: 1
 
 buildTools: [bison, flex, m4]
@@ -77,18 +77,13 @@ multiPackage:
 
         buildScript: |
             mesonBuild $1 \
-                -Dintel-clc=enabled \
-                -Dinstall-intel-clc=True \
                 -Dmesa-clc=enabled \
                 -Dinstall-mesa-clc=True \
-                -Dgallium-xa=disabled \
                 -Dglvnd=disabled \
-                -Dgallium-opencl=disabled \
                 -Dgallium-drivers="" \
                 -Dvulkan-drivers="" \
                 -Dplatforms="" \
                 -Dvalgrind=disabled \
-                -Dosmesa=false \
                 -Dshared-llvm=disabled \
 
         multiPackage:
@@ -184,9 +179,7 @@ multiPackage:
         buildScript: |
             mesonBuild $1 \
                 -Dglx=$([[ $MESA3D_PLATFORM == x11 ]] && echo ${MESA3D_GLX} || echo disabled) \
-                -Dgallium-xa=disabled \
                 -Dglvnd=disabled \
-                -Dgallium-opencl=disabled \
                 -Dgallium-drivers="$MESA3D_GALLIUM_DRIVERS" \
                 -Dvulkan-drivers="" \
                 -Dplatforms=${MESA3D_PLATFORM} \
@@ -198,9 +191,7 @@ multiPackage:
                 -Dglx-read-only-text=$([[ $MESA3D_GLX_READ_ONLY_TEXT -ne 0 ]] && echo true || echo false) \
                 -Dvalgrind=disabled \
                 -Dllvm=$([[ "$MESA3D_GALLIUM_DRIVERS" =~ "llvmpipe" ]] && echo 'enabled' || echo 'disabled') \
-                -Dintel-clc=system \
                 ${BOB_TOOL_PATHS[mesa_clc]+-Dmesa-clc=system} \
-                -Dosmesa=false
 
         multiPackage:
             dev:
