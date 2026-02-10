@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause"
+    PKG_VERSION: "master-b9e40069"
+
+checkoutSCM:
+    scm: git
+    url: ${GITHUB_MIRROR}/ianlancetaylor/libbacktrace.git
+    branch: master
+    commit: b9e40069c0b47a722286b94eb5231f7f05c08713
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt

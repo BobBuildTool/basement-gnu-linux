@@ -41,6 +41,7 @@ depends:
     - libs::jpeg-turbo-tgt
     - libs::jsonc-tgt
     - libs::libaio-tgt
+    - libs::libbacktrace-tgt
     - libs::libb2-tgt
     - libs::libcap-ng-tgt
     - libs::libconfuse-tgt
