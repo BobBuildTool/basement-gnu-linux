@@ -1,13 +1,13 @@
 inherit: [cmake]
 
 metaEnvironment:
-    PKG_VERSION: "1.4.309.0"
+    PKG_VERSION: "1.4.341.0"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
-    url: https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.4.309.0.tar.gz
-    digestSHA256: a96f8b4f2dfb18f7432e5c523e220ab0075372a9509e0c25fbff21c76af0de7c
+    url: https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-${PKG_VERSION}.tar.gz
+    digestSHA256: cab0a654c4917e16367483296b44cdb1d614e3120c721beafcd37e3a8580486c
     stripComponents: 1
 
 buildScript: |
