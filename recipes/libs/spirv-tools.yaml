@@ -2,7 +2,7 @@ inherit: [cmake]
 
 metaEnvironment:
     PKG_LICENSE: "Apache-2.0"
-    PKG_VERSION: "1.4.309.0"
+    PKG_VERSION: "1.4.341.0"
 
 depends:
     - libs::spirv-headers-dev
@@ -13,7 +13,7 @@ depends:
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/KhronosGroup/SPIRV-Tools/archive/refs/tags/vulkan-sdk-${PKG_VERSION}.tar.gz
-    digestSHA256: 6b8577054c575573ead3ad71cb6a2c0b3397b64c746cc3c99e48cc5e324c1b55
+    digestSHA256: 15bfb678138cdf9cd1480dfb952547bbb66b763a735b6d5582578572f5c2e6f9
     stripComponents: 1
 
 buildTools: [python3]
