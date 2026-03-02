@@ -19,7 +19,11 @@ depends:
           - libs::ncurses-tgt
 
 buildScript: |
-    CFLAGS="${CFLAGS} -I$1"
+    # compiling screen fails if configure is used out of tree due to not found
+    # headers. Copy the sources in the build directory to avoid this.
+    mkdir -p build
+    rsync -a $1/ build/
+
     autotoolsBuild $1 \
         --prefix=/usr \
         --sysconfdir=/etc \
