@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "1.2.7"
+    PKG_VERSION: "1.3.1"
     PKG_LICENSE: "GPL-2.0+"
 
 depends:
@@ -14,7 +14,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://netfilter.org/projects/libnftnl/files/libnftnl-${PKG_VERSION}.tar.xz
-    digestSHA1: 06532b49e06d12a8fc2a33326dc35a638b3ae3c6
+    digestSHA256: 607da28dba66fbdeccf8ef1395dded9077e8d19f2995f9a4d45a9c2f0bcffba8
     stripComponents: 1
 
 buildScript: |
