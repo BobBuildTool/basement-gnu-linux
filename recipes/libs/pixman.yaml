@@ -1,21 +1,23 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "0.42.2"
+    PKG_VERSION: "0.46.4"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
     url: https://www.cairographics.org/releases/pixman-${PKG_VERSION}.tar.gz
-    digestSHA256: ea1480efada2fd948bc75366f7c349e1c96d3297d09a3fe62626e38e234a625e
+    digestSHA256: d09c44ebc3bd5bee7021c79f922fe8fb2fb57f7320f55e97ff9914d2346a591c
     stripComponents: 1
 
 buildScript: |
-    autotoolsBuild $1
+    mesonBuild $1 \
+        -Dtests=disabled \
+        -Ddemos=disabled \
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: mesonPackageDev
 
     tgt:
-        packageScript: autotoolsPackageTgt
+        packageScript: mesonPackageTgt
