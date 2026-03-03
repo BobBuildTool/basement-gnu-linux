@@ -1,0 +1,204 @@
+inherit: [meson, pkg-config, install, make, patch]
+
+# qemu uses a mix of meson and manual builds, therefore it also has its own not
+# autotools compatible configure. Needs a little bit of adjustment to make this
+# work.
+
+metaEnvironment:
+    PKG_VERSION: "10.2.1"
+    PKG_LICENSE: "GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c"
+
+depends:
+    - libs::glib-dev
+
+    - use: []
+      depends:
+          - libs::glib-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://download.qemu.org/qemu-${PKG_VERSION}.tar.xz
+    digestSHA1: 53ce67b2b57cccac3655c2ea6c4d88283dbef4f7
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@qemu/*.patch@>
+
+buildVars: [CC, CXX, CROSS_COMPILE]
+buildToolsWeak: [python3]
+buildTools: [host-toolchain, target-toolchain]
+buildSetup: |
+    QEMU_DEFAULT_CONFIGURE_OPTS="\
+        --prefix=/usr \
+        --cross-prefix=$CROSS_COMPILE \
+        --cc=$CC \
+        --cxx=$CXX \
+        --host-cc=gcc \
+        ${MESON_CFLAGS[@]/#/--extra-cflags=} \
+        ${MESON_LDFLAGS[@]/#/--extra-ldflags=} \
+        --disable-containers \
+        --disable-docs \
+        --disable-tsan \
+        --disable-download"
+
+    QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS="\
+        $QEMU_DEFAULT_CONFIGURE_OPTS \
+        --without-default-features \
+        --without-default-devices \
+        --disable-tcg \
+        --enable-fdt=disabled \
+        --target-list="
+
+multiPackage:
+    "":
+        depends:
+            - libs::slirp-dev
+            - devel::dtc-dev
+            - python::pycotap
+
+            - use: []
+              depends:
+                  - libs::slirp-tgt
+                  - devel::dtc-tgt
+
+        # This builds a simple version of qemu. Not a lot of features are
+        # turned on. Its mainly for building it on the host and use it for
+        # some local testing.
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_OPTS \
+                --target-list='aarch64-softmmu arm-softmmu i386-softmmu x86_64-softmmu'
+
+            makeParallel
+            makeParallel DESTDIR=$BOB_CWD/install install
+            popd
+
+    "img":
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-tools
+
+            # only build the required tool
+            makeParallel \
+                qemu-img
+            popd
+
+            install -D -m 0755 build/qemu-img \
+                install/usr/bin/qemu-img
+
+    "guest-agent":
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-guest-agent
+
+            # only build the guest agent
+            makeParallel \
+                qemu-ga
+            popd
+
+            install -D -m 0755 build/qga/qemu-ga \
+                install/usr/bin/qemu-ga
+
+    "storage-daemon":
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-tools \
+                --enable-vhost-user \
+                --enable-vhost-user-blk-server
+
+            # only build the required tool
+            makeParallel \
+                storage-daemon/qemu-storage-daemon
+            popd
+
+            install -D -m 0755 build/storage-daemon/qemu-storage-daemon \
+                install/usr/bin/qemu-storage-daemon
+
+    "vhost-user-input":
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-tools \
+                --enable-vhost-user
+
+            # only build the required tool
+            makeParallel \
+                contrib/vhost-user-input/vhost-user-input
+            popd
+
+            install -D -m 0755 build/contrib/vhost-user-input/vhost-user-input \
+                install/usr/bin/vhost-user-input
+
+    "vhost-user-blk":
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-tools \
+                --enable-vhost-user
+
+            # only build the required tool
+            makeParallel \
+                contrib/vhost-user-blk/vhost-user-blk
+            popd
+
+            install -D -m 0755 build/contrib/vhost-user-blk/vhost-user-blk \
+                install/usr/bin/vhost-user-blk
+
+    "vhost-user-gpu":
+        depends:
+            - virtual::libs::libegl-dev
+            - virtual::libs::libgles-dev
+            - virtual::libs::libdrm-dev
+            - libs::pixman-dev
+            - libs::libvirglrenderer-dev
+
+            - use: []
+              depends:
+                  - virtual::libs::libegl-tgt
+                  - virtual::libs::libgles-tgt
+                  - virtual::libs::libdrm-tgt
+                  - libs::pixman-tgt
+                  - libs::libvirglrenderer-tgt
+
+        buildScript: |
+            mkdir -p build install
+            pushd build
+            $1/configure \
+                $QEMU_DEFAULT_CONFIGURE_TOOLS_OPTS \
+                --enable-tools \
+                --enable-vhost-user \
+                --enable-pixman \
+                --enable-virglrenderer \
+                --enable-opengl
+
+            # only build the required tool
+            makeParallel \
+                contrib/vhost-user-gpu/vhost-user-gpu
+            popd
+
+            install -D -m 0755 build/contrib/vhost-user-gpu/vhost-user-gpu \
+                install/usr/bin/vhost-user-gpu
+
+packageScript: |
+    # /usr/share may contain exec/code which should not be stripped. Ignore it
+    # in the install step.
+    installPackageTgt "$1/install/" "!/usr/share"
+    # Now simply copy the unstripped files.
+    installCopy "$1/install/" "/usr/" "/usr/share/***" "!*"
+provideDeps: [ "*-tgt" ]
