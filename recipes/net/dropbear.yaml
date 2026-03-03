@@ -1,0 +1,31 @@
+inherit: [autotools]
+
+depends:
+    - libs::libxcrypt-dev
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::libxcrypt-tgt
+          - libs::zlib-tgt
+
+metaEnvironment:
+    PKG_VERSION: "2025.89"
+    PKG_LICENSE: "MIT-style"
+
+checkoutSCM:
+    scm: url
+    url: "https://matt.ucc.asn.au/dropbear/dropbear-${PKG_VERSION}.tar.bz2"
+    digestSHA256: "0d1f7ca711cfc336dc8a85e672cab9cfd8223a02fe2da0a4a7aeb58c9e113634"
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild \
+        -o PROGRAMS="dropbear scp" \
+        -O PROGRAMS="dropbear scp" \
+        $1 \
+        --disable-lastlog
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideDeps: [ "*-tgt" ]
