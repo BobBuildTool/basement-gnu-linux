@@ -1,7 +1,7 @@
 inherit: [meson, wayland-scanner, init]
 
 metaEnvironment:
-    PKG_VERSION: "14.0.2"
+    PKG_VERSION: "15.0.0"
     PKG_LICENSE: "MIT"
 
 depends:
@@ -16,6 +16,7 @@ depends:
     - libs::cairo-dev
     - libs::pango-dev
     - libs::libdisplay-info-dev
+    - devel::lua-dev
     - core::seatd-libseat-dev
     - graphics::wayland::wayland-dev
     - graphics::wayland::wayland-protocols
@@ -39,7 +40,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://gitlab.freedesktop.org/wayland/weston/-/releases/${PKG_VERSION}/downloads/weston-${PKG_VERSION}.tar.xz
-    digestSHA1: f744163d71d046fa898bc4aa0df25a57c3ff470b
+    digestSHA1: 0ddaae77c58d13afbfb22380a1ded691127fb7c4
     stripComponents: 1
 
 buildScript: |
@@ -47,13 +48,11 @@ buildScript: |
         -Ddoc=false \
         -Dtest-junit-xml=false \
         -Dremoting=false \
-        -Dbackend-drm-screencast-vaapi=false \
         -Dbackend-x11=false \
         -Dbackend-vnc=false \
         -Dbackend-rdp=false \
         -Dbackend-pipewire=false \
         -Dbackend-headless=false \
-        -Dscreenshare=false \
         -Dxwayland=false \
         -Dsystemd=false \
         -Dpipewire=false \
@@ -66,6 +65,7 @@ buildScript: |
         -Dshell-desktop=true \
         -Dshell-ivi=true \
         -Dbackend-drm=true \
+        -Drenderer-vulkan=false \
         -Drenderer-gl=true
 
         # add init script
