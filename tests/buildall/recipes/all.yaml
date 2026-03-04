@@ -13,6 +13,8 @@ depends:
     - graphics::graphviz
     - graphics::fonts::dejavu
     - graphics::fonts::unicode
+    - graphics::fonts::xorg::alias
+    - graphics::fonts::xorg::cursor-misc
     - graphics::imagemagick
     - graphics::kmscube
 
