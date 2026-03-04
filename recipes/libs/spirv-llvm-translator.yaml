@@ -1,24 +1,26 @@
 inherit: [cmake]
 
 metaEnvironment:
-    PKG_VERSION: "20.1.2"
+    PKG_VERSION: "21.1.4"
     PKG_LICENSE: "LicenseRef-spirv-llvm-trans"
     PKG_LICENSE_PATH: "spirv-llvm-trans:LICENSE.TXT"
 
 depends:
     - devel::llvm-libs-dev
     - libs::spirv-headers-dev
+    - libs::spirv-tools-dev
     - libs::zlib-dev
     - use: []
       depends:
           - devel::llvm-libs-tgt
           - libs::spirv-headers-tgt
+          - libs::spirv-tools-tgt
           - libs::zlib-tgt
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v${PKG_VERSION}.tar.gz
-    digestSHA256: d1b4a55dc457edbd9cc50d23583d4bedda9479176efcd34b3e20166bc7a4a562
+    digestSHA256: e900c907b62f82cf541a611b33d6685f375fe3bda6f041087fcdba350ffb437d
     stripComponents: 1
 
 buildTools: [python3, llvm]
