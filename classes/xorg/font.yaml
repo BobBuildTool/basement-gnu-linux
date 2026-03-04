@@ -1,0 +1,10 @@
+inherit: [autotools, "xorg::font-util"]
+
+depends:
+    - graphics::xorg::utils::util-macros-dev
+    - name: graphics::xorg::utils::bdftopcf
+      tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+
+buildTools: [bdftopcf]
