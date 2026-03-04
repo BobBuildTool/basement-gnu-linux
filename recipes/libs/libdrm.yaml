@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "2.4.123"
+    PKG_VERSION: "2.4.131"
     PKG_LICENSE: "MIT"
 
 depends:
@@ -14,7 +14,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://dri.freedesktop.org/libdrm/libdrm-${PKG_VERSION}.tar.xz
-    digestSHA1: d61f31495f931d53971fa61686239483c25c2a86
+    digestSHA256: 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
     stripComponents: 1
 
 buildScript: |
