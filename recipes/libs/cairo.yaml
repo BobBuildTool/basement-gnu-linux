@@ -1,8 +1,14 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.18.0"
+    PKG_VERSION: "1.18.4"
     PKG_LICENSE: "LGPL-2.1-only OR MPL-1.1"
+
+Config:
+    CAIRO_XLIB:
+        type: bool
+        default: false
+        help: Enable X Window System output target
 
 depends:
     - libs::glib-dev
@@ -11,6 +17,14 @@ depends:
     - libs::zlib-dev
     - libs::freetype-dev
     - libs::fontconfig-dev
+
+    - if: "$CAIRO_XLIB"
+      depends:
+          - graphics::xorg::proto::xorgproto-dev
+          - libs::xorg::libX11-dev
+          - libs::xorg::libXext-dev
+          - libs::xorg::libXrender-dev
+
     - use: []
       depends:
           - libs::glib-tgt
@@ -20,16 +34,29 @@ depends:
           - libs::freetype-tgt
           - libs::fontconfig-tgt
 
+          - if: "$CAIRO_XLIB"
+            depends:
+                - libs::xorg::libX11-tgt
+                - libs::xorg::libXext-tgt
+                - libs::xorg::libXrender-tgt
+
 checkoutSCM:
     scm: url
     url:  https://www.cairographics.org/releases/cairo-${PKG_VERSION}.tar.xz
-    digestSHA256: 243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64
+    digestSHA256: 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
     stripComponents: 1
 
 buildTools: [host-toolchain]
+buildVars: [CAIRO_XLIB]
 buildScript: |
+    CONFIG=""
+    if [[ ${CAIRO_XLIB:-0} == "1" ]]; then
+      CONFIG="-Dxlib=enabled"
+      export MESON_ADDITIONAL_PROPERTIES="ipc_rmid_deferred_release=false"
+    fi
     mesonBuild $1 \
-        -Dtests=disabled
+        -Dtests=disabled \
+        ${CONFIG}
 
 multiPackage:
     dev:

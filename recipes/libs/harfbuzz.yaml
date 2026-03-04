@@ -1,32 +1,35 @@
-inherit: [autotools]
+inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "2.7.4"
+    PKG_VERSION: "12.3.2"
     PKG_LICENSE: "MIT"
 
 depends:
-    - libs::glib-dev
+    - libs::cairo-dev
     - libs::freetype-dev
+    - libs::glib-dev
 
     - use: []
       depends:
-          - libs::glib-tgt
+          - libs::cairo-tgt
           - libs::freetype-tgt
+          - libs::glib-tgt
 
 checkoutSCM:
     scm: url
     url:  ${GITHUB_MIRROR}/harfbuzz/harfbuzz/releases/download/${PKG_VERSION}/harfbuzz-${PKG_VERSION}.tar.xz
-    digestSHA256: 6ad11d653347bd25d8317589df4e431a2de372c0cf9be3543368e07ec23bb8e7
+    digestSHA256: 6f6db164359a2da5a84ef826615b448b33e6306067ad829d85d5b0bf936f1bb8
     stripComponents: 1
 
+buildTools: [glib]
 buildScript: |
-    autotoolsBuild $1
+    mesonBuild $1
 
 multiPackage:
     dev:
-        packageScript: autotoolsPackageDev
+        packageScript: mesonPackageDev
         provideDeps: ["*-dev"]
 
     tgt:
-        packageScript: autotoolsPackageTgt
+        packageScript: mesonPackageTgt
         provideDeps: ["*-tgt"]

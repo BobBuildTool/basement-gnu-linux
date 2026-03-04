@@ -1,13 +1,13 @@
 inherit: [make, install]
 
 metaEnvironment:
-    PKG_VERSION: "R09_27_24"
+    PKG_VERSION: "20251212"
     PKG_LICENSE: "GPLv2 OR BSD OR Intel"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/acpica/acpica/archive/refs/tags/${PKG_VERSION}.tar.gz
-    digestSHA256: cc167c0825c3807f9812f892e77ec918b7f62c3faeaf9a2e3664de7639b00b6b
+    digestSHA256: 6f77bd550655183c63f0a307fb0f29ef6140b1f522d61783a16b2af8d9149a0d
     stripComponents: 1
 
 buildTools: [bison, flex, target-toolchain, m4]

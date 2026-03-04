@@ -1,13 +1,13 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.13.2"
+    PKG_VERSION: "1.13.6"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
     url: https://www.freedesktop.org/software/libevdev/libevdev-${PKG_VERSION}.tar.xz
-    digestSHA1: e916eb4730bf3c508240341d9b3082bc6dfd4b6b
+    digestSHA256: 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
     stripComponents: 1
 
 buildScript: |

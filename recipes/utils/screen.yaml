@@ -1,13 +1,13 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: 5.0.0
+    PKG_VERSION: 5.0.1
     PKG_LICENSE: "GPL-3.0-or-later"
 
 checkoutSCM:
     scm: url
     url: ${GNU_MIRROR}/screen/screen-${PKG_VERSION}.tar.gz
-    digestSHA256: f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971
+    digestSHA256: 2dae36f4db379ffcd14b691596ba6ec18ac3a9e22bc47ac239789ab58409869d
     stripComponents: 1
 
 depends:
@@ -19,7 +19,11 @@ depends:
           - libs::ncurses-tgt
 
 buildScript: |
-    CFLAGS="${CFLAGS} -I$1"
+    # compiling screen fails if configure is used out of tree due to not found
+    # headers. Copy the sources in the build directory to avoid this.
+    mkdir -p build
+    rsync -a $1/ build/
+
     autotoolsBuild $1 \
         --prefix=/usr \
         --sysconfdir=/etc \

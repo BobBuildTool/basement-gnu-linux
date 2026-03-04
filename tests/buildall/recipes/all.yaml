@@ -105,6 +105,7 @@ depends:
     - net::ifenslave
     - net::ifupdown
     - net::iperf
+    - net::iproute2
     - net::iptables
     - net::lighttpd
     - net::net-tools

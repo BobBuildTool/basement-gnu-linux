@@ -1,14 +1,14 @@
 inherit: ["python3::setuptools", "strip"]
 
 metaEnvironment:
-    PKG_VERSION: "3.0.12"
+    PKG_VERSION: "3.2.4"
     PKG_LICENSE: "Apache-2.0"
 
 checkoutSCM:
     scm: url
     url: "https://files.pythonhosted.org/packages/\
-        5a/25/886e197c97a4b8e254173002cdc141441e878ff29aaa7d9ba560cd6e4866/cython-${PKG_VERSION}.tar.gz"
-    digestSHA256: b988bb297ce76c671e28c97d017b95411010f7c77fa6623dd0bb47eed1aee1bc
+        91/85/7574c9cd44b69a27210444b6650f6477f56c75fee1b70d7672d3e4166167/cython-${PKG_VERSION}.tar.gz"
+    digestSHA256: 84226ecd313b233da27dc2eb3601b4f222b8209c3a7216d8733b031da1dc64e6
     stripComponents: 1
 
 buildTools: [target-toolchain]

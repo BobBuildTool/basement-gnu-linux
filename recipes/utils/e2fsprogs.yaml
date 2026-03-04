@@ -1,13 +1,13 @@
 inherit: [autotools, patch]
 
 metaEnvironment:
-    PKG_VERSION: "1.47.1"
+    PKG_VERSION: "1.47.3"
     PKG_LICENSE: "MIT AND GPL-2.0-only AND LPG-2.0-only AND BSD-3-Clause"
 
 checkoutSCM:
     scm: url
     url: ${KERNEL_MIRROR}/linux/kernel/people/tytso/e2fsprogs/v${PKG_VERSION}/e2fsprogs-${PKG_VERSION}.tar.xz
-    digestSHA256: "5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1"
+    digestSHA256: "857e6ef800feaa2bb4578fbc810214be5d3c88b072ea53c5384733a965737329"
     stripComponents: 1
 
 checkoutDeterministic: True

@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "33"
+    PKG_VERSION: "34.2"
     PKG_LICENSE: "GPL-2.0-or-later AND LGPL-2.1-or-later"
 
 privateEnvironment:
@@ -10,20 +10,12 @@ privateEnvironment:
 checkoutSCM:
     scm: url
     url: ${KERNEL_MIRROR}/linux/utils/kernel/kmod/kmod-${PKG_VERSION}.tar.gz
-    digestSHA1: "1514ec6d35a35ba625e2e817e8646c23ee0437e7"
+    digestSHA256: "d60a79fb12a85feab75674ce5b86b2c8bae1714f775f481eae926bd2657b2ffe"
     stripComponents: 1
 
 buildScript: |
     autotoolsBuild $1 \
         --disable-manpages
-
-    # We have to create the symlinks ourself. Not sure why "make
-    # install" doesn't do it
-    mkdir -p install/usr/sbin
-    for i in depmod insmod lsmod modinfo modprobe rmmod ; do
-        ln -s ../bin/kmod install/usr/sbin/$i
-    done
-    ln -s kmod install/usr/lsmod
 
 multiPackage:
     "":

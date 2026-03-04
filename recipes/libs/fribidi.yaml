@@ -1,13 +1,13 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.0.11"
+    PKG_VERSION: "1.0.16"
     PKG_LICENSE: "LGPL-2.1-or-later"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/fribidi/fribidi/releases/download/v${PKG_VERSION}/fribidi-${PKG_VERSION}.tar.xz
-    digestSHA256: 30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d
+    digestSHA256: 1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c
     stripComponents: 1
 
 buildTools: [host-toolchain]
