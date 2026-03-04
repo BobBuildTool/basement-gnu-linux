@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, init]
 
 metaEnvironment:
     PKG_VERSION: "6.0.0"
@@ -29,6 +29,11 @@ buildScript: |
         --enable-openssl=yes \
         --enable-botan=yes \
         --enable-forecast=yes
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@strongswan/S41strongswan.sh@> install/etc/init.d/S41strongswan.sh
+    fi
 
 packageScript: |
     autotoolsPackageTgt
