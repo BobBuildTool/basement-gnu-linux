@@ -1,0 +1,34 @@
+inherit: [cmake, patch]
+
+metaEnvironment:
+    PKG_VERSION: "0.9.5"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/pantoniou/libfyaml/releases/download/v${PKG_VERSION}/libfyaml-${PKG_VERSION}.tar.gz
+    digestSHA256: 9acbc9737808b2833a51be0d4b361987ab6bbbb19cbda7c0c5c83148c8addd8a
+    stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@libfyaml/*.patch@>
+
+depends:
+    - libs::libyaml-dev
+    - use: []
+      depends:
+          - libs::libyaml-tgt
+
+buildScript: |
+    cmakeBuild $1 \
+        -DBUILD_TESTING=OFF \
+        -DCOMPILER_SUPPORTS_WNO_TAUTOLOGICAL_CONSTANT_OUT_OF_RANGE_COMPARE=0
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: cmakePackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: cmakePackageTgt

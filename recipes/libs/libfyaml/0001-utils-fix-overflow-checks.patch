@@ -1,0 +1,64 @@
+From c71802e0ee84e34ee5a2e964fdae9a0db7df3378 Mon Sep 17 00:00:00 2001
+From: Ralf Hubert <ralf.hubert@secunet.com>
+Date: Tue, 10 Mar 2026 07:17:03 +0100
+Subject: [PATCH] utils: fix overflow checks
+
+Fix a compile error raised on the custom overflow implementations, e.g.:
+
+ src/util/fy-utils.h:232:23: error: '__result' undeclared (first use in
+                                   this function); did you mean '__res'?
+   __overflow = ((__a ^ __result) & (__b & __result)) < 0; \
+
+Signed-off-by: Ralf Hubert <ralf.hubert@secunet.com>
+---
+ src/tool/fy-tool-util.h | 4 ++--
+ src/util/fy-utils.h     | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/tool/fy-tool-util.h b/src/tool/fy-tool-util.h
+index 1094e44..62b0e94 100644
+--- a/src/tool/fy-tool-util.h
++++ b/src/tool/fy-tool-util.h
+@@ -99,7 +99,7 @@ static inline bool fy_add_overflow_size_t(size_t a, size_t b, size_t *resp)
+ 	\
+ 	__res = __a + __b; \
+ 	/* overflow when signs of a, b same, but results different */ \
+-	__overflow = ((__a ^ __result) & (__b & __result)) < 0; \
++	__overflow = ((__a ^ __res) & (__b & __res)) < 0; \
+ 	*(_resp) = __res; \
+ 	__overflow; \
+ })
+@@ -132,7 +132,7 @@ static inline bool fy_sub_overflow_size_t(size_t a, size_t b, size_t *resp)
+ 	\
+ 	__res = __a - __b; \
+ 	/* overflow when signs of a, b differ, but results different from minuend */ \
+-	__overflow = ((__a ^ __b) & (__a & __result)) < 0; \
++	__overflow = ((__a ^ __b) & (__a & __res)) < 0; \
+ 	*(_resp) = __res; \
+ 	__overflow; \
+ })
+diff --git a/src/util/fy-utils.h b/src/util/fy-utils.h
+index e7ac43c..018874b 100644
+--- a/src/util/fy-utils.h
++++ b/src/util/fy-utils.h
+@@ -229,7 +229,7 @@ void fy_keyword_iter_end(struct fy_keyword_iter *iter);
+ 	\
+ 	__res = __a + __b; \
+ 	/* overflow when signs of a, b same, but results different */ \
+-	__overflow = ((__a ^ __result) & (__b & __result)) < 0; \
++	__overflow = ((__a ^ __res) & (__b & __res)) < 0; \
+ 	*(_resp) = __res; \
+ 	__overflow; \
+ })
+@@ -255,7 +255,7 @@ void fy_keyword_iter_end(struct fy_keyword_iter *iter);
+ 	\
+ 	__res = __a - __b; \
+ 	/* overflow when signs of a, b differ, but results different from minuend */ \
+-	__overflow = ((__a ^ __b) & (__a & __result)) < 0; \
++	__overflow = ((__a ^ __b) & (__a & __res)) < 0; \
+ 	*(_resp) = __res; \
+ 	__overflow; \
+ })
+-- 
+2.52.0
+
