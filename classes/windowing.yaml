@@ -1,0 +1,16 @@
+Config:
+    WINDOWING_WAYLAND:
+        type: bool
+        default: false
+    WINDOWING_X11:
+        type: bool
+        default: false
+
+buildVars: [WINDOWING_WAYLAND, WINDOWING_X11]
+buildSetup: |
+    windowingWaylandOnOff () {
+        [[ ${WINDOWING_WAYLAND} -eq 1 ]] && echo ON || echo OFF
+    }
+    windowingX11OnOff () {
+        [[ ${WINDOWING_X11} -eq 1 ]] && echo ON || echo OFF
+    }
