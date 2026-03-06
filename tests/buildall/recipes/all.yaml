@@ -106,10 +106,14 @@ depends:
     - libs::yajl-tgt
 
     - multimedia::alsa-utils
+    - multimedia::flac-tgt
     - multimedia::gst-plugins-base-tgt
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
+    - multimedia::ogg-tgt
+    - multimedia::opus-tgt
     - multimedia::pipewire
+    - multimedia::vorbis-tgt
     - multimedia::wireplumber
 
     - net::bridge-utils
