@@ -161,6 +161,7 @@ depends:
     - python::pyyaml
     - python::regex
     - python::semantic-version
+    - python::setuptools-rust
     - python::setuptools-scm
     - python::smbus3
     - python::starlette
