@@ -146,6 +146,7 @@ depends:
     - python::lxml
     - python::mako
     - python::markupsafe
+    - python::maturin
     - python::packaging
     - python::pathspec
     - python::pbr
