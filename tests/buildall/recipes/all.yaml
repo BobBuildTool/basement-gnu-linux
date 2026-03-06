@@ -153,6 +153,7 @@ depends:
     - python::platformdirs
     - python::pluggy
     - python::psutil
+    - python::puccinialin
     - python::pycotap
     - python::pycparser
     - python::pyc_wheel
