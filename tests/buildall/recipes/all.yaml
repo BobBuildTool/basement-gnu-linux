@@ -122,6 +122,7 @@ depends:
     - perl::xml-parser-tgt
 
     - python::anyio
+    - python::asn1
     - python::build
     - python::cachetools
     - python::calver
