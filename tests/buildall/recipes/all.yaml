@@ -160,6 +160,7 @@ depends:
     - python::pyproject-hooks
     - python::pyyaml
     - python::regex
+    - python::semantic-version
     - python::setuptools-scm
     - python::smbus3
     - python::starlette

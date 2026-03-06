@@ -1,0 +1,17 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "2.10.0"
+    PKG_LICENSE: "BSD-2-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/rbarrois/python-semanticversion/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: e234480908f633d2d80fdd97e87699135b2ed2fc9876b7f41d1d4a2d3262a0c4
+    stripComponents: 1
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
