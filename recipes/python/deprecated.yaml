@@ -1,0 +1,22 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "1.3.1"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/laurent-laporte-pro/deprecated/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: 5bfaa49b1edadd5599b2117baf2bf037f493eeda686d6b2c004d55e8ace6f988
+    stripComponents: 1
+
+depends:
+    - python::wrapt
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
+
+provideDeps: ['python::*']

@@ -133,6 +133,7 @@ depends:
     - python::construct
     - python::construct-dataclasses
     - python::cython
+    - python::deprecated
     - python::distlib
     - python::docutils
     - python::filelock
