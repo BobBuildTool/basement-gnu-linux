@@ -1,4 +1,4 @@
-inherit: [autoconf, autotools, patch]
+inherit: [autoconf, autotools, patch, init]
 
 metaEnvironment:
     PKG_VERSION: "4.2.8p18"
@@ -50,6 +50,11 @@ buildScript: |
     cat >install/.bob/ntpd.user-table <<EOF
     ntp -1 ntp -1 * - - - ntpd user
     EOF
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@ntp/S49ntpd.sh@> install/etc/init.d/S49ntpd.sh
+    fi
 
 packageScript: autotoolsPackageTgt
 provideDeps: [ "*-tgt" ]
