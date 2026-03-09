@@ -1,0 +1,16 @@
+inherit: ["xorg::font"]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.4"
+    PKG_LICENSE: "LicenseRef-xorg-font-dec-misc"
+    PKG_LICENSE_PATH: |
+        xorg-font-dev-misc:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-dec-misc-${PKG_VERSION}.tar.xz
+    digestSHA256: 82d968201d8ff8bec0e51dccd781bb4d4ebf17e11004944279bdc0201e161af7
+    stripComponents: 1
+
+buildScript: autotoolsBuild $1
+packageScript: autotoolsPackageTgt

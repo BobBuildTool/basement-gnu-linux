@@ -1,0 +1,20 @@
+metaEnvironment:
+    PKG_VERSION: "1.10"
+    PKG_LICENSE: "Bitstream-Vera"
+
+checkoutSCM:
+    scm: url
+    url: https://download.gnome.org/sources/ttf-bitstream-vera/${PKG_VERSION}/ttf-bitstream-vera-${PKG_VERSION}.tar.bz2
+    digestSHA1: "c3e8505a58d52e198a02960a2bd295e4c7a14242"
+    extract: false
+
+buildVars: [PKG_VERSION]
+buildScript: |
+    ln -sf $1/ttf-bitstream-vera-${PKG_VERSION}.tar.bz2
+
+packageScript: |
+    mkdir -p usr/share/fonts/truetype/ttf-bitstream-vera
+    tar -C usr/share/fonts/truetype/ttf-bitstream-vera \
+        -xf $1/ttf-bitstream-vera-${PKG_VERSION}.tar.bz2 \
+        --strip-components 1 \
+        --wildcards "*.ttf"

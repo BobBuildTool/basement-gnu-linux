@@ -1,0 +1,16 @@
+inherit: ["xorg::font"]
+
+metaEnvironment:
+    PKG_VERSION: "1.0.4"
+    PKG_LICENSE: "LicenseRef-xorg-font-mutt-misc"
+    PKG_LICENSE_PATH: |
+        xorg-font-mutt-misc:COPYING
+
+checkoutSCM:
+    scm: url
+    url: https://xorg.freedesktop.org/releases/individual/font/font-mutt-misc-${PKG_VERSION}.tar.xz
+    digestSHA256: b12359f4e12c23bcfcb448b918297e975fa91bef5293d88d3c25343cc768bb24
+    stripComponents: 1
+
+buildScript: autotoolsBuild $1
+packageScript: autotoolsPackageTgt
