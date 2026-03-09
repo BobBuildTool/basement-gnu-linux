@@ -45,14 +45,17 @@ depends:
     - libs::gcrypt-tgt
     - libs::gnutls-tgt
     - libs::harfbuzz-tgt
+    - libs::ivykis-tgt
     - libs::jpeg-turbo-tgt
     - libs::jsonc-tgt
     - libs::libaio-tgt
+    - libs::libbacktrace-tgt
     - libs::libb2-tgt
     - libs::libcap-ng-tgt
     - libs::libconfuse-tgt
     - libs::libdrm-tgt
     - libs::libevdev-tgt
+    - libs::libfaketime
     - libs::libgpg-error-tgt
     - libs::libiconv-tgt
     - libs::libjpeg-tgt
@@ -66,6 +69,8 @@ depends:
     - libs::libssh-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
+    - libs::libtomcrypt-tgt
+    - libs::libtommath-tgt
     - libs::libunistring-tgt
     - libs::libusb-tgt
     - libs::libxcrypt-tgt
@@ -74,9 +79,11 @@ depends:
     - libs::libxslt-tgt
     - libs::libyaml-tgt
     - libs::lvm2
+    - libs::lzo-tgt
     - libs::mesa3d-tgt
     - libs::mtdev-tgt
     - libs::nettle-tgt
+    - libs::nlohmann-json-tgt
     - libs::npth-tgt
     - libs::openssl
     - name: libs::openssl
@@ -95,6 +102,7 @@ depends:
     - libs::qt6-shadertools-tgt
     - libs::qt6-wayland-tgt
     - libs::slirp-tgt
+    - libs::tinyxml2-tgt
     - libs::yajl-tgt
 
     - multimedia::alsa-utils

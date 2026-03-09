@@ -1,0 +1,22 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "libfaketime modifies the system time for a single application"
+    PKG_LICENSE: "GPL-2.0-only"
+    PKG_VERSION: "0.9.12"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/wolfcw/libfaketime/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: 4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa
+    stripComponents: 1
+
+buildVars: [CC, CFLAGS, CPPFLAGS, LDFLAGS]
+buildScript: |
+    rsync -a --delete $1/ .
+    export CFLAGS="$CFLAGS -Wno-error=maybe-uninitialized"
+    makeSequential install DESTDIR=$(pwd)/install PREFIX=/usr LIBDIRNAME=/lib
+
+# libfaketime is a preload lib with intentionally no dev package.
+packageScript: |
+    autotoolsPackageTgt

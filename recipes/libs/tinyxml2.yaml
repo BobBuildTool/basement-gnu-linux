@@ -1,0 +1,20 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_VERSION: "11.0.0"
+    PKG_LICENSE: "ZLib"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/leethomason/tinyxml2/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        packageScript: cmakePackageDev
+    tgt:
+        packageScript: cmakePackageTgt

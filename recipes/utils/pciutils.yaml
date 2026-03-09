@@ -22,6 +22,12 @@ checkoutSCM:
     stripComponents: 1
 
 buildVars: [CC, AR, RANLIB, CFLAGS, LDFLAGS, AUTOCONF_HOST]
+buildSetup: |
+    SHARED=yes
+    if [[ $(cpackageLibraryType) == "static" ]]; then
+       SHARED=no
+    fi
+
 buildScript: |
     mkdir -p build install
     cp -fas $1/* build/
@@ -39,7 +45,21 @@ buildScript: |
         LIBKMOD=yes \
         PREFIX=/usr \
         DESTDIR=$BOB_CWD/install \
-        install
+        SHARED=${SHARED} \
+        install install-lib
 
-packageScript: installPackageBin "$1/install/"
-provideDeps: [ "*-tgt" ]
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: installPackageDev $1/install/
+
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: installPackageLib $1/install/
+
+    "":
+        depends:
+            - name: utils::pciutils-tgt
+              use: []
+        packageScript: installPackageBin "$1/install/"
+        provideDeps: [ "*-tgt" ]
