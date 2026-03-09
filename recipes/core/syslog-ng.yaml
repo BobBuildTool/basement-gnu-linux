@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, init]
 
 metaEnvironment:
     PKG_VERSION: "4.11.0"
@@ -30,6 +30,11 @@ buildScript: |
         --disable-mongodb \
         --disable-python \
         --disable-example-modules
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@syslog-ng/S11syslog-ng.sh@> install/etc/init.d/S11syslog-ng.sh
+    fi
 
 packageScript: |
     autotoolsPackageTgt
