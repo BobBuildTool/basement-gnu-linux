@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, patch]
 
 metaEnvironment:
     PKG_VERSION: "0.194"
@@ -15,6 +15,10 @@ checkoutSCM:
     url: ${SOURCEWARE_MIRROR}/elfutils/${PKG_VERSION}/elfutils-${PKG_VERSION}.tar.bz2
     digestSHA256: 09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e
     stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@elfutils/*.patch@>
 
 buildTools: [m4]
 buildScript: |
