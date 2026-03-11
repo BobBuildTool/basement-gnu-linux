@@ -1,0 +1,17 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "2.1.2"
+    PKG_LICENSE: "BSD-2-Clause"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/GrahamDumpleton/wrapt/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 9f289d4a27cb94eaa4ecf91cdcdb2508ba38db655ba3f43e018f88e1750b8915
+    stripComponents: 1
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt

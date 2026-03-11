@@ -1,0 +1,22 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "1.12.0"
+    PKG_LICENSE: "MIT"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/PyO3/setuptools-rust/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: e6a8f4c4e3c5f0f87b192425572579b7842ea840b1bdda940e751f9d198a3f58
+    stripComponents: 1
+
+depends:
+    - python::setuptools-scm
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
+
+provideDeps: ['python::*']

@@ -138,17 +138,22 @@ depends:
     - perl::xml-parser-tgt
 
     - python::anyio
+    - python::asn1
     - python::build
     - python::cachetools
     - python::calver
     - python::chardet
+    - python::cffi
     - python::click
     - python::colorama
     - python::construct
     - python::construct-dataclasses
+    - python::cryptography
     - python::cython
+    - python::deprecated
     - python::distlib
     - python::docutils
+    - python::ecpy
     - python::filelock
     - python::funcy
     - python::h11
@@ -158,6 +163,7 @@ depends:
     - python::lxml
     - python::mako
     - python::markupsafe
+    - python::maturin
     - python::packaging
     - python::pathspec
     - python::pbr
@@ -165,6 +171,7 @@ depends:
     - python::platformdirs
     - python::pluggy
     - python::psutil
+    - python::puccinialin
     - python::pycotap
     - python::pycparser
     - python::pyc_wheel
@@ -172,6 +179,8 @@ depends:
     - python::pyproject-hooks
     - python::pyyaml
     - python::regex
+    - python::semantic-version
+    - python::setuptools-rust
     - python::setuptools-scm
     - python::smbus3
     - python::starlette
@@ -182,6 +191,7 @@ depends:
     - python::typing_extensions
     - python::uvicorn
     - python::virtualenv
+    - python::wrapt
 
     - utils::acpica
     - utils::brtools

@@ -1,0 +1,20 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "0.1.8"
+    PKG_LICENSE: "MIT OR Apache-2.0"
+
+checkoutSCM:
+    scm: url
+    url: "https://files.pythonhosted.org/packages/34/7d/\
+          88810c578a1526a8a73ac07bf33fb65d68f9b9c82c37950d09159f4d1916/puccinialin-0.1.8.tar.gz"
+    digestSHA256: e19f6316967ae100bf3fb92d8af95e3cec11ce0de58acd2f1a0bca835403a394
+    stripComponents: 1
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
+
+provideDeps: ['python::*']

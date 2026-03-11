@@ -1,0 +1,17 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "1.2.5"
+    PKG_LICENSE: "Apache-2.0"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/cslashm/ECPy/archive/refs/tags/${PKG_VERSION}.tar.gz
+    digestSHA256: 02a2e990fe4b9c51a5a2d7518439ad80e5d839c931f76fa5144c50543e6a103f
+    stripComponents: 1
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
