@@ -1,7 +1,7 @@
 # SUMMARY = "Cron daemon for executing programs at set times"
 # HOMEPAGE = "https://github.com/cronie-crond/cronie/"
 
-inherit: [autotools]
+inherit: [autotools, init]
 
 metaEnvironment:
     PKG_DESCRIPTION: "Cronie contains the standard UNIX daemon crond that runs
@@ -22,6 +22,11 @@ checkoutSCM:
 buildScript: |
     autotoolsBuild $1 \
         --prefix=/usr
+
+    # add init script
+    if initIsAnySysvinit; then
+        install -D -m 0755 $<@cronie/S48cronie.sh@> install/etc/init.d/S48cronie.sh
+    fi
 
 packageScript: |
     autotoolsPackageTgt
