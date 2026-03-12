@@ -1,0 +1,68 @@
+inherit: [cmake, windowing]
+
+metaEnvironment:
+    PKG_LICENSE: "GPL-2.0-or-later"
+    PKG_VERSION: "1.16.0"
+
+depends:
+    - name: libs::appstream
+      tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+
+    - core::linux-pam-dev
+    - libs::fltk-dev
+    - libs::fontconfig-dev
+    - libs::mesa3d-dev
+    - libs::pixman-dev
+
+    - if: "${WINDOWING_X11}"
+      depends:
+          - libs::xorg::libXdamage-dev
+          - libs::xorg::libXft-dev
+          - libs::xorg::libXinerama-dev
+          - libs::xorg::libXrender-dev
+          - libs::xorg::libXmu-dev
+
+    - libs::xorg::libXi-dev
+    - libs::zlib-dev
+    - virtual::libs::libjpeg-dev
+
+    - use: []
+      depends:
+          - core::linux-pam-tgt
+          - libs::fltk-tgt
+          - libs::fontconfig-tgt
+          - libs::mesa3d-tgt
+          - libs::pixman-tgt
+
+          - if: "${WINDOWING_X11}"
+            depends:
+                - libs::xorg::libXdamage-tgt
+                - libs::xorg::libXft-tgt
+                - libs::xorg::libXinerama-tgt
+                - libs::xorg::libXrender-tgt
+                - libs::xorg::libXmu-tgt
+
+          - libs::xorg::libXi-tgt
+          - libs::zlib-tgt
+          - virtual::libs::libjpeg-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/TigerVNC/tigervnc/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: 10512fc0254ae3bde41c19d18c15f7ebd8cd476261afe0611c41965d635d46e8
+    stripComponents: 1
+
+buildTools: [gettext, appstream]
+buildScript: |
+    # provide appstream ITS files
+    export GETTEXTDATADIRS="${BOB_TOOL_PATHS['appstream']}/../share/gettext/"
+    # FIXME: fltk depends on png and dl but the cmake magic did not
+    # provide these libs??
+    export LDFLAGS="${LDFLAGS} -lpng -ldl"
+    cmakeBuild $1 -Wno-dev
+
+provideDeps: ['*-tgt']
+packageScript: |
+    cmakePackageTgt

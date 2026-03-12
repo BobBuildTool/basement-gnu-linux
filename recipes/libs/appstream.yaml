@@ -1,0 +1,86 @@
+inherit: [meson]
+
+metaEnvironment:
+    PKG_LICENSE: "GPL-2.0-or-later"
+    PKG_VERSION: "1.1.2"
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      depends:
+          - devel::gperf
+          - devel::itstool
+          - name: python::lxml
+            use: [result]
+
+    - libs::glib-dev
+    - libs::libfyaml-dev
+    - libs::libpcre2-dev
+    - libs::libxml2-dev
+    - libs::libxmlb-dev
+    - net::curl-dev
+    - use: []
+      depends:
+          - libs::glib-tgt
+          - libs::libfyaml-tgt
+          - libs::libpcre2-tgt
+          - libs::libxml2-tgt
+          - libs::libxmlb-tgt
+          - net::curl-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/ximion/appstream/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: 564ec87b16e9e4ee81fb021e612250fd27f3a3ecd31c209a5dd1ff59def3022d
+    stripComponents: 1
+
+buildTools: [gettext, glib, gperf, itstool]
+buildScript: |
+    mesonBuild $1 \
+        -Dsystemd=false \
+        -Dzstd-support=false \
+        -Dgir=false \
+        -Dstemming=false \
+        -Dapidocs=false \
+        -Ddocs=false \
+        -Dinstall-docs=false \
+        -Dbash-completion=false \
+        -Dman=false
+
+multiPackage:
+    native:
+        packageScript: |
+            rsync -a --delete $1/install/ .
+        provideTools:
+            appstream-native: "usr/bin"
+    "":
+        depends:
+            # appstream references itself. the referenced version has to be a host
+            # native build (non cross)
+            - name: libs::appstream-native
+              tools:
+                  target-toolchain: host-native-toolchain
+              use: [tools]
+        buildTools: [appstream-native]
+        buildSetup: |
+            # appstream needs a 'full' native appstream, not only the tools, to build...
+            export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:${BOB_TOOL_PATHS['appstream-native']}/../lib/pkgconfig
+        multiPackage:
+            "dev":
+                packageScript: |
+                    mesonPackageDev
+                provideDeps: ['*-dev']
+            "tgt":
+                packageScript: |
+                    mesonPackageTgt
+                provideDeps: ['*-tgt']
+            "":
+                depends:
+                    - use: []
+                      name: libs::appstream-tgt
+                packageScript: |
+                    mesonPackageBin
+                provideDeps: ['*-tgt']
+                provideTools:
+                    appstream: usr/bin

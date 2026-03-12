@@ -1,0 +1,45 @@
+inherit: [cmake, windowing]
+
+metaEnvironment:
+    PKG_DESCRIPTION: "Fast Light Toolkit"
+    PKG_LICENSE: "LGPL-2.0-only WITH FLTK-exception"
+    PKG_VERSION: "1.3.11"
+
+depends:
+    - libs::libpng-dev
+    - if: "${WINDOWING_X11}"
+      name: libs::xorg::libX11-dev
+    - libs::zlib-dev
+    - virtual::libs::libegl-dev
+    - virtual::libs::libjpeg-dev
+    - use: []
+      depends:
+          - libs::libpng-tgt
+          - if: "${WINDOWING_X11}"
+            name: libs::xorg::libX11-tgt
+          - libs::zlib-tgt
+          - virtual::libs::libegl-tgt
+          - virtual::libs::libjpeg-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/fltk/fltk/releases/download/release-${PKG_VERSION}/fltk-${PKG_VERSION}-source.tar.bz2
+    digestSHA256: ca2e144e5f89173cd094cc273940d56230b1bf613083a0792e6406dc191cd99f
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1 \
+        -DFLTK_BUILD_TEST=0 \
+        -DFLTK_BUILD_EXAMPLES=0 \
+        -DFLTK_BACKEND_X11=$(windowingX11OnOff)
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            cmakePackageDev $1 "usr/share/" "usr/share/fltk/***"
+
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            cmakePackageTgt
