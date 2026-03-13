@@ -32,6 +32,7 @@ depends:
     - libs::alsa-lib-tgt
     - libs::libassuan-tgt
     - libs::libksba-tgt
+    - libs::bayer2rgb-tgt
     - libs::botan-tgt
     - libs::cairo-tgt
     - libs::cloog-tgt
@@ -78,6 +79,7 @@ depends:
     - libs::libxml2-tgt
     - libs::libxslt-tgt
     - libs::libyaml-tgt
+    - libs::libyuv-tgt
     - libs::lvm2
     - libs::lzo-tgt
     - libs::mesa3d-tgt
@@ -106,10 +108,19 @@ depends:
     - libs::yajl-tgt
 
     - multimedia::alsa-utils
+    - multimedia::flac-tgt
+    - multimedia::ffmpeg
     - multimedia::gst-plugins-base-tgt
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
+    - multimedia::libsdl2
+    - multimedia::libsdl2-image-tgt
+    - multimedia::libsdl2-ttf-tgt
+    - multimedia::ogg-tgt
+    - multimedia::opus-tgt
+    - multimedia::speex-tgt
     - multimedia::pipewire
+    - multimedia::vorbis-tgt
     - multimedia::wireplumber
 
     - net::bridge-utils

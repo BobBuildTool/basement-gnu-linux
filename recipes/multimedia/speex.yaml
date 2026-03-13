@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "BSD-3-Clause"
+    PKG_VERSION:  "1.2.1"
+
+checkoutSCM:
+    scm: url
+    url: http://downloads.xiph.org/releases/speex/speex-${PKG_VERSION}.tar.gz
+    digestSHA256: 4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt

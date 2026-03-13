@@ -1,0 +1,32 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_LICENSE: "ZLib"
+    PKG_VERSION: "2.24.0"
+
+depends:
+    - libs::freetype-dev
+    - multimedia::libsdl2-dev
+    - use: []
+      depends:
+          - libs::freetype-tgt
+          - multimedia::libsdl2-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libsdl-org/SDL_ttf/releases/download/release-${PKG_VERSION}/SDL2_ttf-${PKG_VERSION}.tar.gz
+    digestSHA256: 6f6db164359a2da5a84ef826615b448b33e6306067ad829d85d5b0bf936f1bb8
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ["*-dev"]
+        packageScript: |
+            cmakePackageDev
+    tgt:
+        provideDeps: ["*-tgt"]
+        packageScript: |
+            cmakePackageTgt

@@ -1,0 +1,83 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "8.0.1"
+    PKG_LICENSE: "LGPL-2.1-or-later"
+
+depends:
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::zlib-tgt
+    - name: devel::nasm
+      tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      if: "$(eq,${ARCH},x86_64)"
+
+Config:
+    FFMPEG_ADDITIONAL_OPTIONS:
+        help: Additional options passed to ffmpeg configure
+
+checkoutSCM:
+    scm: url
+    url: https://ffmpeg.org/releases/ffmpeg-8.0.1.tar.xz
+    digestSHA256: 05ee0b03119b45c0bdb4df654b96802e909e0a752f72e4fe3794f487229e5a41
+    stripComponents: 1
+
+buildTools:
+    - host-toolchain
+    - name: nasm
+      if: "$(eq,${ARCH},x86_64)"
+
+buildVars: [ARCH, CROSS_COMPILE, FFMPEG_ADDITIONAL_OPTIONS]
+buildSetup: |
+    CONFIGURE_OPTIONS="${FFMPEG_ADDITIONAL_OPTIONS:-} "
+    if [[ ! $(cpackageCrossCompiling) ]]; then
+        CONFIGURE_OPTIONS+="--enable-cross-compile \
+                       --cross-prefix=${CROSS_COMPILE} \
+                       --arch=${ARCH} "
+    fi
+    case $(cpackageLibraryType) in
+        static)
+            CONFIGURE_OPTIONS+="--disable-shared --enable-static "
+            ;;
+        shared)
+            CONFIGURE_OPTIONS+="--enable-shared --disable-static "
+            ;;
+        both)
+            CONFIGURE_OPTIONS+="--enable-shared --enable-static "
+            ;;
+    esac
+
+buildScript: |
+    # ffmpeg uses a custom configure script failing on unknown options
+    # provided by autotools class:
+    # > Unknown option "--build=x86_64-bob-linux-gnu"
+    # Call it manually...
+
+    mkdir -p build install
+    pushd build
+
+    $1/configure \
+       --prefix=/usr \
+       --target-os=linux \
+       --pkg-config=pkg-config \
+       ${CONFIGURE_OPTIONS}
+    makeParallel
+    makeSequential install DESTDIR=${PWD}/../install
+    popd
+
+multiPackage:
+    "":
+        depends:
+            - name: multimedia::ffmpeg-tgt
+              use: []
+        provideDeps: ['*-tgt']
+        packageScript: installPackageBin $1/install/
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: installPackageDev $1/install/
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: installPackageLib $1/install/

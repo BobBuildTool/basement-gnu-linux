@@ -1,0 +1,47 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_LICENSE: "ZLib"
+    PKG_VERSION: "2.32.10"
+
+depends:
+    - libs::alsa-lib-dev
+    - if: "${WINDOWING_X11}"
+      depends:
+          - libs::xorg::libX11-dev
+          - libs::xorg::libXext-dev
+    - use: []
+      depends:
+          - libs::alsa-lib-tgt
+          - if: "${WINDOWING_X11}"
+            depends:
+                - libs::xorg::libX11-tgt
+                - libs::xorg::libXext-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://libsdl.org/release/SDL2-${PKG_VERSION}.tar.gz
+    digestSHA256: 5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    "":
+        depends:
+            - use: []
+              name: multimedia::libsdl2-tgt
+        provideDeps: ['*-tgt']
+        packageScript: |
+            cmakePackageBin
+        provideTools:
+            sdl_config: usr/bin
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            cmakePackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            cmakePackageLib

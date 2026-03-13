@@ -1,0 +1,30 @@
+inherit: [cmake]
+
+metaEnvironment:
+    PKG_LICENSE: "ZLib"
+    PKG_VERSION: "2.8.8"
+
+depends:
+    - multimedia::libsdl2-dev
+    - use: []
+      depends:
+          - multimedia::libsdl2-tgt
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/libsdl-org/SDL_image/releases/download/release-${PKG_VERSION}/SDL2_image-${PKG_VERSION}.tar.gz
+    digestSHA256: 2213b56fdaff2220d0e38c8e420cbe1a83c87374190cba8c70af2156097ce30a
+    stripComponents: 1
+
+buildScript: |
+    cmakeBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ["*-dev"]
+        packageScript: |
+            cmakePackageDev
+    tgt:
+        provideDeps: ["*-tgt"]
+        packageScript: |
+            cmakePackageTgt

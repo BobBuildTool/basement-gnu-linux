@@ -1,0 +1,27 @@
+inherit: [autotools, autoconf]
+
+metaEnvironment:
+    PKG_LICENSE: "GPLv3"
+    PKG_VERSION: "0.6.0"
+
+checkoutSCM:
+    scm: url
+    url: https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb/-/archive/v${PKG_VERSION}/bayer2rgb-v${PKG_VERSION}.tar.bz2
+    digestSHA256: e731bbe02f2ca68ed5752f47422d0bdcbc6880751484575b7eb7262db2c865bd
+    stripComponents: 1
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      name: devel::gengetopt
+      use: [tools]
+
+buildTools: [gengetopt]
+buildScript: |
+    autotoolsBuild -s $1
+
+multiPackage:
+    dev:
+        packageScript: autotoolsPackageDev
+    tgt:
+        packageScript: autotoolsPackageTgt
