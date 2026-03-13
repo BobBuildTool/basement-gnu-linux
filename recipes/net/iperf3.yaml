@@ -1,0 +1,28 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "LicenseRef-iperf3"
+    PKG_LICENSE_PATH: |
+        iperf3:LICENSE
+    PKG_VERSION: "3.20"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/esnet/iperf/releases/download/${PKG_VERSION}/iperf-${PKG_VERSION}.tar.gz
+    digestSHA256: 3acc572d1ecca4e0b20359c7bf0132ddc80d982efeee20c86f6726a9a6094388
+    stripComponents: 1
+
+depends:
+    - core::util-linux-dev
+    - libs::openssl-dev
+    - use: []
+      depends:
+          - core::util-linux-tgt
+          - libs::openssl-tgt
+
+buildScript: |
+    autotoolsBuild $1
+
+provideDeps: ['*-tgt']
+packageScript: |
+    autotoolsPackageTgt

@@ -1,0 +1,27 @@
+inherit: [install, make, cpackage]
+
+metaEnvironment:
+    PKG_LICENSE: "ISC"
+    PKG_VERSION: "6.9"
+
+depends:
+    - libs::libnl-dev
+    - use: []
+      depends:
+          - libs::libnl-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://mirrors.edge.kernel.org/pub/software/network/iw/iw-${PKG_VERSION}.tar.xz
+    digestSHA256: 3f2db22ad41c675242b98ae3942dbf3112548c60a42ff739210f2de4e98e4894
+    stripComponents: 1
+
+buildVars: [CC]
+buildScript: |
+    rsync -a --delete $1/ .
+    makeParallel PREFIX="/usr/"
+    makeSequential install PREFIX="/usr/" DESTDIR=$(pwd)/install
+
+provideDeps: ['*-tgt']
+packageScript:
+    installPackageTgt $1/install/

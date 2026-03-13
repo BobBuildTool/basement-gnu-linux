@@ -1,0 +1,61 @@
+inherit: [meson, python3]
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - libs::glib-tools
+          - python::python3-setuptools
+          - python::packaging
+
+    - libs::glib-dev
+    - libs::openssl-dev
+    - use: []
+      depends:
+          - libs::glib-tgt
+          - libs::openssl-tgt
+
+metaEnvironment:
+    PKG_LICENSE: "LGPL-2.1"
+    PKG_VERSION: "1.15"
+
+checkoutSCM:
+    scm: url
+    url: https://github.com/rauc/rauc/releases/download/v${PKG_VERSION}/rauc-${PKG_VERSION}.tar.xz
+    digestSHA256: 4ae0b5246c668acb544ce0230a3bada81c78e8afd4755e5afa2218cbd686fd70
+    stripComponents: 1
+
+buildTools: [glib]
+buildVars: [RAUC_OPTIONS]
+buildSetup: |
+    export PYTHONPATH=$PYTHONPATH:${BOB_DEP_PATHS['libs::glib-tools']}/usr/share/glib-2.0/
+buildScript: |
+    mesonBuild $1 \
+       -Djson=disabled \
+       -Dnetwork=false \
+       -Dstreaming=false \
+       -Dgpt=disabled \
+       -Dtests=false \
+       -Ddbussystemservicedir="/usr/share/dbus-1/system-services" \
+       -Ddbusinterfacesdir="/usr/share/dbus-1/interfaces" \
+       -Ddbuspolicydir="/usr/share/dbus-1/system.d" \
+       ${RAUC_OPTIONS}
+
+packageScript: |
+    mesonPackageTgt
+
+multiPackage:
+    host:
+        environment:
+            RAUC_OPTIONS: "-Dservice=false"
+        provideTools:
+            rauc: "usr/bin"
+    client:
+        depends:
+            - core::dbus-dev
+            - use: []
+              depends:
+                  - core::dbus-tgt
+        provideDeps: ['*-tgt']
+        environment:
+            RAUC_OPTIONS: "-Dcreate=false"

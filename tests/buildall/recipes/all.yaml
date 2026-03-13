@@ -67,6 +67,7 @@ depends:
     - libs::libpng-tgt
     - libs::libseccomp-tgt
     - libs::libssh-tgt
+    - libs::libssh2-tgt
     - libs::libtasn1-tgt
     - libs::libtirpc-tgt
     - libs::libtomcrypt-tgt
@@ -110,6 +111,7 @@ depends:
     - multimedia::gst-plugins-good-tgt
     - multimedia::gstreamer-tgt
     - multimedia::pipewire
+    - multimedia::v4l-utils
     - multimedia::wireplumber
 
     - net::bridge-utils
@@ -121,17 +123,23 @@ depends:
     - net::ifenslave
     - net::ifupdown
     - net::iperf
+    - net::iperf3
     - net::iproute2
     - net::iptables
+    - net::iputils
+    - net::iw
     - net::lighttpd
     - net::net-tools
     - net::nftables
+    - net::nmap
     - net::ntp
+    - net::openldap
     - net::openssh
     - net::socat
     - net::strongswan
     - net::tcpdump
     - net::wget
+    - net::wpa-supplicant
 
     - perl::cache-memcached-tgt
     - perl::string-crc32-tgt
@@ -187,6 +195,7 @@ depends:
     - utils::brtools
     - utils::cpio
     - utils::cryptsetup
+    - utils::dmidecode
     - utils::dosfstools
     - utils::e2fsprogs
     - utils::evtest
@@ -194,17 +203,25 @@ depends:
     - utils::genimage
     - utils::gnupg
     - utils::luajit
+    - utils::mtd-utils
     - utils::minicom
+    - utils::minicoredumper
     - utils::mingetty
     - utils::mtools
     - utils::nano
     - utils::pciutils
+    - utils::rauc-client
+    - utils::rauc-host
     - utils::s390-tools-ttyrun
     - utils::screen
     - utils::strace
     - utils::sysbench
+    - utils::sysvinit
     - utils::tidy
     - utils::ttysnoop
+    - utils::usbutils
+    - utils::qpdf
+    - utils::valgrind
     - utils::xorriso
     - utils::xxd
 

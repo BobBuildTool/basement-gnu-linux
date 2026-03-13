@@ -1,0 +1,56 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "2.3.0"
+    PKG_LICENSE: "GPL-2.0-or-later"
+
+Config:
+    MTDUTILS_UBIFS:
+        type: bool
+        default: false
+        help: Enable ubifs utilities
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      use: [tools]
+      name: utils::e2fsprogs
+
+    - libs::lzo-dev
+    - libs::zlib-dev
+    - libs::zstd-dev
+    - if: "${MTDUTILS_UBIFS}"
+      depends:
+          - core::util-linux-dev
+          - libs::openssl-dev
+    - use: []
+      depends:
+          - if: "${MTDUTILS_UBIFS}"
+            depends:
+                - core::util-linux-tgt
+                - libs::openssl-tgt
+          - libs::zstd-tgt
+          - libs::lzo-tgt
+          - libs::zlib-tgt
+
+checkoutSCM:
+    scm: url
+    url: "https://infraroot.at/pub/mtd/mtd-utils-${PKG_VERSION}.tar.bz2"
+    digestSHA256: 2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598c10
+    stripComponents: 1
+
+buildTools: [e2fsprogs]
+buildVars: [MTDUTILS_UBIFS]
+buildScript: |
+    CONFIG_OPTS=
+    if [[ "${MTDUTILS_UBIFS}" == "0" ]]; then
+       CONFIG_OPTS+="--without-ubifs "
+    fi
+
+    autotoolsBuild $1 \
+        --without-tests \
+        $CONFIG_OPTS
+
+provideDeps: [ '*-tgt' ]
+packageScript: |
+    autotoolsPackageTgt

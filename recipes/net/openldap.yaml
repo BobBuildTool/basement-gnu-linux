@@ -1,0 +1,53 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_LICENSE: "OLDAP-2.8"
+    PKG_VERSION: "2.6.12"
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      name: devel::groff
+      use: [tools]
+    - libs::openssl-dev
+    - use: []
+      depends:
+          - libs::openssl-tgt
+
+checkoutSCM:
+    scm: url
+    url: https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${PKG_VERSION}.tgz
+    digestSHA256: 1716ad779e85d743694c3e3b05277fb71b6a5eadca43c7a958aa62683b22208e
+    stripComponents: 1
+
+buildTools: [groff]
+buildScript: |
+    export ac_cv_func_memcmp_working=yes
+
+    case $(cpackageLibraryType) in
+       shared)
+          DYNAMIC="--enable-dynamic"
+          ;;
+       *)
+          ;;
+    esac
+
+    export STRIP="true"
+    autotoolsBuild $1 --disable-slapd \
+                      --disable-debug \
+                      ${DYNAMIC:-} \
+                      --with-yielding-select=yes
+
+multiPackage:
+    "":
+        depends:
+            - name: net::openldap-tgt
+              use: []
+        packageScript: autotoolsPackageBin
+        provideDeps: ['*-tgt']
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: autotoolsPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: autotoolsPackageTgt
