@@ -51,7 +51,7 @@ checkoutVars: [GRUB2_BOOTSTRAP, GNULIB_URL]
 checkoutScript: |
     # support overriding the scm with a git repo
     if [[ ${GRUB2_BOOTSTRAP:-0} == 1 ]]; then
-        ./bootstrap
+        ./bootstrap --skip-po
         updateConfigAllRecursive
     fi
 
