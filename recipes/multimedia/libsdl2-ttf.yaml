@@ -19,7 +19,7 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-    cmakeBuild $1
+    cmakeBuild $1 -DSDL2TTF_SAMPLES=OFF
 
 multiPackage:
     dev:
