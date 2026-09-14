@@ -5,10 +5,10 @@ metaEnvironment:
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
-    scm: url
-    url: ${GITHUB_MIRROR}/LuaJIT/LuaJIT/archive/refs/tags/v${PKG_VERSION}.ROLLING.tar.gz
-    digestSHA256: 31d7a4853df4c548bf91c13d3b690d19663d4c06ae952b62606c8225d0b410ad
-    stripComponents: 1
+    scm: git
+    url: ${GITHUB_MIRROR}/LuaJIT/LuaJIT.git
+    branch: "v${PKG_VERSION}"
+    commit: 24c20c94e7db195b640854619577441f9b4bc6be
 
 buildTools: [target-toolchain, host-toolchain]
 buildVars: [CC, STRIP, CROSS_COMPILE]
