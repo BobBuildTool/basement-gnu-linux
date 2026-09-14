@@ -1,13 +1,13 @@
 inherit: [make, cpackage, install]
 
 metaEnvironment:
-    PKG_VERSION: "1.6.1"
+    PKG_VERSION: "1.8.1"
     PKG_LICENSE: "GPL-2.0-or-later"
 
 checkoutSCM:
     scm: url
     url: ${KERNEL_MIRROR}/software/utils/dtc/dtc-${PKG_VERSION}.tar.xz
-    digestSHA256: 65cec529893659a49a89740bb362f507a3b94fc8cd791e76a8d6a2b6f3203473
+    digestSHA256: 23526015a6f1550e0541a53fe7acea1b5a11e3697cdf3a3bdc076abc38f6045d
     stripComponents: 1
 
 buildTools: [bison, flex, target-toolchain, m4]
