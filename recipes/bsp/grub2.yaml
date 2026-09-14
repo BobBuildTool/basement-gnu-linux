@@ -4,7 +4,7 @@ privateEnvironment:
     APPLY_UPDATE_CONFIG: "$(if-then-else,${GRUB2_BOOTSTRAP:-0},no,yes)"
 
 metaEnvironment:
-    PKG_VERSION: "2.12"
+    PKG_VERSION: "2.14"
     PKG_LICENSE: "GPL-3.0-or-later"
 
 Config:
@@ -28,7 +28,7 @@ Config:
 checkoutSCM:
     scm: url
     url: ${GNU_MIRROR}/grub/grub-${PKG_VERSION}.tar.gz
-    digestSHA256: b30919fa5be280417c17ac561bb1650f60cfb80cc6237fa1e2b6f56154cb9c91
+    digestSHA256: d0415fbb3e739237064e173743a6e5f60c33a81ec02a069cc9152d80efff4967
     stripComponents: 1
 
 depends:
@@ -62,12 +62,6 @@ buildScript: |
     # cp: cannot create regular file 'dev/src/bsp/grub2/1/workspace/docs/stamp-1': Read-only file system
 
     rsync -a --delete $1/ __src__
-    pushd __src__
-    if [ ! -e grub-core/extra_deps.lst ]; then
-        # Add a file missing from the release tarball:
-        echo depends bli part_gpt > grub-core/extra_deps.lst
-    fi
-    popd
 
     unset {C,CPP,CXX,LD}FLAGS
     autotoolsBuild $(pwd)/__src__ \
