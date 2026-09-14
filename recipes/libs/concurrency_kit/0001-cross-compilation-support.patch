@@ -1,0 +1,83 @@
+From 06a58a19e145625ea9a0c26e323b896b29be0652 Mon Sep 17 00:00:00 2001
+From: wdfk-prog <1425075683@qq.com>
+Date: Thu, 11 Dec 2025 03:19:24 +0800
+Subject: [PATCH] configure: add --compiler option to support cross-compilation
+ (#262)
+
+This adds a --compiler option to manually specify the compiler family
+(e.g., gcc, clang). This allows users to bypass the compiler detection
+logic which attempts to execute a compiled binary, causing failure when
+cross-compiling due to architecture mismatch.
+
+Additionally, this skips the strict file existence check on $CC when
+--compiler is provided, enabling the use of compiler variables that
+include arguments (e.g., --sysroot).
+
+Fixes #251
+---
+ configure | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/configure b/configure
+index 4c3eb9c..b614276 100755
+--- a/configure
++++ b/configure
+@@ -198,6 +198,7 @@ for option; do
+ 		echo
+ 		echo "The following options may be used for cross-building."
+ 		echo "  --profile=N              Use custom build profile (use in conjunction with \$CC)"
++		echo "  --compiler=N             Force compiler type (gcc, clang, suncc) to skip detection"
+ 		echo
+ 		echo "The following options may be used to modify installation behavior."
+ 		echo "  --includedir=N           Headers directory (default is ${PREFIX}/include)"
+@@ -274,6 +275,9 @@ for option; do
+ 	--profile=*)
+ 		PROFILE=$value
+ 		;;
++	--compiler=*)
++		COMPILER=$value
++		;;
+ 	--prefix=*)
+ 		PREFIX=$value
+ 		;;
+@@ -676,13 +680,15 @@ if test "$PROFILE"; then
+ fi
+ 
+ printf "Finding suitable compiler........"
+-if test ! -x "${CC}"; then
+-	CC=`pathsearch "${CC:-cc}"`
+-	if test -z "$CC" -o ! -x "$CC"; then
+-		CC=`pathsearch "${CC:-gcc}"`
++if test -z "$COMPILER"; then
++	if test ! -x "${CC}"; then
++		CC=`pathsearch "${CC:-cc}"`
++		if test -z "$CC" -o ! -x "$CC"; then
++			CC=`pathsearch "${CC:-gcc}"`
++		fi
+ 	fi
++	assert "$CC" "not found"
+ fi
+-assert "$CC" "not found"
+ 
+ cat << EOF > .1.c
+ #include <stdio.h>
+@@ -712,6 +718,7 @@ int main(void) {
+ }
+ EOF
+ 
++if test -z "$COMPILER"; then
+ $CC -o .1 .1.c
+ COMPILER=`./.1 2> /dev/null`
+ r=$?
+@@ -722,6 +729,9 @@ if test "$r" -ne 0; then
+ else
+ 	echo "success [$CC]"
+ fi
++else
++    echo "success [$CC] (manual)"
++fi
+ 
+ if test "$COMPILER" = "suncc"; then
+ 	LD=/bin/ld
+-- 
+2.39.5

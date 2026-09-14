@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, patch]
 
 metaEnvironment:
     PKG_VERSION: "0.7.2"
@@ -10,10 +10,14 @@ checkoutSCM:
     stripComponents: 1
     digestSHA256: 568ebe0bc1988a23843fce6426602e555b7840bf6714edcdf0ed530214977f1b
 
+checkoutDeterministic: True
+checkoutScript: |
+  patchApplySeries -p1 $<@concurrency_kit/*.patch@>
+
 buildVars: [ARCH, AR, CC]
 buildScript: |
     rsync -a --delete $1/ .
-    autotoolsBuild $(pwd) --platform=${ARCH}
+    autotoolsBuild $(pwd) --compiler=${CC##*-} --platform=${ARCH}
 
 multiPackage:
     dev:
