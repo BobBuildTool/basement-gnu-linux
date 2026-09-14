@@ -1,0 +1,20 @@
+inherit: [autotools]
+
+metaEnvironment:
+    PKG_VERSION: "0.19.1"
+    PKG_LICENSE: "GPL-3.0-or-later"
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/NixOS/patchelf/releases/download/${PKG_VERSION}/patchelf-${PKG_VERSION}.tar.bz2
+    digestSHA256: 2cce01de93653829f6ab68a20c2ec275e1c00a946110704a27e928d2e6e88716
+    stripComponents: 1
+
+buildScript: |
+    autotoolsBuild $1
+
+packageScript: |
+    autotoolsPackageTgt
+
+provideTools:
+    patchelf: "usr/bin"
