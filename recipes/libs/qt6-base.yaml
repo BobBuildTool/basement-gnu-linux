@@ -74,7 +74,7 @@ multiPackage:
                   !"${QT6_BASE_HOST_BUILD}"
               depends:
                   - libs::zlib-dev
-                  - libs::pcre2-dev
+                  - libs::libpcre2-dev
                   - libs::libb2-dev
                   - libs::glib-dev
                   - libs::libinput-dev
@@ -94,7 +94,7 @@ multiPackage:
                         - libs::libc-openmp-tgt
                         - libs::libc-stdc++-tgt
                         - libs::zlib-tgt
-                        - libs::pcre2-tgt
+                        - libs::libpcre2-tgt
                         - libs::libb2-tgt
                         - libs::glib-tgt
                         - libs::libinput-tgt
