@@ -5,11 +5,12 @@ metaEnvironment:
     PKG_VERSION: "0.6.0"
 
 checkoutSCM:
-    scm: url
-    url: https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb/-/archive/v${PKG_VERSION}/bayer2rgb-v${PKG_VERSION}.tar.bz2
-    digestSHA256: e731bbe02f2ca68ed5752f47422d0bdcbc6880751484575b7eb7262db2c865bd
-    stripComponents: 1
+    scm: git
+    url: https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git
+    tag: v${PKG_VERSION}
+    commit: dc5cda706fea679fc53597e03dd39dd17ebd8a2e
 
+checkoutDeterministic: True
 checkoutScript: |
     autoconfReconfigure
 
