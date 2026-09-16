@@ -7,6 +7,7 @@ depends:
     - core::dbus-tgt
     - core::eudev-tgt
     - core::hwdata
+    - core::syslog-ng
     - core::sysvinit
     - core::tz-data
     - core::tz-zic
@@ -100,7 +101,7 @@ depends:
       alias: libs::openssl-no-sse2
       use: [result] # don't use the deps as they are causing incompatible variants...
     - libs::pango-tgt
-    - libs::pcre2-tgt
+    - libs::libpcre2-tgt
     - libs::pixman-tgt
     - libs::popt-tgt
     - libs::protobuf-tgt
