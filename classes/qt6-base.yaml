@@ -40,6 +40,7 @@ buildSetup: |
             -DQT_BUILD_TESTS=OFF \
             -DQT_BUILD_EXAMPLES=OFF \
             -DBUILD_WITH_PCH=OFF \
+            -DQT_AVOID_CMAKE_ARCHIVING_API=ON \
             ${@:2}
     }
 
