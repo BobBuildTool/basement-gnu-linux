@@ -1,7 +1,7 @@
-inherit: [autotools, patch]
+inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "0.194"
+    PKG_VERSION: "0.196"
     PKG_LICENSE: "GPL-3.0-or-later"
 
 depends:
@@ -13,12 +13,8 @@ depends:
 checkoutSCM:
     scm: url
     url: ${SOURCEWARE_MIRROR}/elfutils/${PKG_VERSION}/elfutils-${PKG_VERSION}.tar.bz2
-    digestSHA256: 09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e
+    digestSHA256: fd5cc6b77ad6773cac93cb3f415f9318ac3b3455eecf801f6b4a742c4f6c7209
     stripComponents: 1
-
-checkoutDeterministic: True
-checkoutScript: |
-    patchApplySeries $<@elfutils/*.patch@>
 
 buildTools: [m4]
 buildScript: |
