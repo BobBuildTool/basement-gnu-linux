@@ -59,7 +59,7 @@ buildSetup: |
         fi
         # check if the source file is newer than .config
         if [[ -f .config && .config -nt $DEF_CFG ]]; then
-            break;
+            return
         fi
         # redo the .config file
         cp -u "$DEF_CFG" .config
