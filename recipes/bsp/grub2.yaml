@@ -51,8 +51,11 @@ checkoutVars: [GRUB2_BOOTSTRAP, GNULIB_URL]
 checkoutScript: |
     # support overriding the scm with a git repo
     if [[ ${GRUB2_BOOTSTRAP:-0} == 1 ]]; then
-        ./bootstrap
+        ./bootstrap --skip-po
         updateConfigAllRecursive
+        # the changelog contains a timestamp
+        rm grub-core/lib/libgcrypt-grub/cipher/ChangeLog
+        touch grub-core/lib/libgcrypt-grub/cipher/ChangeLog
     fi
 
 buildTools: [bison, flex, python3, host-toolchain, m4]
