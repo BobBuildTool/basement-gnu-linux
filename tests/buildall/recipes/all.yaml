@@ -149,6 +149,7 @@ depends:
     - net::net-tools
     - net::nftables
     - net::nmap
+    - net::nss
     - net::ntp
     - net::openldap
     - net::openssh
