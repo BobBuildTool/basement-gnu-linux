@@ -60,7 +60,7 @@ multiPackage:
         multiPackage:
             "":
                 depends:
-                    - name: core::eudev-tgt
+                    - name: virtual::core::udev-tgt
                       use: []
                 packageScript: autotoolsPackageBin
                 provideDeps: [ "*-tgt" ]
