@@ -32,7 +32,7 @@ buildTools:
 
 buildVars: [ARCH, CROSS_COMPILE, FFMPEG_ADDITIONAL_OPTIONS]
 buildSetup: |
-    CONFIGURE_OPTIONS="${FFMPEG_ADDITIONAL_OPTIONS:-} "
+    CONFIGURE_OPTIONS=""
     if cpackageCrossCompiling ; then
         CONFIGURE_OPTIONS+="--enable-cross-compile \
                        --cross-prefix=${CROSS_COMPILE} \
@@ -49,6 +49,7 @@ buildSetup: |
             CONFIGURE_OPTIONS+="--enable-shared --enable-static "
             ;;
     esac
+    CONFIGURE_OPTIONS+="${FFMPEG_ADDITIONAL_OPTIONS:-}"
 
 buildScript: |
     # ffmpeg uses a custom configure script failing on unknown options
