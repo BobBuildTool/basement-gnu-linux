@@ -35,6 +35,7 @@ depends:
     - libs::alsa-lib-tgt
     - libs::appstream-tgt
     - libs::libassuan-tgt
+    - libs::libcacard-tgt
     - libs::libksba-tgt
     - libs::bayer2rgb-tgt
     - libs::botan-tgt
