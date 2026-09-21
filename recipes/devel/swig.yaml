@@ -11,14 +11,14 @@ checkoutSCM:
     stripComponents: 1
 
 depends:
-    - libs::pcre2-dev
+    - libs::libpcre2-dev
     - use: []
       depends:
-          - libs::pcre2-tgt
+          - libs::libpcre2-tgt
 
 buildScript: |
     autotoolsBuild $1 \
-        --with-pcre2-prefix=${BOB_DEP_PATHS[libs::pcre2-dev]}/usr
+        --with-pcre2-prefix=${BOB_DEP_PATHS[libs::libpcre2-dev]}/usr
 
 multiPackage:
     "":

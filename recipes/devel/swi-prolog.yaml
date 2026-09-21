@@ -7,13 +7,13 @@ metaEnvironment:
 
 depends:
     - libs::gmp-dev
-    - libs::pcre2-dev
+    - libs::libpcre2-dev
     - libs::openssl-dev
     - libs::zlib-dev
     - use: []
       depends:
           - libs::gmp-tgt
-          - libs::pcre2-tgt
+          - libs::libpcre2-tgt
           - libs::openssl-tgt
           - libs::zlib-tgt
 

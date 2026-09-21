@@ -12,13 +12,13 @@ checkoutSCM:
 
 depends:
     - libs::glib-dev
-    - libs::pcre2-dev
+    - libs::libpcre2-dev
     - libs::openssl-dev
     - libs::jsonc-dev
     - use: []
       depends:
           - libs::glib-tgt
-          - libs::pcre2-tgt
+          - libs::libpcre2-tgt
           - libs::openssl-tgt
           - libs::jsonc-tgt
 
