@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, autoconf]
 
 metaEnvironment:
     PKG_VERSION: "1.2.12"
@@ -31,7 +31,7 @@ buildSetup: |
     esac
 
     build_alsa () {
-        autotoolsBuild $1 \
+        autotoolsBuild -s $1 \
             --with-alsa-devdir=/dev/snd \
             --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi \
                 file null empty share meter hooks lfloat ladspa dmix dshare dsnoop \
