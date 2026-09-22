@@ -1,13 +1,13 @@
 inherit: ["python3::build"]
 
 metaEnvironment:
-    PKG_VERSION: "2.0.11"
+    PKG_VERSION: "2.4.4"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/karpierz/pyc_wheel/archive/refs/tags/${PKG_VERSION}.tar.gz
-    digestSHA256: 49be32f3db3d5dba4884d9c1944ee3d0142efec77e3adacb8ea8c2d07a4493e3
+    digestSHA256: 54b840fe9d77bb4c60f2af7992f12195e26ad1da687f51c92d4eb7c8dee32549
     stripComponents: 1
 
 depends:
