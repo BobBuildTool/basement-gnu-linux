@@ -1,0 +1,38 @@
+diff -ur a/arch/sandbox/config.mk b/arch/sandbox/config.mk
+--- a/arch/sandbox/config.mk	2025-04-07 23:57:55.000000000 +0200
++++ b/arch/sandbox/config.mk	2026-09-21 15:22:03.611906883 +0200
+@@ -50,10 +50,10 @@
+ 
+ ifeq ($(HOST_ARCH),$(HOST_ARCH_X86_64))
+ EFI_LDS := ${SRCDIR}/../../../arch/x86/lib/elf_x86_64_efi.lds
+-EFI_TARGET := --target=efi-app-x86_64
++EFI_TARGET := --output-target=efi-app-x86_64
+ else ifeq ($(HOST_ARCH),$(HOST_ARCH_X86))
+ EFI_LDS := ${SRCDIR}/../../../arch/x86/lib/elf_ia32_efi.lds
+-EFI_TARGET := --target=efi-app-ia32
++EFI_TARGET := --output-target=efi-app-ia32
+ else ifeq ($(HOST_ARCH),$(HOST_ARCH_AARCH64))
+ EFI_LDS := ${SRCDIR}/../../../arch/arm/lib/elf_aarch64_efi.lds
+ OBJCOPYFLAGS += -j .text -j .secure_text -j .secure_data -j .rodata -j .data \
+diff -ur a/arch/x86/config.mk b/arch/x86/config.mk
+--- a/arch/x86/config.mk	2025-04-07 23:57:55.000000000 +0200
++++ b/arch/x86/config.mk	2026-09-21 15:16:08.137012205 +0200
+@@ -69,7 +69,7 @@
+ 
+ LDSCRIPT_EFI := $(srctree)/arch/x86/lib/elf_$(EFIARCH)_efi.lds
+ EFISTUB := crt0_$(EFIARCH)_efi.o reloc_$(EFIARCH)_efi.o
+-OBJCOPYFLAGS_EFI += --target=efi-app-$(EFIARCH)
++OBJCOPYFLAGS_EFI += --output-target=efi-app-$(EFIARCH)
+ 
+ CPPFLAGS_REMOVE_crt0-efi-$(EFIARCH).o += $(CFLAGS_NON_EFI)
+ CPPFLAGS_crt0-efi-$(EFIARCH).o += $(CFLAGS_EFI)
+@@ -127,7 +127,7 @@
+ endif
+ 
+ ifdef CONFIG_X86_64
+-EFI_TARGET := --target=efi-app-x86_64
++EFI_TARGET := --output-target=efi-app-x86_64
+ else
+-EFI_TARGET := --target=efi-app-ia32
++EFI_TARGET := --output-target=efi-app-ia32
+ endif
