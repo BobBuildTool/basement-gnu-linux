@@ -1,8 +1,9 @@
-inherit: [make, install]
+inherit: [make, install, licenses]
 
 metaEnvironment:
     PKG_VERSION: "2024b"
-    PKG_LICENSE: "Public domain"
+    PKG_LICENSE: "LicenseRef-tzdata"
+    PKG_LICENSE_PATH: "tzdata:src/LICENSE"
 
 checkoutSCM:
     - scm: url

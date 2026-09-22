@@ -4,7 +4,7 @@ metaEnvironment:
     PKG_VERSION: "1.0.4"
     PKG_LICENSE: "LicenseRef-xorg-font-dec-misc"
     PKG_LICENSE_PATH: |
-        xorg-font-dev-misc:COPYING
+        xorg-font-dec-misc:COPYING
 
 checkoutSCM:
     scm: url

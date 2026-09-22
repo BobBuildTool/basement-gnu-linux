@@ -10,7 +10,8 @@ depends:
 
 metaEnvironment:
     PKG_VERSION: "2025.89"
-    PKG_LICENSE: "MIT-style"
+    PKG_LICENSE: "LicenseRef-dropbear"
+    PKG_LICENSE_PATH: "dropbear:LICENSE"
 
 checkoutSCM:
     scm: url
