@@ -1,13 +1,13 @@
 inherit: ["python3::build"]
 
 metaEnvironment:
-    PKG_VERSION: "2.0.11"
+    PKG_VERSION: "2.4.4"
     PKG_LICENSE: "Zlib"
 
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/karpierz/pkg_about/archive/refs/tags/${PKG_VERSION}.tar.gz
-    digestSHA256: f3c273b8bf8edfebc5fd6995d9211574ab6a126e77ae394e4fafeff8396e4550
+    digestSHA256: e7668dd319cf1927832fd20e06d6226fdf8454d2a0ac80feb7576c6693e979b2
     stripComponents: 1
 
 depends:
