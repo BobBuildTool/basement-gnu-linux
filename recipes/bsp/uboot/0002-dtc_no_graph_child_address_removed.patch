@@ -1,0 +1,11 @@
+diff -ur a/scripts/Makefile.lib b/scripts/Makefile.lib
+--- a/scripts/Makefile.lib	2025-04-07 23:57:55.000000000 +0200
++++ b/scripts/Makefile.lib	2026-09-21 16:34:29.308808386 +0200
+@@ -300,7 +300,6 @@
+ 	-Wno-unit_address_format \
+ 	-Wno-avoid_unnecessary_addr_size \
+ 	-Wno-alias_paths \
+-	-Wno-graph_child_address \
+ 	-Wno-graph_port \
+ 	-Wno-unique_unit_address \
+ 	-Wno-simple_bus_reg \
