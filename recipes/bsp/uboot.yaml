@@ -1,4 +1,4 @@
-inherit: [uboot, install]
+inherit: [uboot, install, patch]
 
 metaEnvironment:
     PKG_VERSION: "2025.04"
@@ -9,6 +9,10 @@ checkoutSCM:
     url: https://ftp.denx.de/pub/u-boot/u-boot-${PKG_VERSION}.tar.bz2
     digestSHA1: 6bc4fd62d5b135ff2fbb11fcecbb4b8ca055022a
     stripComponents: 1
+
+checkoutDeterministic: True
+checkoutScript: |
+    patchApplySeries $<@uboot/*.patch@>
 
 multiPackage:
     "":
