@@ -1,4 +1,4 @@
-inherit: [make, install, kconfig, patch, init]
+inherit: [make, install, kconfig, patch, init, licenses]
 
 depends:
     - if: "${BUSYBOX_CUSTOM_CONFIG:-}"
@@ -6,7 +6,7 @@ depends:
 
 metaEnvironment:
     PKG_VERSION: "1.37.0"
-    PKG_LICENSE: "GPL-2.0, bzip2-1.0.4"
+    PKG_LICENSE: "GPL-2.0 AND bzip2-1.0.6"
 
 checkoutSCM:
     scm: url
