@@ -1,4 +1,4 @@
-inherit: [autotools]
+inherit: [autotools, autoconf]
 
 metaEnvironment:
     PKG_VERSION: "1.2.12"
@@ -10,13 +10,55 @@ checkoutSCM:
     digestSHA1: b911006236d4f7f1e02f6d9d64c8ab218df34855
     stripComponents: 1
 
+# configure fails if BOTH library types are enabled at the same time.
+privateEnvironment:
+    AUTOTOOLS_AUTO_STATIC: "no"
+
+buildSetup: |
+    STATIC=0
+    SHARED=0
+    case $(cpackageLibraryType) in
+        static)
+            STATIC=1
+            ;;
+        shared)
+            SHARED=1
+            ;;
+        both)
+            STATIC=1
+            SHARED=1
+            ;;
+    esac
+
+    build_alsa () {
+        autotoolsBuild -s $1 \
+            --with-alsa-devdir=/dev/snd \
+            --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi \
+                file null empty share meter hooks lfloat ladspa dmix dshare dsnoop \
+                asym iec958 softvol extplug ioplug mmap_emul" \
+            --with-ctl-plugins=all \
+            ${@:2}
+    }
+
 buildScript: |
-    autotoolsBuild $1 \
-        --with-alsa-devdir=/dev/snd \
-        --with-pcm-plugins="copy linear route mulaw alaw adpcm rate plug multi \
-            file null empty share meter hooks lfloat ladspa dmix dshare dsnoop \
-            asym iec958 softvol extplug ioplug mmap_emul" \
-        --with-ctl-plugins=all
+    if [ ${STATIC} -eq 1 ]; then
+        mkdir -p build_static && pushd build_static
+        build_alsa $1 --enable-static --disable-shared
+        popd
+    fi
+    if [ ${SHARED} -eq 1 ]; then
+        mkdir -p build_shared && pushd build_shared
+        build_alsa $1 --disable-static --enable-shared
+        popd
+    fi
+    rm -rf install && mkdir -p install
+
+    if [ ${STATIC} -eq 1 ]; then
+        cp -a build_static/install/. install/
+    fi
+    if [ ${SHARED} -eq 1 ]; then
+        cp -a build_shared/install/. install/
+    fi
 
 multiPackage:
     dev:

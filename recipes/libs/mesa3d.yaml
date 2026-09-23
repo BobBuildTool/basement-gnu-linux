@@ -158,6 +158,8 @@ multiPackage:
                         - devel::llvm-libs-tgt
 
             - if: "$(match,$MESA3D_GALLIUM_DRIVERS,[llvmpipe|iris])"
+              environment:
+                  BASEMENT_LIBS: "static"
               tools:
                   target-toolchain: host-compat-toolchain
               depends:
