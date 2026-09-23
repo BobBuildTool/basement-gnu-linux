@@ -7,7 +7,7 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${GITHUB_MIRROR}/chardet/chardet/archive/refs/tags/${PKG_VERSION}.tar.gz
-    digestSHA256: 07249fb7bdf1fc669e2fb0eba58afe18fe6c5e3187ee806f22969f0e809a32dd
+    digestSHA256: a93d730fd5cf7ba9a543bd8e0a66a1f63a784bbb325bcb8c797ac91b56cdc9e2
     stripComponents: 1
 
 depends:

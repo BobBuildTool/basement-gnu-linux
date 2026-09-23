@@ -10,10 +10,6 @@ checkoutSCM:
     tag: v${PKG_VERSION}
     commit: dc5cda706fea679fc53597e03dd39dd17ebd8a2e
 
-checkoutDeterministic: True
-checkoutScript: |
-    autoconfReconfigure
-
 depends:
     - tools:
           target-toolchain: host-compat-toolchain
@@ -22,7 +18,7 @@ depends:
 
 buildTools: [gengetopt]
 buildScript: |
-    autotoolsBuild $1
+    autotoolsBuild -s $1
 
 multiPackage:
     dev:
