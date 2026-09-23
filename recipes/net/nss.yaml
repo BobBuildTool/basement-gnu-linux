@@ -1,0 +1,104 @@
+inherit: [cpackage, make, install]
+
+metaEnvironment:
+    PKG_VERSION: "3.129"
+    PKG_LICENSE: "MLP-2.0"
+
+depends:
+    - libs::zlib-dev
+    - use: []
+      depends:
+          - libs::zlib-tgt
+
+checkoutSCM:
+    - scm: url
+      url: "https://archive.mozilla.org/pub/security/nss/releases/\
+            NSS_$(subst,.,_,${PKG_VERSION})_RTM/src/nss-${PKG_VERSION}.tar.gz"
+      digestSHA256: 38baa3b0a18a3f674843473b549753c96419a0151abd1e7a9b214ce0493d0785
+      stripComponents: 1
+
+    - scm: url
+      url: https://archive.mozilla.org/pub/nspr/releases/v4.40/src/nspr-4.40.tar.gz
+      digestSHA256: c0c1884c627f3db7a783f7c7314c695226b2043696791d15519e7e0578c19bdc
+      stripComponents: 2
+      dir: nspr
+
+buildVars: [AR, CC, LD, CFLAGS]
+buildSetup: |
+    export XCFLAGS="${CPPFLAGS}"
+buildTools: [perl]
+buildScript: |
+    rsync -a --delete --exclude "*.OBJ" $1/ .
+
+    mkdir bin && pushd bin
+    ln -s $(which $AR) ar
+    popd
+    export PATH=$(pwd)/bin:${PATH}
+
+    pushd nss
+    # parallel build sometimes fails with linker errors like
+    #  undefined reference to `libcrux_ml_kem...
+    makeSequential USE_64=1 BUILD_OPT=1 \
+        NSS_ENABLE_WERROR=0 \
+        NSS_DISABLE_GTESTS=1 \
+        NSS_DISABLE_NSPR_TESTS=1 \
+        USE_SYSTEM_ZLIB=1 \
+        ZLIB_LIBS=-lz \
+        nss_build_all
+    popd
+
+    mkdir -p install
+    pushd dist
+    install -v -m755 -d               ../install/usr/lib
+    install -v -m755 Linux*/lib/*.so  ../install/usr/lib
+    install -v -m755 -d               ../install/usr/include/nss
+    cp -v -RL {public,private}/nss/*  ../install/usr/include/nss
+    cp -v -RL Linux*/include/*        ../install/usr/include/
+
+    install -v -m755 -d               ../install/usr/bin
+    install -v -m755 Linux*/bin/{certutil,pk12util} ../install/usr/bin
+    popd
+
+    NSS_VERSION=$(grep "NSS_VERSION" install/usr/include/nss/nss.h | awk '{print $3}')
+    NSS_MAJOR_VERSION=$(grep "NSS_VMAJOR" install/usr/include/nss/nss.h | awk '{print $3}')
+    NSS_MINOR_VERSION=$(grep "NSS_VMINOR" install/usr/include/nss/nss.h | awk '{print $3}')
+    NSS_PATCH_VERSION=$(grep "NSS_VPATCH" install/usr/include/nss/nss.h | awk '{print $3}')
+    NSPR_VERSION=$(head -n1 nss/automation/release/nspr-version.txt)
+
+    mkdir -p install/usr/lib/pkgconfig
+    sed -e "s,%prefix%,/usr/," \
+        -e "s,%exec_prefix%,\${prefix}," \
+        -e "s,%libdir%,\${prefix}/lib," \
+        -e "s,%includedir%,\${prefix}/include/nss," \
+        -e "s,%NSS_VERSION%,${NSS_VERSION},g" \
+        -e "s,%NSPR_VERSION%,${NSPR_VERSION}," \
+        nss/pkg/pkg-config/nss.pc.in > install/usr/lib/pkgconfig/nss.pc
+    chmod 0644 install/usr/lib/pkgconfig/nss.pc
+
+    mkdir -p install/usr/bin
+    sed -e "s,@prefix@,/usr," \
+        -e "s,@MOD_MAJOR_VERSION@,${NSS_MAJOR_VERSION}," \
+        -e "s,@MOD_MINOR_VERSION@,${NSS_MINOR_VERSION}," \
+        -e "s,@MOD_PATCH_VERSION@,${NSS_PATCH_VERSION}," \
+        nss/pkg/pkg-config/nss-config.in > install/usr/bin/nss-config
+    chmod 0755 install/usr/bin/nss-config
+
+    cp nspr/Linux*/config/nspr.pc install/usr/lib/pkgconfig/
+    cp nspr/Linux*/config/nspr-config install/usr/bin/
+
+multiPackage:
+    "":
+        depends:
+            - use: []
+              name: net::nss-tgt
+        provideDeps: ['*-tgt']
+        packageScript: |
+            installPackageBin $1/install/
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            installPackageDev $1/install/
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            installPackageLib $1/install/

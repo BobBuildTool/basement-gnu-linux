@@ -36,6 +36,7 @@ depends:
     - libs::alsa-lib-tgt
     - libs::appstream-tgt
     - libs::libassuan-tgt
+    - libs::libcacard-tgt
     - libs::libksba-tgt
     - libs::bayer2rgb-tgt
     - libs::botan-tgt
@@ -150,6 +151,7 @@ depends:
     - net::net-tools
     - net::nftables
     - net::nmap
+    - net::nss
     - net::ntp
     - net::openldap
     - net::openssh

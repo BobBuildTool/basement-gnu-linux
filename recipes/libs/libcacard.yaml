@@ -1,0 +1,42 @@
+inherit: [meson, cmake]
+
+metaEnvironment:
+    PKG_LICENSE: "LGPL-2.1-or-later"
+    PKG_VERSION: "2.8.2"
+
+depends:
+    - libs::glib-dev
+    - net::nss-dev
+    - use: []
+      depends:
+          - libs::glib-tgt
+          - net::nss-tgt
+
+checkoutSCM:
+    scm: url
+    url: "https://gitlab.freedesktop.org/-/project/58/uploads/\
+          af66d0795031498878fa243f8f30b7c5/libcacard-${PKG_VERSION}.tar.xz"
+    stripComponents: 1
+    digestSHA256: 45fc28a6ff3c7a359d4448132ca190f0a9c760540c445dba4597a5b71de40f68
+
+checkoutVars: [PKG_VERSION]
+checkoutDeterministic: True
+checkoutScript: |
+    # add .tarball-version file if it doesn't exist (e.g. git checkouts).
+    # otherwise the build fails.
+    if [ ! -e .tarball-version ]; then
+      echo "$PKG_VERSION" > .tarball-version
+    fi
+
+buildScript: |
+    mesonBuild $1
+
+multiPackage:
+    dev:
+        provideDeps: ['*-dev']
+        packageScript: |
+            mesonPackageDev
+    tgt:
+        provideDeps: ['*-tgt']
+        packageScript: |
+            mesonPackageTgt
