@@ -5,7 +5,7 @@ depends:
     - core::acpid
     - core::busybox
     - core::dbus-tgt
-    - core::eudev-tgt
+    - core::eudev
     - core::hwdata
     - core::syslog-ng
     - core::sysvinit

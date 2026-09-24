@@ -18,6 +18,17 @@ checkoutSCM:
 
 buildTools: [gperf]
 
+Config:
+    CORE_EUDEV_ENABLE_RULE_GEN:
+        type: bool
+        default: false
+        help: |
+            Enable eudev rule generator. (default: disabled)
+    CORE_EUDEV_KMOD:
+        help: Enable kmod support
+        type: bool
+        default: True
+
 multiPackage:
     "":
         depends:
@@ -28,22 +39,29 @@ multiPackage:
                   target-toolchain: host-compat-toolchain
               use: [tools]
 
-            - kernel::kmod-lib-dev
+            - name: kernel::kmod-lib-dev
+              if: ${CORE_EUDEV_KMOD}
 
             - use: []
               depends:
-                  - kernel::kmod-lib-tgt
+                  - name: kernel::kmod-lib-tgt
+                    if: ${CORE_EUDEV_KMOD}
 
         buildTools: [udevadm]
+        buildVars:  [CORE_EUDEV_ENABLE_RULE_GEN, CORE_EUDEV_KMOD]
         buildScript: |
             autotoolsBuild $1 \
                 --sbindir=/usr/sbin \
                 --libexecdir=/lib \
                 --disable-manpages \
                 --disable-selinux \
-                --disable-rule-generator \
+                $(
+                    [[ ${CORE_EUDEV_ENABLE_RULE_GEN} == 1 ]] &&
+                        echo "-enable-rule-generator" ||
+                        echo "-disable-rule-generator"
+                ) \
                 --disable-blkid \
-                --enable-kmod \
+                $([[ ${CORE_EUDEV_KMOD} == 1 ]] && echo "--enable-kmod" ||: ) \
                 --enable-hwdb
 
             # update hw db for target build
@@ -60,7 +78,7 @@ multiPackage:
         multiPackage:
             "":
                 depends:
-                    - name: core::eudev-tgt
+                    - name: virtual::core::udev-tgt
                       use: []
                 packageScript: autotoolsPackageBin
                 provideDeps: [ "*-tgt" ]
