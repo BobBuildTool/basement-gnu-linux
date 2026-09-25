@@ -17,7 +17,9 @@ depends:
           - name: python::maturin
             alias: python::maturin-host
             use: [tools]
-          - python::cffi
+          - name: python::cffi
+            alias: python::cffi-host
+            use: [result]
           - name: libs::openssl-dev
             alias: openssl-host
             use: [result]
@@ -25,6 +27,7 @@ depends:
     - python::setuptools-rust
     - python::pycparser
     - python::semantic-version
+    - python::cffi
     - libs::openssl-dev
     - use: []
       depends:
@@ -69,4 +72,5 @@ provideDeps:
     - python::setuptools-rust
     - python::pycparser
     - python::semantic-version
+    - python::cffi
     - '*-tgt'
