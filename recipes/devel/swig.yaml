@@ -18,7 +18,8 @@ depends:
 
 buildScript: |
     autotoolsBuild $1 \
-        --with-pcre2-prefix=${BOB_DEP_PATHS[libs::libpcre2-dev]}/usr
+        PCRE2_CFLAGS="$(pkg-config --cflags libpcre2-8)" \
+        PCRE2_LIBS="$(pkg-config --libs libpcre2-8)"
 
 multiPackage:
     "":
