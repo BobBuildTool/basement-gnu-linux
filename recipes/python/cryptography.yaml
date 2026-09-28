@@ -17,7 +17,9 @@ depends:
           - name: python::maturin
             alias: python::maturin-host
             use: [tools]
-          - python::cffi
+          - name: python::cffi
+            alias: python::cffi-host
+            use: [result]
           - name: libs::openssl-dev
             alias: openssl-host
             use: [result]
@@ -25,6 +27,7 @@ depends:
     - python::setuptools-rust
     - python::pycparser
     - python::semantic-version
+    - python::cffi
     - libs::openssl-dev
     - use: []
       depends:
@@ -41,6 +44,13 @@ buildSetup: |
     # caro builds a native-tool depending on python::cffi
     export HOST_CC=gcc
     export CARGO_BUILD_RUSTFLAGS="-C link-arg=-L${BOB_DEP_PATHS['openssl-host']}/usr/lib"
+    # A static libcrypto (host build) is built with zlib support but does not
+    # pull in zlib by itself.
+    if [[ ! -e ${OPENSSL_DIR}/lib/libcrypto.so ]] ; then
+        CARGO_TARGET_RUSTFLAGS_VAR=CARGO_TARGET_${CARGO_TARGET}_RUSTFLAGS
+        ZLIB_LIB_DIR="${BOB_ALL_PATHS['libs::zlib-dev']}/usr/lib"
+        export $CARGO_TARGET_RUSTFLAGS_VAR="${!CARGO_TARGET_RUSTFLAGS_VAR} -C link-arg=-L$ZLIB_LIB_DIR -C link-arg=-lz"
+    fi
 
 buildScript: |
     # without a git directory maturin fails with:
@@ -62,4 +72,5 @@ provideDeps:
     - python::setuptools-rust
     - python::pycparser
     - python::semantic-version
+    - python::cffi
     - '*-tgt'

@@ -1,0 +1,25 @@
+inherit: ["python3::build"]
+
+metaEnvironment:
+    PKG_VERSION: "3.9.0"
+    PKG_LICENSE: "GPL-2.0-only"
+
+depends:
+    - python::hatchling
+
+checkoutSCM:
+    scm: url
+    url: ${GITHUB_MIRROR}/yoctoproject/bmaptool/archive/refs/tags/v${PKG_VERSION}.tar.gz
+    digestSHA256: 9940bb97fa0f2c11ee4625a2f620a4ae2b94c556f8d01c070aee08486a2a1812
+    stripComponents: 1
+
+buildScript: |
+    python3Build $1
+
+packageScript: |
+    python3PackageTgt
+
+provideTools:
+    bmaptool:
+        path: usr/bin
+        dependTools: [python3]

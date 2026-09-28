@@ -67,7 +67,7 @@ buildSetup: |
     # $3: targets (optional)
     l4reBuild()
     {
-        if [[ ! -e build/.bob-init-done ]] ; then
+        if [[ ! -e build/.bob-init-done || "$2" -nt build/.kconfig ]] ; then
             rm -rf $BOB_CWD/build
             make -C $1 B=$BOB_CWD/build \
                 DEFCONFIG="$2"
