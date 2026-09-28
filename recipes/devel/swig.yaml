@@ -2,7 +2,10 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "4.3.1"
-    PKG_LICENSE: "GPL-3.0+, BSD-2-Clause, BSD-3-Clause"
+    PKG_LICENSE: "GPL-3.0-or-later AND LicenseRef-Swig-UNIVERSITIES AND LicenseRef-Swig-Library"
+    PKG_LICENSE_PATH: |
+        Swig-UNIVERSITIES:LICENSE-UNIVERSITIES
+        Swig-Library:LICENSE
 
 checkoutSCM:
     scm: url

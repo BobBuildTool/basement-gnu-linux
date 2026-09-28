@@ -2,7 +2,9 @@ inherit: [meson]
 
 metaEnvironment:
     PKG_VERSION: "1.7.0"
-    PKG_LICENSE: "MIT/X11"
+    PKG_LICENSE: "LicenseRef-xkbcommon"
+    PKG_LICENSE_PATH: |
+        "xkbcommon:LICENSE"
 
 depends:
     - libs::libxml2-dev

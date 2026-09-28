@@ -1,4 +1,4 @@
-inherit: [make, cpackage, install]
+inherit: [make, cpackage, install, licenses]
 
 metaEnvironment:
     PKG_LICENSE: "GPL-2.0-or-later"

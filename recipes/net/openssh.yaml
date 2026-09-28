@@ -2,9 +2,8 @@ inherit: [autotools]
 
 metaEnvironment:
     PKG_VERSION: "10.2p1"
-    PKG_LICENSE: >-
-        0BSD AND BSD-2-Clause AND BSD-3-Clause AND
-        ISC AND LicenseRef-Public-Domain AND MIT
+    PKG_LICENSE: "LicenseRef-openssh"
+    PKG_LICENSE_PATH: openssh:LICENCE
 
 depends:
     - libs::libxcrypt-dev

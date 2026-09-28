@@ -16,4 +16,4 @@ buildScript: |
     ln -snf $1/intel-ucode .
 
 packageScript: |
-    rsync -a --delete $1/intel-ucode/ .
+    rsync -a $1/intel-ucode/ .

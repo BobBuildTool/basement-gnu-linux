@@ -3,7 +3,7 @@ inherit: [meson, wayland-scanner]
 metaEnvironment:
     PKG_DESCRIPTION: "Mesa OpenGL library"
     PKG_VERSION: "25.3.1"
-    PKG_LICENSE: "MIT, SGI, Khronos"
+    PKG_LICENSE: "Apache-2.0 AND BSL-1.0 AND MIT AND SGI-B-2.0 AND GPL-2.0 WITH Linux-syscall-note"
 
 Config:
     MESA3D_GALLIUM_DRIVERS:
