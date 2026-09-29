@@ -40,6 +40,14 @@
 # packageScript: |
 #        l4reInstall $1 \
 #           bootstrap.uimage
+#
+# To assemble the image in a separate recipe with l4image (see l4re::dist),
+# install everything the image needs instead:
+#
+# packageScript: |
+#        l4reInstallDist $1
+#
+# Dependencies using the tools of such a package get the l4image tool.
 
 inherit: [pkg-config, make]
 
@@ -78,6 +86,11 @@ buildSetup: |
 
         makeParallel -C $1 O=$BOB_CWD/build \
             ${3:-}
+
+        # l4reInstallDist has no access to the source dir
+        mkdir -p $BOB_CWD/tool/bin $BOB_CWD/tool/lib
+        cp $1/tool/bin/l4image $BOB_CWD/tool/bin/
+        rsync -a --delete $1/tool/lib/L4 $BOB_CWD/tool/lib/
     }
 
     # $1: source dir
@@ -103,3 +116,35 @@ packageSetup: |
             cp -L "$1/build/images/$i" .
         done
     }
+
+    # Install the parts of the build dir that l4image takes the modules from
+    # (see the search path of l4reDistImage in l4re::dist) and the l4image
+    # tool.
+    #
+    # $1: build dir
+    l4reInstallDist()
+    {
+        rsync -a --copy-unsafe-links \
+            --include="/assets/***" \
+            --include="/bin/" \
+            --exclude="/bin/host/" \
+            --exclude="/bin/targetsys/" \
+            --include="/bin/*/" \
+            --include="/bin/*/l4f/***" \
+            --include="/bin/*/plain/***" \
+            --include="/lib/" \
+            --exclude="/lib/host/" \
+            --include="/lib/*/" \
+            --include="/lib/*/std/" \
+            --include="/lib/*/std/l4f/" \
+            --include="/lib/*/std/l4f/*.so*" \
+            --exclude="*" \
+            "$1/build/" .
+
+        rsync -a "$1/tool" .
+    }
+
+provideTools:
+    l4image:
+        path: tool/bin
+        dependTools: [perl]
