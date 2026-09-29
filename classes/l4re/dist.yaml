@@ -1,0 +1,264 @@
+# Assemble a bootable L4Re image out of an already built l4re package.
+#
+# This runs l4image directly instead of the l4re build system. The l4re
+# package must be installed with l4reInstallDist of the l4re class, which also
+# provides the l4image tool. Use it like this in your own recipes:
+#
+# inherit: [l4re::dist]
+#
+# depends:
+#     # add additional dependencies here, like linux kernels or external
+#     # device trees
+#     - fiasco
+#     # the actual l4re build
+#     - name: l4re-build
+#       use: [result, deps, tools]
+#     - ...
+#
+# buildScript: |
+#     l4reDistImage ${BOB_DEP_PATHS[l4re-build]} \
+#         raw rpi test test.list "" "${@:2}"
+#
+# packageScript: |
+#     l4reDistInstall $1
+#
+# The uimage and itb images are loaded to the address the l4re image was
+# linked for. Set L4RE_IMAGE_LOAD_ADDRESS if the target needs a different
+# one.
+
+depends:
+    - tools:
+          target-toolchain: host-compat-toolchain
+      depends:
+          - name: bsp::uboot-tools
+            use: [tools]
+          - name: devel::dtc
+            use: [tools]
+          - name: utils::mtools
+            use: [tools]
+
+buildTools: [l4image, uboot-tools, dtc, mtools]
+buildVars: [L4RE_IMAGE_COMPRESSION]
+buildSetup: |
+    # Write the image tree source of the FIT image.
+    #
+    # $1: device tree, may be empty
+    # $2: load address
+    l4reMkimageIts()
+    {
+        local dtb="$1" loadaddr="$2" name="L4Re Image"
+
+        loadaddr=$(printf "0x%x 0x%x" $((loadaddr >> 32)) \
+                                      $((loadaddr & 0xffffffff)))
+
+        # /incbin/ resolves relative to the source file
+        case "$dtb" in
+            ""|/*) ;;
+            *)     dtb="$PWD/$dtb" ;;
+        esac
+
+        if [ -n "$dtb" ] ; then
+            name="${dtb##*/}"
+            name="${name%.*}"
+        fi
+
+        cat <<EOF
+    /dts-v1/;
+
+    / {
+        description = "L4Re Image";
+        #address-cells = <2>;
+
+        images {
+            kernel-1 {
+                description = "L4Re Image";
+                data = /incbin/("$PWD/images/bootstrap.raw");
+                type = "kernel";
+                arch = "$ARCH";
+                os = "linux";
+                compression = "${L4RE_IMAGE_COMPRESSION:-none}";
+                load = <$loadaddr>;
+                entry = <$loadaddr>;
+                hash-1 {
+                    algo = "crc32";
+                };
+            };
+    EOF
+
+        if [ -n "$dtb" ] ; then
+            cat <<EOF
+            fdt-1 {
+                description = "$name";
+                data = /incbin/("$dtb");
+                type = "flat_dt";
+                arch = "$ARCH";
+                compression = "none";
+                hash-1 {
+                    algo = "crc32";
+                };
+            };
+    EOF
+        fi
+
+        cat <<EOF
+        };
+
+        configurations {
+            default = "conf-1";
+            conf-1 {
+                description = "$name";
+                kernel = "kernel-1";
+    EOF
+
+        [ -n "$dtb" ] && echo '            fdt = "fdt-1";'
+
+        cat <<EOF
+            };
+        };
+    };
+    EOF
+    }
+
+    # Wrap the raw image for u-boot.
+    #
+    # $1: image type: uimage or itb
+    # $2: device tree, itb only, may be empty
+    l4reMkimage()
+    {
+        local loadaddr="${L4RE_IMAGE_LOAD_ADDRESS:-}"
+
+        # without an explicit address take the one the image was linked for
+        if [ -z "$loadaddr" ] ; then
+            loadaddr=$(l4image -i images/bootstrap.raw attr --get l4i:loadaddr)
+        fi
+
+        if [ "$1" = itb ] ; then
+            l4reMkimageIts "$2" "$loadaddr" > images/bootstrap.its
+
+            # Store the sub-images outside the FIT structure (-E) and align
+            # them to 8 bytes (-B). Embedded data is only 4 byte aligned,
+            # which violates the 8 byte alignment the device tree spec
+            # requires for the DTB. A boot loader passing the DTB in place
+            # then hands over a misaligned blob.
+            mkimage -f images/bootstrap.its -E -B 8 images/bootstrap.itb
+
+            rm images/bootstrap.its
+        else
+            # the uimage header holds 32 bit addresses only
+            if [ $((loadaddr > 0xffffffff)) = 1 ] ; then
+                >&2 echo "load address '$loadaddr' does not fit into a uimage"
+                return 1
+            fi
+
+            mkimage \
+                -a "$loadaddr" \
+                -e "$loadaddr" \
+                -A "$ARCH" \
+                -C "${L4RE_IMAGE_COMPRESSION:-none}" \
+                -n "L4Re Image" \
+                -d images/bootstrap.raw \
+                "images/bootstrap.$1"
+        fi
+
+        rm images/bootstrap.raw
+    }
+
+    # Put the EFI application on a FAT disk, where the firmware looks for it.
+    l4reEfiDisk()
+    {
+        local name size
+
+        case "$ARCH" in
+            amd64) name=bootx64.efi ;;
+            x86)   name=bootia32.efi ;;
+            arm64) name=bootaa64.efi ;;
+            *)
+                >&2 echo "no efi boot file name for '$ARCH'"
+                return 1
+                ;;
+        esac
+
+        # the file system needs some head room on top of the image
+        size=$(( $(du -k images/bootstrap.efi | cut -f 1) * 12 / 10 ))
+
+        dd if=/dev/zero of=images/bootstrap.efi.img bs=1K count=$size
+        mformat -i images/bootstrap.efi.img ::
+        mmd -i images/bootstrap.efi.img ::/EFI ::/EFI/BOOT
+        mcopy -i images/bootstrap.efi.img images/bootstrap.efi "::/EFI/BOOT/$name"
+    }
+
+    # The search path matches what l4reInstallDist installs.
+    #
+    # $1: path of the package with the l4re build
+    # $2: image type: elf, raw, efi, uimage or itb
+    # $3: platform type
+    # $4: modules entry
+    # $5: modules list
+    # $6: device tree for the itb image, empty for none
+    # $7+: search paths for the modules, searched before the l4re build
+    l4reDistImage()
+    {
+        local l4re="$1" type="$2" platform="$3" entry="$4" modlist="$5" \
+              itbdtb="$6"
+        shift 6
+
+        local sys d
+        for d in "$l4re"/bin/*/l4f ; do
+            sys="${d%/l4f}"
+            sys="${sys##*/}"
+        done
+
+        # l4image evaluates the modules list, which selects modules by these
+        export PLATFORM_TYPE="$platform"
+        export ARCH="${sys%%_*}"
+        export CPU="${sys#*_}"
+        case "$ARCH" in
+            *64) export BITS=64 ;;
+            *)   export BITS=32 ;;
+        esac
+
+        # uimage and itb are a raw image wrapped by mkimage
+        local base="$type"
+        case "$type" in
+            elf|raw|efi) ;;
+            uimage|itb)  base=raw ;;
+            *)
+                >&2 echo "unknown image type '$type'"
+                return 1
+                ;;
+        esac
+
+        local -a sp=(
+            "$@"
+            "$l4re"/assets
+            "$l4re"/bin/$sys/l4f
+            "$l4re"/bin/$sys/plain
+            "$l4re"/lib/$sys/std/l4f
+        )
+
+        if [ ! -e "$l4re/bin/$sys/plain/bootstrap.$base" ] ; then
+            >&2 echo "l4re has no $base base image, its config does not build one"
+            return 1
+        fi
+
+        mkdir -p images
+        l4image -i "$l4re/bin/$sys/plain/bootstrap.$base" \
+            -o "images/bootstrap.$base" --verbose create \
+            --entry "$entry" \
+            --modules-list-file "$modlist" \
+            --search-path "${sp[*]}"
+
+        case "$type" in
+            uimage|itb) l4reMkimage "$type" "$itbdtb" ;;
+            efi)        l4reEfiDisk ;;
+        esac
+    }
+
+packageSetup: |
+    _L4RE_BUILD_PATH="$1"
+
+    # $1: build dir (optional)
+    l4reDistInstall()
+    {
+        cp "${1:-$_L4RE_BUILD_PATH}"/images/* .
+    }
