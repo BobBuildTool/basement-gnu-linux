@@ -5,7 +5,7 @@ inherit: [meson, pkg-config, install, make, patch]
 # work.
 
 metaEnvironment:
-    PKG_VERSION: "11.1.1"
+    PKG_VERSION: "11.1.2"
     PKG_LICENSE: "GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c"
 
 depends:
@@ -18,7 +18,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://download.qemu.org/qemu-${PKG_VERSION}.tar.xz
-    digestSHA1: cadeadb4ff18ae6a93b01a3cf000616a75c03e91
+    digestSHA1: fb04bb1f7850c81a507b5b3786efed0d134718c9
     stripComponents: 1
 
 checkoutDeterministic: True
