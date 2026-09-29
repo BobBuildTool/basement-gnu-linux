@@ -1,8 +1,8 @@
 inherit: [cmake]
 
 privateEnvironment:
-    QT6_VERSION: "6.8.1"
-    QT6_MIRROR: "https://download.qt.io/archive/qt/6.8/6.8.1/submodules"
+    QT6_VERSION: "6.11.2"
+    QT6_MIRROR: "https://download.qt.io/archive/qt/6.11/6.11.2/submodules"
 
 buildSetup: |
     # Build the actual target qt6 package

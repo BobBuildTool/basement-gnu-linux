@@ -1,3 +1,5 @@
+inherit: [qt6, wayland-scanner]
+
 metaEnvironment:
     PKG_VERSION: "${QT6_VERSION}"
     PKG_LICENSE: >-
@@ -7,48 +9,24 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtwayland-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: 9186473950103916a57499784376baf88db297aa
+    digestSHA1: 058a12a72d9cdf13967c38f7fbab08e99d3c2425
     stripComponents: 1
 
+depends:
+    - graphics::wayland::wayland-dev
+
+    - use: []
+      depends:
+          - graphics::wayland::wayland-tgt
+
+buildScript: |
+    qt6Build $1
+
 multiPackage:
-    "":
-        inherit: [qt6, wayland-scanner]
-        depends:
-            - graphics::wayland::wayland-dev
+    dev:
+        packageScript: qt6PackageDev
+        provideDeps: [ "*-dev" ]
 
-            - use: []
-              depends:
-                  - graphics::wayland::wayland-tgt
-
-            # depend on our self for the host tools build
-            - name: libs::qt6-wayland-tools
-              tools:
-                  target-toolchain: host-native-toolchain
-              use: [tools]
-
-        buildTools: [qt6-wayland-tools]
-        buildScript: |
-            qt6Build $1
-
-        multiPackage:
-            dev:
-                packageScript: qt6PackageDev
-                provideDeps: [ "*-dev" ]
-
-            tgt:
-                packageScript: qt6PackageLib
-                provideDeps: [ "*-tgt" ]
-
-    tools:
-        inherit: [qt6-tools, wayland-scanner]
-        depends:
-            - graphics::wayland::wayland-dev
-
-        buildScript: |
-            # tools only version usually used for building
-            qt6Build $1 \
-                -DFEATURE_wayland_client=OFF \
-                -DFEATURE_wayland_server=OFF
-
-        provideTools:
-            qt6-wayland-tools: "usr/libexec"
+    tgt:
+        packageScript: qt6PackageLib
+        provideDeps: [ "*-tgt" ]

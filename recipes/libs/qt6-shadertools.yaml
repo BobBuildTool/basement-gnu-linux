@@ -7,7 +7,7 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtshadertools-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: 9cae6c63fa71cd02444bacba3ea5378083e7705d
+    digestSHA1: da78118acad77072a7e6002b602274801bdcb247
     stripComponents: 1
 
 multiPackage:

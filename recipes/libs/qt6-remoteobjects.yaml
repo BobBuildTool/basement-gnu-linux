@@ -7,7 +7,7 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtremoteobjects-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: ef4c9b112b023e4b7dd968871dd53853dd7b526c
+    digestSHA1: cea22c06555a504084a593bde8cf24061db8ce2f
     stripComponents: 1
 
 multiPackage:
