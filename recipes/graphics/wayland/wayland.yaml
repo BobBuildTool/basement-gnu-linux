@@ -1,7 +1,7 @@
 inherit: [meson]
 
 metaEnvironment:
-    PKG_VERSION: "1.24.0"
+    PKG_VERSION: "1.26.0"
     PKG_LICENSE: "MIT"
 
 depends:
@@ -18,7 +18,7 @@ depends:
 checkoutSCM:
     scm: url
     url: https://gitlab.freedesktop.org/wayland/wayland/-/archive/${PKG_VERSION}/wayland-${PKG_VERSION}.tar.bz2
-    digestSHA1: b2e4f077a60c07bfaa7b241bcdeecea6bfa85c78
+    digestSHA1: 1be4f6a8dc79a8371d6daa4690f420bd53804199
     stripComponents: 1
 
 multiPackage:
