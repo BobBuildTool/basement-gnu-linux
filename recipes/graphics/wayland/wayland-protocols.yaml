@@ -1,14 +1,14 @@
 inherit: [meson, wayland-scanner]
 
 metaEnvironment:
-    PKG_VERSION: "1.47"
+    PKG_VERSION: "1.49"
     PKG_LICENSE: "MIT"
 
 checkoutSCM:
     scm: url
     url: "https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/\
           ${PKG_VERSION}/downloads/wayland-protocols-${PKG_VERSION}.tar.xz"
-    digestSHA1: cc3915eb646e607abc82242e84652e4a548832d0
+    digestSHA1: fb934fc767ec68d2335030a41e5f132c03179438
     stripComponents: 1
 
 buildScript: |
