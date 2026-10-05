@@ -9,7 +9,7 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtsvg-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: 82c4a06321d3e2f9e221892cd0c241de99ed9d27
+    digestSHA1: 756a5aafc445fef7fe75a3254ee021eee07ad0c8
     stripComponents: 1
 
 buildScript: |

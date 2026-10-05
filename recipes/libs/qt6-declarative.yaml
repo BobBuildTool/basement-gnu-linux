@@ -9,7 +9,7 @@ metaEnvironment:
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtdeclarative-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: 672e5532e616fea73ae7368174fe1536299b450e
+    digestSHA1: 5059986384515b7388d6182355e02cffbc8ce526
     stripComponents: 1
 
 checkoutDeterministic: True

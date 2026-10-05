@@ -1,4 +1,4 @@
-inherit: [qt6-base]
+inherit: [qt6-base, wayland-scanner]
 
 metaEnvironment:
     PKG_VERSION: "${QT6_VERSION}"
@@ -39,6 +39,7 @@ privateEnvironment:
         -DFEATURE_dbus=OFF
         -DFEATURE_icu=OFF
         -DFEATURE_glib=OFF
+        -DFEATURE_wayland=OFF
         -DFEATURE_force_bundled_libs=ON
     DEFAULT_CONF: >-
         -DFEATURE_opengl=ON
@@ -47,6 +48,7 @@ privateEnvironment:
         -DFEATURE_gui=ON
         -DFEATURE_kms=ON
         -DFEATURE_libinput=ON
+        -DFEATURE_wayland=ON
         -DFEATURE_freetype=ON
         -DFEATURE_xml=ON
         -DFEATURE_network=ON
@@ -59,12 +61,14 @@ privateEnvironment:
         -DFEATURE_dbus=OFF
         -DFEATURE_icu=OFF
         -DFEATURE_force_system_libs=ON
+        -DFEATURE_system_pcre2=OFF
+        -DFEATURE_system_textmarkdownreader=OFF
         -DQT_QPA_DEFAULT_PLATFORM=eglfs
 
 checkoutSCM:
     scm: url
     url: ${QT6_MIRROR}/qtbase-everywhere-src-${PKG_VERSION}.tar.xz
-    digestSHA1: ac3cfaee831310f03288ab32adc7ccc60b501205
+    digestSHA1: efd440c60bb38beaaf29d1fc08a5cca94edb2329
     stripComponents: 1
 
 multiPackage:
@@ -74,7 +78,6 @@ multiPackage:
                   !"${QT6_BASE_HOST_BUILD}"
               depends:
                   - libs::zlib-dev
-                  - libs::libpcre2-dev
                   - libs::libb2-dev
                   - libs::glib-dev
                   - libs::libinput-dev
@@ -88,13 +91,13 @@ multiPackage:
                   - virtual::libs::libdrm-dev
                   - virtual::libs::libegl-dev
                   - virtual::libs::libgles-dev
+                  - graphics::wayland::wayland-dev
 
                   - use: []
                     depends:
                         - libs::libc-openmp-tgt
                         - libs::libc-stdc++-tgt
                         - libs::zlib-tgt
-                        - libs::libpcre2-tgt
                         - libs::libb2-tgt
                         - libs::glib-tgt
                         - libs::libinput-tgt
@@ -108,6 +111,7 @@ multiPackage:
                         - virtual::libs::libdrm-tgt
                         - virtual::libs::libegl-tgt
                         - virtual::libs::libgles-tgt
+                        - graphics::wayland::wayland-tgt
 
             # depend on our self for the host tools build
             - name: libs::qt6-base-tools

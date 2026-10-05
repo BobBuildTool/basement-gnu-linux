@@ -1,7 +1,7 @@
 inherit: [meson, wayland-scanner, init]
 
 metaEnvironment:
-    PKG_VERSION: "15.0.0"
+    PKG_VERSION: "16.0.0"
     PKG_LICENSE: "MIT"
 
 depends:
@@ -40,14 +40,13 @@ depends:
 checkoutSCM:
     scm: url
     url: https://gitlab.freedesktop.org/wayland/weston/-/releases/${PKG_VERSION}/downloads/weston-${PKG_VERSION}.tar.xz
-    digestSHA1: 0ddaae77c58d13afbfb22380a1ded691127fb7c4
+    digestSHA1: 0f8e5f770e78b5b968e5beed3322d2ac26b8687c
     stripComponents: 1
 
 buildScript: |
     mesonBuild $1 \
         -Ddoc=false \
         -Dtest-junit-xml=false \
-        -Dremoting=false \
         -Dbackend-x11=false \
         -Dbackend-vnc=false \
         -Dbackend-rdp=false \
@@ -55,9 +54,7 @@ buildScript: |
         -Dbackend-headless=false \
         -Dxwayland=false \
         -Dsystemd=false \
-        -Dpipewire=false \
         -Dimage-webp=false \
-        -Dwcap-decode=false \
         -Dcolor-management-lcms=false \
         -Dtools=calibrator,debug,info,terminal,touch-calibrator \
         -Dsimple-clients=all \
@@ -91,8 +88,8 @@ multiPackage:
                 packageScript: |
                     mesonPackageDev "$1" \
                         "/usr/" "/usr/share/" \
-                        "/usr/share/libweston-14/" \
-                        "/usr/share/libweston-14/protocols/"
+                        "/usr/share/libweston-16/" \
+                        "/usr/share/libweston-16/protocols/***"
                 provideDeps: [ "*-dev" ]
 
             tgt:
