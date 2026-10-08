@@ -11,6 +11,6 @@ checkoutSCM:
     stripComponents: 1
 
 buildScript: |
-    autotoolsBuild -s $1
+    autotoolsBuild -s $1 --disable-doxygen
 
 packageScript: autotoolsPackageTgt
