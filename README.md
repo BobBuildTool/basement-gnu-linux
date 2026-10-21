@@ -19,13 +19,13 @@ project. To do so add a `layers` entry to `config.yaml`:
 
     bobMinimumVersion: "0.25"
     layers:
-        - name: basement-gnu-linux
-          scm: git
-          url: https://github.com/BobBuildTool/basement-gnu-linux.git
-          commit: <git commit id> # optional but highly recommended
         - name: basement
           scm: git
           url: https://github.com/BobBuildTool/basement.git
+          commit: <git commit id> # optional but highly recommended
+        - name: basement-gnu-linux
+          scm: git
+          url: https://github.com/BobBuildTool/basement-gnu-linux.git
           commit: <git commit id> # optional but highly recommended
 
 and then fetch the layers:
