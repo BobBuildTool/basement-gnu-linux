@@ -20,6 +20,7 @@ checkoutSCM:
     - scm: git
       url: https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
       tag: v${PKG_VERSION}
+      commit: 9cfca9fe7aa7a8e29b92fe33ce8433e212c9a8ba
       submodules: True
 
 checkoutDeterministic: True
