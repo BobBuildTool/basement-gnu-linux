@@ -233,6 +233,7 @@ depends:
     - utils::genext2fs
     - utils::genimage
     - utils::gnupg
+    - utils::lm-sensors
     - utils::luajit
     - utils::mtd-utils
     - utils::minicom

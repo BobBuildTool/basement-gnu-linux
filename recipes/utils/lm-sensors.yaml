@@ -1,0 +1,40 @@
+inherit: [cpackage, make, install, licenses]
+
+metaEnvironment:
+    PKG_VERSION: 3.6.2
+
+checkoutSCM:
+    scm: url
+    url: "https://github.com/lm-sensors/lm-sensors/archive/refs/tags/V$(subst,.,-,${PKG_VERSION}).tar.gz"
+    digestSHA256: c6a0587e565778a40d88891928bf8943f27d353f382d5b745a997d635978a8f0
+    stripComponents: 1
+
+buildVars: [AR, CC]
+buildTools: [bison, flex, m4]
+buildScript: |
+    mkdir -p build/
+    rsync -a --delete $1/ build/
+    pushd build
+    makeParallel AR=$AR CC=$CC
+    make install DESTDIR=$(pwd)/../install PREFIX=/usr/
+    popd
+
+multiPackage:
+    dev:
+        metaEnvironment:
+            PKG_LICENSE: LGPL-2.1-or-later
+        packageScript: |
+            installPackageDev $1/install/
+    tgt:
+        metaEnvironment:
+            PKG_LICENSE: LGPL-2.1-or-later
+        packageScript: |
+            installPackageLib $1/install/
+    "":
+        metaEnvironment:
+            PKG_LICENSE: GPL-2.0-or-later
+        depends:
+            - use: []
+              name: utils::lm-sensors-tgt
+        packageScript: |
+            installPackageBin $1/install/
