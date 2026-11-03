@@ -6,7 +6,7 @@ metaEnvironment:
 
 checkoutSCM:
     scm: url
-    url: https://ftp.denx.de/pub/u-boot/u-boot-${PKG_VERSION}.tar.bz2
+    url: https://git.u-boot-project.org/u-boot/u-boot/-/releases/v${PKG_VERSION}/downloads/u-boot-${PKG_VERSION}.tar.bz2
     digestSHA1: 6bc4fd62d5b135ff2fbb11fcecbb4b8ca055022a
     stripComponents: 1
 
