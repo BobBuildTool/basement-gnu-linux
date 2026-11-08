@@ -1,7 +1,7 @@
 inherit: [autotools]
 
 metaEnvironment:
-    PKG_VERSION: "10.2p1"
+    PKG_VERSION: "10.6p2"
     PKG_LICENSE: "LicenseRef-openssh"
     PKG_LICENSE_PATH: openssh:LICENCE
 
@@ -19,7 +19,7 @@ depends:
 checkoutSCM:
     scm: url
     url: http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${PKG_VERSION}.tar.gz
-    digestSHA256: ccc42c0419937959263fa1dbd16dafc18c56b984c03562d2937ce56a60f798b2
+    digestSHA256: 9ae44872090cf2f06b3cf9ff147e7f16f309671340763ed2f99248398ae29d5b
     stripComponents: 1
 
 buildTools: [target-toolchain]
