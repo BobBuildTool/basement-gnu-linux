@@ -1,0 +1,13 @@
+inherit: [make]
+
+checkoutSCM:
+    scm: git
+    url: ${GITHUB_MIRROR}/felipec/sharness.git
+    tag: v1.2.1
+    shallow: 1
+
+buildScript: |
+    make -C "$1" install prefix=/usr DESTDIR="$PWD/install"
+
+packageScript: |
+    cp -a "$1/install/." .
